@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Pipeline Optimization on Tài liệu AWS MLOps</title>
+    <link>https://docs.vinashoes.org/vi/5-workshop/3-s3-data-storage/</link>
+    <description>Recent content in Data Pipeline Optimization on Tài liệu AWS MLOps</description>
+    <generator>Hugo</generator>
+    <language>vi</language>
+    <lastBuildDate></lastBuildDate>
+    <atom:link href="https://docs.vinashoes.org/vi/5-workshop/3-s3-data-storage/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

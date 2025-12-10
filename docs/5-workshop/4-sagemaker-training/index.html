@@ -1,0 +1,3524 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>End-to-End Model Training Pipeline :: AWS MLOps Docs</title>
+
+    
+    <link href="/css/nucleus.css?1765386116" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765386116" rel="stylesheet">
+    <link href="/css/hybrid.css?1765386116" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765386116" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765386116" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765386116" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765386116" rel="stylesheet">
+    <link href="/css/theme.css?1765386116" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765386116" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765386116"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/5-workshop/4-sagemaker-training/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765386116"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765386116"></script>
+<script type="text/javascript">
+    var baseurl = "https:\/\/docs.vinashoes.org\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765386116"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/" title="Worklog" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/">
+           <b> 1. </b> Worklog
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.1-week1/" title="Week 1 - Introduction to AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Week 1 - Introduction to AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.2-week2/" title="Week 2 - Networking on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Week 2 - Networking on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.3-week3/" title="Week 3 - Compute VM Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Week 3 - Compute VM Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.4-week4/" title="Week 4 - Storage Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Week 4 - Storage Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.5-week5/" title="Week 5 - Security Services on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Week 5 - Security Services on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.6-week6/" title="Week 6 - Database Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Week 6 - Database Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.7-week7/" title="Week 7 - DataLake Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Week 7 - DataLake Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.8-week8/" title="Week 8 - Serverless Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Week 8 - Serverless Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.9-week9/" title="Week 9 - Container Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Week 9 - Container Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.10-week10/" title="Week 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Week 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.11-week11/" title="Week 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Week 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.12-week12/" title="Week 12 - Capstone: Personal Project" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Week 12 - Capstone: Personal Project
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/" title="Translated blogs" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/">
+           <b> 3. </b> Translated blogs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.1-blog1/" title="Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.1-blog1/">
+           <b> 3.1. </b> Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.2-blog2/" title="Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.2-blog2/">
+           <b> 3.2. </b> Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.3-blog3/" title="AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.3-blog3/">
+           <b> 3.3. </b> AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.4-blog4/" title="Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.4-blog4/">
+           <b> 3.4. </b> Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.5-blog5/" title="Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.5-blog5/">
+           <b> 3.5. </b> Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.6-blog6/" title="Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.6-blog6/">
+           <b> 3.6. </b> Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.7-blog7/" title="Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.9-blog9/" title="AWS Partner Central now available in AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central now available in AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.10-blog10/" title="Announcing AWS Partner Central in the AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Announcing AWS Partner Central in the AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.11-blog11/" title="Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.12-blog12/" title="Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-eventparticipated/" title="Events Participated" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-eventparticipated/">
+           <b> 4. </b> Events Participated
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/" title="Workshop" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/1-introduction/" title="MLOps Architecture Design" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/1-introduction/">
+          <b>1. </b>MLOps Architecture Design
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/6-ecr-registry/" title="Amazon ECR Container Registry (MLOps)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/6-ecr-registry/">
+          <b>6. </b>Amazon ECR Container Registry (MLOps)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/7-eks-cluster/" title="EKS Cluster Setup (Production)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup (Production)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/7-feedback/" title="Sharing and Feedback" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/7-feedback/">
+           <b> 7. </b> Sharing and Feedback
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="https://docs.vinashoes.org/5-workshop/4-sagemaker-training/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="https://docs.vinashoes.org/vi/5-workshop/4-sagemaker-training/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/5-Workshop/4-sagemaker-training/_index.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Internship Report</a> > <a href='/5-workshop/'>Workshop</a> > End-to-End Model Training Pipeline
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#task-4-objectives">Task 4 Objectives</a></li>
+    <li><a href="#1-environment-preparation-and-prerequisites-check">1. Environment preparation and prerequisites check</a>
+      <ul>
+        <li><a href="#11-check-s3-bucket-from-task-3">1.1. Check S3 bucket (from Task 3)</a></li>
+        <li><a href="#12-verify-iam-role-from-task-2">1.2. Verify IAM Role (from Task 2)</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-create-sagemaker-domain-and-project">2. Create SageMaker Domain and Project</a>
+      <ul>
+        <li><a href="#21-access-sagemaker-unified-studio">2.1. Access SageMaker Unified Studio</a></li>
+        <li><a href="#22-create-project-in-unified-studio">2.2. Create Project in Unified Studio</a></li>
+        <li><a href="#23-access-project-workspace">2.3. Access Project Workspace</a></li>
+        <li><a href="#24-verify-ec2-permissions-already-configured-from-task-2">2.4. Verify EC2 Permissions (already configured from Task 2)</a></li>
+        <li><a href="#25-region-recommendations-for-task-4">2.5. Region Recommendations for Task 4</a></li>
+        <li><a href="#3-etl---data-preparation-in-sagemaker-studio">3. ETL - Data preparation in SageMaker Studio</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-training---model-training">4. Training - Model Training</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#5-monitoring--results">5. Monitoring &amp; Results</a>
+      <ul>
+        <li><a href="#51-monitor-training-job-in-studio">5.1. Monitor Training Job in Studio</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-model-registry-new-interface-in-project">6. Model Registry (New interface in Project)</a>
+      <ul>
+        <li><a href="#61-open-model-registry-in-project">6.1. Open Model Registry in Project</a></li>
+        <li><a href="#62-create-model-group">6.2. Create Model Group</a></li>
+        <li><a href="#63-register-model-version-after-training">6.3. Register Model Version after Training</a></li>
+        <li><a href="#64-approve-a-model-version">6.4. Approve a Model Version</a></li>
+        <li><a href="#task-4-completion">Task 4 Completion</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-clean-up-resources-aws-cli">7. Clean Up Resources (AWS CLI)</a>
+      <ul>
+        <li><a href="#71-delete-sagemaker-training-jobs">7.1. Delete SageMaker Training Jobs</a></li>
+        <li><a href="#72-delete-model-registry">7.2. Delete Model Registry</a></li>
+        <li><a href="#73-delete-sagemaker-domain-and-project">7.3. Delete SageMaker Domain and Project</a></li>
+        <li><a href="#74-clean-up-s3-artifacts">7.4. Clean up S3 artifacts</a></li>
+        <li><a href="#75-delete-cloudwatch-logs">7.5. Delete CloudWatch Logs</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-sagemaker-pricing-table">8. SageMaker Pricing Table</a>
+      <ul>
+        <li><a href="#81-training-instance-costs">8.1. Training Instance Costs</a></li>
+        <li><a href="#82-sagemaker-studio-costs">8.2. SageMaker Studio Costs</a></li>
+        <li><a href="#83-model-registry--endpoints-costs">8.3. Model Registry &amp; Endpoints Costs</a></li>
+        <li><a href="#84-task-4-cost-estimate">8.4. Task 4 Cost Estimate</a></li>
+      </ul>
+    </li>
+    <li><a href="#-task-4-implementation-video">📹 Task 4 Implementation Video</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              End-to-End Model Training Pipeline
+            </h1>
+          
+
+        
+
+
+
+	<h2 id="task-4-objectives">Task 4 Objectives</h2>
+<p>Train a <strong>BASKET_PRICE_SENSITIVITY</strong> prediction model (Low/Medium/High) using Amazon SageMaker with automated ETL → Training → Model Registry pipeline.</p>
+<p>→ <strong>The heart of MLOps pipeline</strong> - from raw data to production-ready model.</p>
+<p><strong>Input</strong></p>
+<ul>
+<li>AWS Account with SageMaker/S3/CloudWatch permissions</li>
+<li>S3 bucket with data (from Task 3)</li>
+<li>SageMaker IAM Role (from Task 2)</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li>Model achieving accuracy ≥ 80%, F1 ≥ 0.7</li>
+<li>Model registered in Model Registry</li>
+<li>Artifacts stored in S3</li>
+</ul>
+<p><strong>Cost</strong>: ~<strong>$0.3-0.5/job</strong> (ml.m5.large, 10-15 minutes)</p>
+
+<div class="notices info" ><p><strong>💡 Task 4 - MLOps Core Pipeline:</strong></p>
+<ul>
+<li><strong>Automated ETL</strong> - Raw data → Features</li>
+<li><strong>Model training</strong> - Random Forest classifier</li>
+<li><strong>Model evaluation</strong> - Accuracy, F1, Confusion Matrix</li>
+<li><strong>Model Registry</strong> - Version control and approval</li>
+</ul>
+</div>
+
+<h2 id="1-environment-preparation-and-prerequisites-check">1. Environment preparation and prerequisites check</h2>
+<h3 id="11-check-s3-bucket-from-task-3">1.1. Check S3 bucket (from Task 3)</h3>
+<p><strong>AWS Console → S3:</strong></p>
+<ol>
+<li>
+<p>Find bucket: <code>mlops-retail-prediction-dev-[account-id]</code></p>
+</li>
+<li>
+<p>Check actual structure:</p>
+<pre tabindex="0"><code>raw/           # transactions.csv + _select/ folder
+silver/        # shop_week partitions (200607-200619) 
+gold/          # processed features (to be created from silver/)
+artifacts/     # model outputs (to be created)
+</code></pre></li>
+</ol>
+<p><img src="/images4-sagemake-training/01-s3-bucket.png" alt="S3 bucket placeholder"></p>
+<h3 id="12-verify-iam-role-from-task-2">1.2. Verify IAM Role (from Task 2)</h3>
+<p><strong>AWS Console → IAM → Roles:</strong></p>
+<ol>
+<li>Find role: <code>mlops-retail-prediction-dev-sagemaker-execution</code></li>
+<li>Check permissions:
+<ul>
+<li>✅ <code>AmazonSageMakerFullAccess</code></li>
+<li>✅ <code>AmazonS3FullAccess</code></li>
+<li>✅ <code>CloudWatchLogsFullAccess</code></li>
+</ul>
+</li>
+</ol>
+<p><img src="/images4-sagemake-training/02-iam-role.png" alt="IAM role placeholder"></p>
+
+<div class="notices warning" ><p>Warning: If your bucket uses SSE-KMS, the role needs decrypt/encrypt permissions for the KMS key; if using cross-account S3, check the trust policy as well.</p>
+</div>
+
+<h2 id="2-create-sagemaker-domain-and-project">2. Create SageMaker Domain and Project</h2>
+<h3 id="21-access-sagemaker-unified-studio">2.1. Access SageMaker Unified Studio</h3>
+<p><strong>AWS Console → SageMaker:</strong></p>
+<ol>
+<li>Access URL: <code>https://[domain-id].studio.sagemaker.[region].amazonaws.com</code></li>
+<li>Or from SageMaker Console → <strong>Studio</strong> → <strong>Open Studio</strong></li>
+<li>Choose authentication method:
+<ul>
+<li><strong>Sign in with SSO</strong> (if SSO is set up)</li>
+<li><strong>Sign in with AWS IAM</strong> (using IAM user/role)</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images4-sagemake-training/04.1-domain.png" alt="SageMaker Unified Studio Login"></p>
+<ol start="4">
+<li>After login, you&rsquo;ll see the <strong>SageMaker Unified Studio</strong> interface</li>
+<li>Dashboard displays:
+<ul>
+<li><strong>&ldquo;Good morning&rdquo;</strong> greeting</li>
+<li><strong>Search bar</strong>: &ldquo;Search for data products, assets, and projects&rdquo;</li>
+<li><strong>Discover section</strong>: Catalog, Generative AI playground, Shared generative AI assets</li>
+<li><strong>Build section</strong>: ML and generative AI model development, Generative AI app development</li>
+<li><strong>Browse all projects</strong> and <strong>Create project</strong> buttons</li>
+<li><strong>Browse all projects</strong> and <strong>Create project</strong> buttons</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images4-sagemake-training/04.2-domain.png" alt="SageMaker Unified Studio Dashboard"></p>
+
+<div class="notices info" ><p><strong>💡 SageMaker Unified Studio:</strong></p>
+<ul>
+<li><strong>Unified interface</strong> for data analytics, ML, and generative AI</li>
+<li><strong>Project-based workspace</strong> with shared resources</li>
+<li><strong>Built-in collaboration</strong> with team members and approval workflows</li>
+<li><strong>Integrated tools</strong>: Notebooks, Visual ETL, Workflows, Chat agents</li>
+</ul>
+</div>
+
+<h3 id="22-create-project-in-unified-studio">2.2. Create Project in Unified Studio</h3>
+<p><strong>In SageMaker Unified Studio dashboard:</strong></p>
+<p><strong>Step 1: Access Create Project</strong></p>
+<ol>
+<li>In <strong>Build</strong> section, click <strong>&ldquo;Create project&rdquo;</strong> (blue button)</li>
+<li>Or click <strong>&ldquo;Browse all projects&rdquo;</strong> → <strong>&ldquo;Create project&rdquo;</strong></li>
+</ol>
+<p><img src="/images4-sagemake-training/05.2.png" alt="Project Name and Description"></p>
+<p><strong>Step 2: Fill Project Information (Step 1)</strong></p>
+<ol>
+<li><strong>Project name</strong>: <code>retail-ml-training</code></li>
+<li><strong>Description</strong>: <code>Retail price sensitivity model training</code></li>
+<li>Click <strong>Next</strong> to proceed to Step 2</li>
+</ol>
+<p><img src="/images4-sagemake-training/05.3.png" alt="Project Name and Description"></p>
+<p><strong>Step 2.5: Choose Project Profile (Step 2)</strong></p>
+<ol>
+<li><strong>Project profile</strong>: Choose <strong>&ldquo;All capabilities&rdquo;</strong> (highlighted in blue)
+<ul>
+<li><strong>Description</strong>: &ldquo;Analyze data and build machine learning and generative AI models and applications powered by Amazon Bedrock, Amazon EMR, AWS Glue, Amazon Athena, Amazon SageMaker AI and Amazon SageMaker Lakehouse&rdquo;</li>
+<li><strong>Tooling</strong>: LakeHouse Database, Workflows</li>
+<li><strong>+ 12 more</strong> capabilities</li>
+</ul>
+</li>
+<li>Other options: <strong>Generative AI application development</strong>, <strong>SQL analytics</strong></li>
+<li>Other options: <strong>Generative AI application development</strong>, <strong>SQL analytics</strong></li>
+</ol>
+<p><img src="/images4-sagemake-training/05.4.png" alt="Project Profile Selection"></p>
+<p><strong>Step 3: Blueprint Parameters</strong></p>
+<ul>
+<li><strong>S3 location</strong>: <code>s3://amazon-sagemaker-[account-id]-ap-southeast-1-[random-id]</code></li>
+<li><strong>Retention</strong>: 731 days</li>
+<li><strong>Enable Project Repository Auto Sync</strong>: false</li>
+<li><strong>Lakehouse Database</strong>: <code>glue_db</code></li>
+</ul>
+<p><img src="/images4-sagemake-training/05.5.png" alt="Blueprint Parameters"></p>
+<p><strong>Step 4: Create Project</strong></p>
+<ul>
+<li>Review the settings and click <strong>&ldquo;Create project&rdquo;</strong></li>
+</ul>
+<p><img src="/images4-sagemake-training/05.5.png" alt="Project Creation Final"></p>
+<ul>
+<li>Wait 2-3 minutes for the Project to be provisioned</li>
+</ul>
+<h3 id="23-access-project-workspace">2.3. Access Project Workspace</h3>
+<p><strong>After Project <code>retail-ml-training</code> is successfully created:</strong></p>
+<p><strong>Step 1: Enter Project Overview</strong></p>
+<ol>
+<li>Project will appear in the list with status <strong>&ldquo;Created&rdquo;</strong></li>
+<li>Click on project name <code>retail-ml-training</code> to enter <strong>Project overview</strong></li>
+<li>Project overview displays:
+<ul>
+<li><strong>Project title</strong>: <code>retail-ml-training</code></li>
+<li><strong>Description</strong>: &ldquo;Retail price sensitivity model training&rdquo;</li>
+<li><strong>Project files (6)</strong>: <code>.ipynb_checkpoints</code>, <code>workflows</code>, <code>.libs.json</code>, <code>.temp_sagemaker_unified_studio_debugging_info</code>, <code>README.md</code>, <code>getting_started.ipynb</code></li>
+<li><strong>S3 path</strong>: <code>/dzd-5kultpj28sm31d/cu2gr2js1w1wv</code> (project workspace path)</li>
+<li><strong>Actions</strong> and <strong>New</strong> dropdown buttons</li>
+<li><strong>Actions</strong> and <strong>New</strong> dropdown buttons
+<ul>
+<li><strong>Project overview</strong> (active)</li>
+<li><strong>Assets</strong>, <strong>Subscription requests</strong>, <strong>Data sources</strong>, <strong>Metadata entities</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Step 2: Create Notebook</strong></p>
+<ol>
+<li>Click <strong>&ldquo;New&rdquo;</strong> dropdown (blue button) → select <strong>&ldquo;Notebook&rdquo;</strong></li>
+<li><strong>New</strong> dropdown shows options (in order as shown in image):</li>
+</ol>
+<p><img src="/images4-sagemake-training/05.6.png" alt="Project Overview"></p>
+<p><img src="/images4-sagemake-training/06.1.png" alt="New Notebook Creation"></p>
+<ul>
+<li><strong>Notebook</strong> (select this option)</li>
+</ul>
+<p><strong>Step 3: Project Welcome</strong>
+In the project overview, you&rsquo;ll also see a <strong>Readme</strong> section displaying <strong>&ldquo;Welcome&rdquo;</strong> with guidance on getting started with the project.</p>
+<h3 id="24-verify-ec2-permissions-already-configured-from-task-2">2.4. Verify EC2 Permissions (already configured from Task 2)</h3>
+<p><strong>EC2 permissions were fully configured in Task 2</strong>, including the inline policy <code>SageMakerEC2Access</code> in role <code>mlops-retail-prediction-dev-sagemaker-execution</code>.</p>
+<p><strong>Verify existing EC2 permissions:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Check inline policy already added from Task 2</span>
+</span></span><span style="display:flex;"><span>aws iam get-role-policy --role-name mlops-retail-prediction-dev-sagemaker-execution --policy-name SageMakerEC2Access
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test EC2 describe permissions</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test EC2 describe permissions</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-vpcs --region us-east-<span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p><strong>Role already has all 4 policies from Task 2:</strong></p>
+<ul>
+<li>✅ <code>AmazonSageMakerFullAccess</code> (AWS managed)</li>
+<li>✅ <code>AmazonS3FullAccess</code> (AWS managed)</li>
+<li>✅ <code>CloudWatchLogsFullAccess</code> (AWS managed)</li>
+<li>✅ <code>SageMakerEC2Access</code> (inline policy for Project creation)</li>
+</ul>
+
+<div class="notices success" ><p><strong>Project creation ready:</strong> Role was fully configured from Task 2, can create Project immediately.</p>
+</div>
+
+<h3 id="25-region-recommendations-for-task-4">2.5. Region Recommendations for Task 4</h3>
+<p><strong>Summary:</strong> If the main data <code>gold/</code> and <code>artifacts/</code> currently reside in bucket <code>mlops-retail-prediction-dev-842676018087</code> (region <code>us-east-1</code>), the recommendation is to <strong>create SageMaker Domain / Project in the same <code>us-east-1</code></strong> to avoid cross-region errors (S3 301), KMS complexity, and endpoint issues.</p>
+<ul>
+<li>
+<p><strong>Benefits of creating Project in <code>us-east-1</code>:</strong></p>
+<ul>
+<li>Eliminates &lsquo;bucket must be addressed using the specified endpoint&rsquo; errors when SageMaker loads data from S3.</li>
+<li>No need to maintain KMS keys or IAM policies across multiple regions.</li>
+<li>Less risk when running training jobs from Studio/Project.</li>
+</ul>
+</li>
+<li>
+<p><strong>When needing to create Project in <code>ap-southeast-1</code> (or other regions):</strong></p>
+<ul>
+<li>Must <strong>transfer</strong> or <strong>copy</strong> <code>gold/</code> and <code>artifacts/</code> data to a bucket in that region or configure Cross-Region Replication (CRR).</li>
+<li>Create corresponding KMS keys and update policies/roles for the new bucket.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>If you want to keep the Project in <code>ap-southeast-1</code>, here&rsquo;s an example command to create bucket and copy data (PowerShell / CloudShell):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Create new bucket in ap-southeast-1</span>
+</span></span><span style="display:flex;"><span>aws s3 mb s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>-apse1 --region ap-southeast-<span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Sync gold/ and artifacts/ to new bucket</span>
+</span></span><span style="display:flex;"><span>aws s3 sync s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>/gold/ s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>-apse1/gold/ --acl bucket-owner-full-control -<span style="color:#f92672">-exact</span>-timestamps
+</span></span><span style="display:flex;"><span>aws s3 sync s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>/artifacts/ s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>-apse1/artifacts/ --acl bucket-owner-full-control -<span style="color:#f92672">-exact</span>-timestamps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># (Optional) Create KMS key in ap-southeast-1 and update bucket policy / IAM role</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># aws kms create-key --region ap-southeast-1 --description &#34;KMS for mlops retail ap-southeast-1&#34;</span>
+</span></span></code></pre></div><p>Notes:</p>
+<ul>
+<li>If the source bucket uses SSE-KMS, ensure you create corresponding KMS key in the destination region and update both bucket policy and role <code>mlops-retail-prediction-dev-sagemaker-execution</code>.</li>
+<li>If you want quick resolution with minimal IAM changes, choose to create Project/Domain in <code>us-east-1</code> (where the bucket currently exists) — this is the recommended approach for labs and fast training runs.</li>
+</ul>
+<h3 id="3-etl---data-preparation-in-sagemaker-studio">3. ETL - Data preparation in SageMaker Studio</h3>
+<p><strong>🎯 Objective:</strong> Read ALL shop_week partitions from S3 silver/ and create train/test/validation splits</p>
+<p><strong>Input:</strong> <code>silver/shop_week=200607/</code> to <code>silver/shop_week=200619/</code> (14 partitions)<br>
+<strong>Output:</strong> <code>gold/train.parquet</code>, <code>gold/test.parquet</code>, <code>gold/validation.parquet</code></p>
+<h4 id="step-1-create-etl-notebook-in-project"><strong>Step 1: Create ETL Notebook in Project</strong></h4>
+<p><strong>From Project overview:</strong></p>
+<ol>
+<li>Click <strong>&ldquo;New&rdquo;</strong> dropdown → select <strong>&ldquo;Notebook&rdquo;</strong></li>
+<li>Notebook will open in a new browser tab</li>
+<li>Choose kernel: <strong>Python 3 (Data Science 3.0)</strong></li>
+<li>Rename notebook: <strong>File</strong> → <strong>Rename</strong> → <code>retail-etl-pipeline.ipynb</code></li>
+<li>Notebook will auto-save to S3 project path</li>
+</ol>
+
+<div class="notices info" ><p><strong>Note:</strong></p>
+<ul>
+<li>Notebook runs on SageMaker&rsquo;s managed compute instance</li>
+<li>Files automatically sync with S3 project storage</li>
+<li>Can be shared with team members in project</li>
+</ul>
+</div>
+
+<h4 id="step-2-execute-etl-pipeline"><strong>Step 2: Execute ETL Pipeline</strong></h4>
+<p>Create and run the following cells in order:
+Create and run the following cells in order:</p>
+<p><strong>Cell 1: Install dependencies</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install all required packages</span>
+</span></span><span style="display:flex;"><span>pip install pandas pyarrow s3fs scikit-learn xgboost sagemaker boto3 joblib
+</span></span></code></pre></div><p><strong>Cell 2: Setup configuration</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> boto3
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> datetime
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Configuration - update bucket name for your project</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># If using project S3: amazon-sagemaker-[account-id]-ap-southeast-1-[random-id]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Or bucket from Task 3: mlops-retail-prediction-dev-[account-id]</span>
+</span></span><span style="display:flex;"><span>bucket_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;amazon-sagemaker-842676018087-ap-southeast-1-f6cd5056a835&#39;</span>  <span style="color:#75715e"># &lt;-- UPDATE for your project</span>
+</span></span><span style="display:flex;"><span>raw_prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;silver/&#39;</span>
+</span></span><span style="display:flex;"><span>gold_prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gold/&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize AWS clients</span>
+</span></span><span style="display:flex;"><span>s3 <span style="color:#f92672">=</span> boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#39;s3&#39;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;✅ AWS clients initialized. Bucket: </span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><p><strong>Cell 3: Load data from all partitions</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;📊 Loading all partitioned data from s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>raw_prefix<span style="color:#e6db74">}</span><span style="color:#e6db74">...&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Discover all parquet files in silver/</span>
+</span></span><span style="display:flex;"><span>response <span style="color:#f92672">=</span> s3<span style="color:#f92672">.</span>list_objects_v2(Bucket<span style="color:#f92672">=</span>bucket_name, Prefix<span style="color:#f92672">=</span>raw_prefix)
+</span></span><span style="display:flex;"><span>parquet_files <span style="color:#f92672">=</span> [obj[<span style="color:#e6db74">&#39;Key&#39;</span>] <span style="color:#66d9ef">for</span> obj <span style="color:#f92672">in</span> response<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;Contents&#39;</span>, [])
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> obj[<span style="color:#e6db74">&#39;Key&#39;</span>]<span style="color:#f92672">.</span>endswith(<span style="color:#e6db74">&#39;.parquet&#39;</span>) <span style="color:#f92672">and</span> obj[<span style="color:#e6db74">&#39;Size&#39;</span>] <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;📁 Found </span><span style="color:#e6db74">{</span>len(parquet_files)<span style="color:#e6db74">}</span><span style="color:#e6db74"> parquet files&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load all files into one DataFrame</span>
+</span></span><span style="display:flex;"><span>all_dataframes <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>total_rows <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i, key <span style="color:#f92672">in</span> enumerate(parquet_files[:<span style="color:#ae81ff">10</span>]):  <span style="color:#75715e"># Limit to first 10 files for demo</span>
+</span></span><span style="display:flex;"><span>    s3_path <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>key<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_parquet(s3_path)
+</span></span><span style="display:flex;"><span>        all_dataframes<span style="color:#f92672">.</span>append(df)
+</span></span><span style="display:flex;"><span>        total_rows <span style="color:#f92672">+=</span> len(df)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  ✅ File </span><span style="color:#e6db74">{</span>i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>len(df)<span style="color:#e6db74">:</span><span style="color:#e6db74">,</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> rows from </span><span style="color:#e6db74">{</span>key<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  ❌ Failed to load </span><span style="color:#e6db74">{</span>key<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Combine all data</span>
+</span></span><span style="display:flex;"><span>combined_data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat(all_dataframes, ignore_index<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🎯 Combined dataset: </span><span style="color:#e6db74">{</span>combined_data<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;📋 Columns: </span><span style="color:#e6db74">{</span>list(combined_data<span style="color:#f92672">.</span>columns)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><p><strong>Cell 4: Create features and target variable</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;📌 STEP 1 — Columns in combined_data:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(list(combined_data<span style="color:#f92672">.</span>columns))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Force lowercase column names for safety</span>
+</span></span><span style="display:flex;"><span>combined_data<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> [c<span style="color:#f92672">.</span>lower() <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> combined_data<span style="color:#f92672">.</span>columns]
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 2 — Columns after lowercase normalization:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(list(combined_data<span style="color:#f92672">.</span>columns))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 3 — Checking required columns...&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;basket_id&#39;</span> <span style="color:#f92672">in</span> combined_data<span style="color:#f92672">.</span>columns <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;spend&#39;</span> <span style="color:#f92672">in</span> combined_data<span style="color:#f92672">.</span>columns:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;✅ Found basket_id and spend — proceeding with basket-level feature engineering.&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 4 — Converting numeric columns...&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> col <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;spend&#39;</span>, <span style="color:#e6db74">&#39;quantity&#39;</span>]:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> col <span style="color:#f92672">in</span> combined_data<span style="color:#f92672">.</span>columns:
+</span></span><span style="display:flex;"><span>            combined_data[col] <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>to_numeric(combined_data[col], errors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;coerce&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 5 — Starting groupby aggregation...&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;⚙️ Aggregating, this may take a moment...&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    features <span style="color:#f92672">=</span> combined_data<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;basket_id&#39;</span>)<span style="color:#f92672">.</span>agg({
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;spend&#39;</span>: [<span style="color:#e6db74">&#39;sum&#39;</span>, <span style="color:#e6db74">&#39;mean&#39;</span>, <span style="color:#e6db74">&#39;count&#39;</span>],
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;quantity&#39;</span>: [<span style="color:#e6db74">&#39;sum&#39;</span>, <span style="color:#e6db74">&#39;mean&#39;</span>] <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;quantity&#39;</span> <span style="color:#f92672">in</span> combined_data<span style="color:#f92672">.</span>columns <span style="color:#66d9ef">else</span> []
+</span></span><span style="display:flex;"><span>    })<span style="color:#f92672">.</span>reset_index()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;✅ Aggregation complete.&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📊 Features raw shape: </span><span style="color:#e6db74">{</span>features<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Flatten column names</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 6 — Flattening column names...&#34;</span>)
+</span></span><span style="display:flex;"><span>    features<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>        [<span style="color:#e6db74">&#39;basket_id&#39;</span>, <span style="color:#e6db74">&#39;spend_sum&#39;</span>, <span style="color:#e6db74">&#39;spend_mean&#39;</span>, <span style="color:#e6db74">&#39;spend_count&#39;</span>] <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>        ([<span style="color:#e6db74">&#39;quantity_sum&#39;</span>, <span style="color:#e6db74">&#39;quantity_mean&#39;</span>] <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;quantity&#39;</span> <span style="color:#f92672">in</span> combined_data<span style="color:#f92672">.</span>columns <span style="color:#66d9ef">else</span> [])
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;📋 New feature columns:&#34;</span>, list(features<span style="color:#f92672">.</span>columns))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 7 — Creating price_sensitivity target variable...&#34;</span>)
+</span></span><span style="display:flex;"><span>    median_spend <span style="color:#f92672">=</span> features[<span style="color:#e6db74">&#39;spend_sum&#39;</span>]<span style="color:#f92672">.</span>median()
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Median spend = </span><span style="color:#e6db74">{</span>median_spend<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    features[<span style="color:#e6db74">&#39;price_sensitivity&#39;</span>] <span style="color:#f92672">=</span> (features[<span style="color:#e6db74">&#39;spend_sum&#39;</span>] <span style="color:#f92672">&gt;</span> median_spend)<span style="color:#f92672">.</span>astype(int)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;❌ Could NOT find required columns for basket-level engineering.&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;Available columns:&#34;</span>, list(combined_data<span style="color:#f92672">.</span>columns))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 Fallback: Using transaction-level feature engineering...&#34;</span>)
+</span></span><span style="display:flex;"><span>    features <span style="color:#f92672">=</span> combined_data<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;spend&#39;</span> <span style="color:#f92672">in</span> features<span style="color:#f92672">.</span>columns:
+</span></span><span style="display:flex;"><span>        features[<span style="color:#e6db74">&#39;price_sensitivity&#39;</span>] <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>            features[<span style="color:#e6db74">&#39;spend&#39;</span>] <span style="color:#f92672">&gt;</span> features[<span style="color:#e6db74">&#39;spend&#39;</span>]<span style="color:#f92672">.</span>median()
+</span></span><span style="display:flex;"><span>        )<span style="color:#f92672">.</span>astype(int)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;✅ Created price_sensitivity for transaction-level data.&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">RuntimeError</span>(<span style="color:#e6db74">&#34;❌ spend column not found — cannot create price_sensitivity.&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 8 — Final feature table shape:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(features<span style="color:#f92672">.</span>shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 9 — Target distribution:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(features[<span style="color:#e6db74">&#39;price_sensitivity&#39;</span>]<span style="color:#f92672">.</span>value_counts(dropna<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📌 STEP 10 — Sample output:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(features<span style="color:#f92672">.</span>head())
+</span></span></code></pre></div><p><strong>Cell 5: Create train/test/validation splits and save to S3</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(<span style="color:#e6db74">&#39;📋 Creating train/test/validation splits...&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create stratified splits</span>
+</span></span><span style="display:flex;"><span>train_data, temp_data <span style="color:#f92672">=</span> train_test_split(
+</span></span><span style="display:flex;"><span>    features, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>,
+</span></span><span style="display:flex;"><span>    stratify<span style="color:#f92672">=</span>features[<span style="color:#e6db74">&#39;price_sensitivity&#39;</span>]
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test_data, val_data <span style="color:#f92672">=</span> train_test_split(
+</span></span><span style="display:flex;"><span>    temp_data, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.33</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>,
+</span></span><span style="display:flex;"><span>    stratify<span style="color:#f92672">=</span>temp_data[<span style="color:#e6db74">&#39;price_sensitivity&#39;</span>]
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>splits <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;train&#39;</span>: train_data,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;test&#39;</span>: test_data,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;validation&#39;</span>: val_data
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Save to S3</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;💾 Saving splits to s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>gold_prefix<span style="color:#e6db74">}</span><span style="color:#e6db74">...&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> split_name, split_data <span style="color:#f92672">in</span> splits<span style="color:#f92672">.</span>items():
+</span></span><span style="display:flex;"><span>    s3_path <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>gold_prefix<span style="color:#e6db74">}{</span>split_name<span style="color:#e6db74">}</span><span style="color:#e6db74">.parquet&#39;</span>
+</span></span><span style="display:flex;"><span>    split_data<span style="color:#f92672">.</span>to_parquet(s3_path, index<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  ✅ </span><span style="color:#e6db74">{</span>split_name<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>len(split_data)<span style="color:#e6db74">:</span><span style="color:#e6db74">,</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> rows saved to </span><span style="color:#e6db74">{</span>split_name<span style="color:#e6db74">}</span><span style="color:#e6db74">.parquet&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🎉 ETL Complete! Data ready for training.&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify files created</span>
+</span></span><span style="display:flex;"><span>response <span style="color:#f92672">=</span> s3<span style="color:#f92672">.</span>list_objects_v2(Bucket<span style="color:#f92672">=</span>bucket_name, Prefix<span style="color:#f92672">=</span>gold_prefix)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;Contents&#39;</span> <span style="color:#f92672">in</span> response:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📁 Files in gold/:&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> obj <span style="color:#f92672">in</span> response[<span style="color:#e6db74">&#39;Contents&#39;</span>]:
+</span></span><span style="display:flex;"><span>        size_mb <span style="color:#f92672">=</span> obj[<span style="color:#e6db74">&#39;Size&#39;</span>] <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1024</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  📄 </span><span style="color:#e6db74">{</span>obj[<span style="color:#e6db74">&#34;Key&#34;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>size_mb<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> MB&#39;</span>)
+</span></span></code></pre></div><h2 id="4-training---model-training">4. Training - Model Training</h2>
+<p><strong>🎯 Objective:</strong> Train Random Forest model to classify customer price sensitivity</p>
+<p><strong>Input:</strong> S3 <code>gold/train.parquet</code>, <code>gold/test.parquet</code>, <code>gold/validation.parquet</code><br>
+<strong>Output:</strong> Trained Random Forest model in S3 artifacts/ with performance metrics</p>
+<h4 id="step-1-create-training-notebook-in-project"><strong>Step 1: Create Training Notebook in Project</strong></h4>
+<ol>
+<li>In Studio interface, click <strong>File</strong> → <strong>New</strong> → <strong>Notebook</strong></li>
+<li>Choose <strong>conda_python3</strong> kernel (or <strong>Python 3 (Data Science)</strong>)</li>
+<li>Name notebook: <code>notebooks/retail-model-training.ipynb</code></li>
+<li>Click <strong>Create</strong></li>
+</ol>
+<p><img src="/images4-sagemake-training/05.7.png" alt="Create notebook"></p>
+<p><strong>💡 Note:</strong> Notebook will be saved in Project repository and can be committed to CodeCommit.</p>
+<h4 id="step-2-execute-model-training"><strong>Step 2: Execute Model Training</strong></h4>
+<p>Create and run the following cells in order:
+Create and run the following cells in order:</p>
+<p><strong>Cell 1: Setup SageMaker Configuration</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> sagemaker
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> boto3
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sagemaker.sklearn.estimator <span style="color:#f92672">import</span> SKLearn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize SageMaker session and get execution role</span>
+</span></span><span style="display:flex;"><span>sagemaker_session <span style="color:#f92672">=</span> sagemaker<span style="color:#f92672">.</span>Session()
+</span></span><span style="display:flex;"><span>role <span style="color:#f92672">=</span> sagemaker<span style="color:#f92672">.</span>get_execution_role()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Configuration - update bucket name if different</span>
+</span></span><span style="display:flex;"><span>bucket_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;mlops-retail-prediction-dev-842676018087&#39;</span>
+</span></span><span style="display:flex;"><span>gold_prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gold/&#39;</span>
+</span></span><span style="display:flex;"><span>artifacts_prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;artifacts/&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;✅ SageMaker Role: </span><span style="color:#e6db74">{</span>role<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;📊 Training Data: s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>gold_prefix<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;📦 Model Artifacts: s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>artifacts_prefix<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><p><strong>Cell 2: Create Training Script</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">%%</span>writefile train_retail_model<span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> joblib
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.ensemble <span style="color:#f92672">import</span> RandomForestClassifier
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> accuracy_score, f1_score, precision_score, recall_score, classification_report
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Standard SageMaker paths</span>
+</span></span><span style="display:flex;"><span>    train_dir <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;SM_CHANNEL_TRAIN&#34;</span>, <span style="color:#e6db74">&#34;/opt/ml/input/data/train&#34;</span>)
+</span></span><span style="display:flex;"><span>    model_dir <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;SM_MODEL_DIR&#34;</span>, <span style="color:#e6db74">&#34;/opt/ml/model&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 1. Load data</span>
+</span></span><span style="display:flex;"><span>    train_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(train_dir, <span style="color:#e6db74">&#34;train.parquet&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📖 Loading training data from: </span><span style="color:#e6db74">{</span>train_path<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_parquet(train_path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📊 Dataset shape: </span><span style="color:#e6db74">{</span>df<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📋 Columns: </span><span style="color:#e6db74">{</span>list(df<span style="color:#f92672">.</span>columns)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 2. Prepare features &amp; target</span>
+</span></span><span style="display:flex;"><span>    target_col <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;price_sensitivity&#34;</span> <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;price_sensitivity&#34;</span> <span style="color:#f92672">in</span> df<span style="color:#f92672">.</span>columns <span style="color:#66d9ef">else</span> df<span style="color:#f92672">.</span>columns[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    feature_cols <span style="color:#f92672">=</span> [c <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> df<span style="color:#f92672">.</span>columns <span style="color:#66d9ef">if</span> c <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> [target_col, <span style="color:#e6db74">&#34;basket_id&#34;</span>]]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    X <span style="color:#f92672">=</span> df[feature_cols]
+</span></span><span style="display:flex;"><span>    y <span style="color:#f92672">=</span> df[target_col]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;🔢 Features: </span><span style="color:#e6db74">{</span>len(feature_cols)<span style="color:#e6db74">}</span><span style="color:#e6db74"> columns&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;🎯 Target: </span><span style="color:#e6db74">{</span>target_col<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📈 Target distribution: </span><span style="color:#e6db74">{</span>dict(y<span style="color:#f92672">.</span>value_counts())<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 3. Train/validation split (stratified)</span>
+</span></span><span style="display:flex;"><span>    X_train, X_val, y_train, y_val <span style="color:#f92672">=</span> train_test_split(
+</span></span><span style="display:flex;"><span>        X, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>, stratify<span style="color:#f92672">=</span>y
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 4. Train Random Forest model</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🌲 Training Random Forest model...&#34;</span>)
+</span></span><span style="display:flex;"><span>    model <span style="color:#f92672">=</span> RandomForestClassifier(
+</span></span><span style="display:flex;"><span>        n_estimators<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>,
+</span></span><span style="display:flex;"><span>        max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>        min_samples_split<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>,
+</span></span><span style="display:flex;"><span>        min_samples_leaf<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    model<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 5. Evaluate model</span>
+</span></span><span style="display:flex;"><span>    y_pred <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(X_val)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    accuracy <span style="color:#f92672">=</span> accuracy_score(y_val, y_pred)
+</span></span><span style="display:flex;"><span>    f1 <span style="color:#f92672">=</span> f1_score(y_val, y_pred, average<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;macro&#34;</span>)
+</span></span><span style="display:flex;"><span>    precision <span style="color:#f92672">=</span> precision_score(y_val, y_pred, average<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;macro&#34;</span>)
+</span></span><span style="display:flex;"><span>    recall <span style="color:#f92672">=</span> recall_score(y_val, y_pred, average<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;macro&#34;</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Classification report</span>
+</span></span><span style="display:flex;"><span>    class_report <span style="color:#f92672">=</span> classification_report(y_val, y_pred, output_dict<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📊 Model Performance:&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  Accuracy:  </span><span style="color:#e6db74">{</span>accuracy<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  Precision: </span><span style="color:#e6db74">{</span>precision<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  Recall:    </span><span style="color:#e6db74">{</span>recall<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  F1-Score:  </span><span style="color:#e6db74">{</span>f1<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 6. Save model</span>
+</span></span><span style="display:flex;"><span>    model_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(model_dir, <span style="color:#e6db74">&#34;model.joblib&#34;</span>)
+</span></span><span style="display:flex;"><span>    joblib<span style="color:#f92672">.</span>dump(model, model_path)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;💾 Model saved to: </span><span style="color:#e6db74">{</span>model_path<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 7. Save training results</span>
+</span></span><span style="display:flex;"><span>    results <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;model_name&#34;</span>: <span style="color:#e6db74">&#34;RandomForestClassifier&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;accuracy&#34;</span>: float(accuracy),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;precision&#34;</span>: float(precision),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;recall&#34;</span>: float(recall),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;f1_score&#34;</span>: float(f1),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;feature_count&#34;</span>: len(feature_cols),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;training_samples&#34;</span>: len(X_train),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;validation_samples&#34;</span>: len(X_val),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;classification_report&#34;</span>: class_report
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    results_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(model_dir, <span style="color:#e6db74">&#34;training_results.json&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(results_path, <span style="color:#e6db74">&#34;w&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>        json<span style="color:#f92672">.</span>dump(results, f, indent<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 8. Validate performance targets</span>
+</span></span><span style="display:flex;"><span>    target_accuracy <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.80</span>
+</span></span><span style="display:flex;"><span>    target_f1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.70</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🎯 Performance validation:&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  📊 Accuracy ≥ </span><span style="color:#e6db74">{</span>target_accuracy<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span><span style="color:#e6db74">&#34;✅&#34;</span> <span style="color:#66d9ef">if</span> accuracy <span style="color:#f92672">&gt;=</span> target_accuracy <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;❌&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>accuracy<span style="color:#e6db74">:</span><span style="color:#e6db74">.3f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">)&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;  📊 F1-Score ≥ </span><span style="color:#e6db74">{</span>target_f1<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span><span style="color:#e6db74">&#34;✅&#34;</span> <span style="color:#66d9ef">if</span> f1 <span style="color:#f92672">&gt;=</span> target_f1 <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;❌&#34;</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>f1<span style="color:#e6db74">:</span><span style="color:#e6db74">.3f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">)&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    main()
+</span></span></code></pre></div><p><strong>Cell 3: Submit the SageMaker Training Job</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;🚀 Submitting SageMaker Training Job...&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Pre-flight: check region + data in gold/</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Pre-flight: check region + data in gold/</span>
+</span></span><span style="display:flex;"><span>s3_client <span style="color:#f92672">=</span> boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#34;s3&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bucket_location <span style="color:#f92672">=</span> s3_client<span style="color:#f92672">.</span>get_bucket_location(Bucket<span style="color:#f92672">=</span>bucket_name)
+</span></span><span style="display:flex;"><span>bucket_region <span style="color:#f92672">=</span> bucket_location[<span style="color:#e6db74">&#34;LocationConstraint&#34;</span>] <span style="color:#f92672">or</span> <span style="color:#e6db74">&#34;us-east-1&#34;</span>
+</span></span><span style="display:flex;"><span>current_region <span style="color:#f92672">=</span> sagemaker_session<span style="color:#f92672">.</span>boto_region_name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📍 Bucket region:    </span><span style="color:#e6db74">{</span>bucket_region<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📍 SageMaker region: </span><span style="color:#e6db74">{</span>current_region<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check cross-region issue</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check cross-region issue</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> bucket_region <span style="color:#f92672">!=</span> current_region:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;⚠️ Region mismatch detected!&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  Bucket &#39;</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39; is in </span><span style="color:#e6db74">{</span>bucket_region<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  SageMaker session is in </span><span style="color:#e6db74">{</span>current_region<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  This may cause S3 access errors during training&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  Solutions:&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;    1. Create SageMaker Domain in </span><span style="color:#e6db74">{</span>bucket_region<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;    2. Copy data to bucket in </span><span style="color:#e6db74">{</span>current_region<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;    3. Configure cross-region S3 access&#34;</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">import</span> warnings
+</span></span><span style="display:flex;"><span>    warnings<span style="color:#f92672">.</span>warn(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Cross-region S3 access: </span><span style="color:#e6db74">{</span>bucket_region<span style="color:#e6db74">}</span><span style="color:#e6db74"> -&gt; </span><span style="color:#e6db74">{</span>current_region<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;✅ Same region - no cross-region issues&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>train_s3_uri <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>gold_prefix<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>resp <span style="color:#f92672">=</span> s3_client<span style="color:#f92672">.</span>list_objects_v2(Bucket<span style="color:#f92672">=</span>bucket_name, Prefix<span style="color:#f92672">=</span>gold_prefix)
+</span></span><span style="display:flex;"><span>data_files <span style="color:#f92672">=</span> [o[<span style="color:#e6db74">&#34;Key&#34;</span>] <span style="color:#66d9ef">for</span> o <span style="color:#f92672">in</span> resp<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;Contents&#34;</span>, []) <span style="color:#66d9ef">if</span> o[<span style="color:#e6db74">&#34;Key&#34;</span>]<span style="color:#f92672">.</span>endswith(<span style="color:#e6db74">&#34;.parquet&#34;</span>)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> data_files:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;❌ No .parquet files found in </span><span style="color:#e6db74">{</span>train_s3_uri<span style="color:#e6db74">}</span><span style="color:#e6db74">. Run ETL first.&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;❌ No .parquet files found in </span><span style="color:#e6db74">{</span>train_s3_uri<span style="color:#e6db74">}</span><span style="color:#e6db74">. Run ETL first.&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;✅ Found </span><span style="color:#e6db74">{</span>len(data_files)<span style="color:#e6db74">}</span><span style="color:#e6db74"> training files in </span><span style="color:#e6db74">{</span>train_s3_uri<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Configure estimator</span>
+</span></span><span style="display:flex;"><span>estimator <span style="color:#f92672">=</span> SKLearn(
+</span></span><span style="display:flex;"><span>    entry_point<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;train_retail_model.py&#34;</span>,
+</span></span><span style="display:flex;"><span>    instance_type<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ml.m5.large&#34;</span>,
+</span></span><span style="display:flex;"><span>    instance_count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    role<span style="color:#f92672">=</span>role,
+</span></span><span style="display:flex;"><span>    py_version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;py3&#34;</span>,
+</span></span><span style="display:flex;"><span>    framework_version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.2-1&#34;</span>,
+</span></span><span style="display:flex;"><span>    sagemaker_session<span style="color:#f92672">=</span>sagemaker_session,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;📊 Training data location: </span><span style="color:#e6db74">{</span>train_s3_uri<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run training job</span>
+</span></span><span style="display:flex;"><span>estimator<span style="color:#f92672">.</span>fit({<span style="color:#e6db74">&#34;train&#34;</span>: train_s3_uri}, wait<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>job_name <span style="color:#f92672">=</span> estimator<span style="color:#f92672">.</span>latest_training_job<span style="color:#f92672">.</span>name
+</span></span><span style="display:flex;"><span>model_artifacts <span style="color:#f92672">=</span> estimator<span style="color:#f92672">.</span>model_data
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🎉 Training job completed!&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;📝 Job name:       &#34;</span>, job_name)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;💾 Model artifacts:&#34;</span>, model_artifacts)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;❌ Pre-flight check failed: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;   Common fixes:&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;   1. Verify bucket name: </span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;   2. Check gold/ folder has .parquet files&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;   3. Verify IAM role has S3 access&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Configure estimator for Unified Studio project</span>
+</span></span><span style="display:flex;"><span>estimator <span style="color:#f92672">=</span> SKLearn(
+</span></span><span style="display:flex;"><span>    entry_point<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;train_retail_model.py&#39;</span>,
+</span></span><span style="display:flex;"><span>    instance_type<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ml.m5.large&#39;</span>,
+</span></span><span style="display:flex;"><span>    instance_count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    role<span style="color:#f92672">=</span>role,
+</span></span><span style="display:flex;"><span>    py_version<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;py3&#39;</span>,
+</span></span><span style="display:flex;"><span>    framework_version<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;1.2-1&#39;</span>,
+</span></span><span style="display:flex;"><span>    sagemaker_session<span style="color:#f92672">=</span>sagemaker_session,
+</span></span><span style="display:flex;"><span>    output_path<span style="color:#f92672">=</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;s3://</span><span style="color:#e6db74">{</span>bucket_name<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>artifacts_prefix<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;📊 Training data location: </span><span style="color:#e6db74">{</span>train_s3_uri<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Start training job with error handling</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;⏳ Starting training job (this will take 5–10 minutes)...&#39;</span>)
+</span></span><span style="display:flex;"><span>    estimator<span style="color:#f92672">.</span>fit({<span style="color:#e6db74">&#39;train&#39;</span>: train_s3_uri}, wait<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    job_name <span style="color:#f92672">=</span> estimator<span style="color:#f92672">.</span>latest_training_job<span style="color:#f92672">.</span>name
+</span></span><span style="display:flex;"><span>    model_artifacts <span style="color:#f92672">=</span> estimator<span style="color:#f92672">.</span>model_data
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🎉 Training job completed!&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;📝 Job name:       &#39;</span>, job_name)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;💾 Model artifacts:&#39;</span>, model_artifacts)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;❌ Training job failed: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;   Check CloudWatch logs for details:&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;   AWS Console → CloudWatch → Log groups → /aws/sagemaker/TrainingJobs/&#39;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;   Look for log group: </span><span style="color:#e6db74">{</span>job_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span>
+</span></span></code></pre></div><p><strong>Cell 4: Download &amp; Read Training Results</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tarfile
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> boto3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;📊 Analyzing training results...&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># model_artifacts from Cell 3 (estimator.model_data)</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;📦 Artifact path:&#34;</span>, model_artifacts)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Extract bucket + key</span>
+</span></span><span style="display:flex;"><span>art_parts <span style="color:#f92672">=</span> model_artifacts<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#34;s3://&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>)<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>art_bucket <span style="color:#f92672">=</span> art_parts[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>art_key <span style="color:#f92672">=</span> art_parts[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>s3 <span style="color:#f92672">=</span> boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#34;s3&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Download model.tar.gz locally</span>
+</span></span><span style="display:flex;"><span>local_tar <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;model.tar.gz&#34;</span>
+</span></span><span style="display:flex;"><span>s3<span style="color:#f92672">.</span>download_file(art_bucket, art_key, local_tar)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;📥 Downloaded&#34;</span>, local_tar)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Extract to model_artifacts/ directory</span>
+</span></span><span style="display:flex;"><span>extract_dir <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;model_artifacts&#34;</span>
+</span></span><span style="display:flex;"><span>os<span style="color:#f92672">.</span>makedirs(extract_dir, exist_ok<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> tarfile<span style="color:#f92672">.</span>open(local_tar, <span style="color:#e6db74">&#34;r:gz&#34;</span>) <span style="color:#66d9ef">as</span> tar:
+</span></span><span style="display:flex;"><span>    tar<span style="color:#f92672">.</span>extractall(extract_dir)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📂 Files inside model:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(os<span style="color:#f92672">.</span>listdir(extract_dir))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Read training_results.json</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Read training_results.json</span>
+</span></span><span style="display:flex;"><span>results_path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(extract_dir, <span style="color:#e6db74">&#34;training_results.json&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(results_path, <span style="color:#e6db74">&#34;r&#34;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    results <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>load(f)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🌲 RANDOM FOREST TRAINING RESULTS:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  🤖 Model:      </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;model_name&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  📊 Accuracy:   </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;accuracy&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  📊 Precision:  </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;precision&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  📊 Recall:     </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;recall&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  📊 F1-Score:   </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;f1_score&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  🔢 Features:   </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;feature_count&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  📚 Train rows: </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;training_samples&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">,</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  🧪 Val rows:   </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;validation_samples&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">,</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">📋 Per-class Performance:&#34;</span>)
+</span></span><span style="display:flex;"><span>class_report <span style="color:#f92672">=</span> results[<span style="color:#e6db74">&#39;classification_report&#39;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> class_name, metrics <span style="color:#f92672">in</span> class_report<span style="color:#f92672">.</span>items():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(metrics, dict) <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;f1-score&#39;</span> <span style="color:#f92672">in</span> metrics:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  Class </span><span style="color:#e6db74">{</span>class_name<span style="color:#e6db74">}</span><span style="color:#e6db74">: F1=</span><span style="color:#e6db74">{</span>metrics[<span style="color:#e6db74">&#39;f1-score&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.3f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, Precision=</span><span style="color:#e6db74">{</span>metrics[<span style="color:#e6db74">&#39;precision&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.3f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, Recall=</span><span style="color:#e6db74">{</span>metrics[<span style="color:#e6db74">&#39;recall&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.3f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Validate target</span>
+</span></span><span style="display:flex;"><span>acc_target <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.80</span>
+</span></span><span style="display:flex;"><span>f1_target <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.70</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">🎯 Performance validation:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  📊 Accuracy ≥ </span><span style="color:#e6db74">{</span>acc_target<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span><span style="color:#e6db74">&#39;✅&#39;</span> <span style="color:#66d9ef">if</span> results[<span style="color:#e6db74">&#39;accuracy&#39;</span>] <span style="color:#f92672">&gt;=</span> acc_target <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#39;❌&#39;</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;accuracy&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.3f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">)&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;  📊 F1-score ≥ </span><span style="color:#e6db74">{</span>f1_target<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span><span style="color:#e6db74">&#39;✅&#39;</span> <span style="color:#66d9ef">if</span> results[<span style="color:#e6db74">&#39;f1_score&#39;</span>] <span style="color:#f92672">&gt;=</span> f1_target <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#39;❌&#39;</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;f1_score&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.3f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">)&#34;</span>)
+</span></span></code></pre></div><p><strong>Results</strong>
+<img src="/images4-sagemake-training/00.png" alt="Training results"></p>
+
+<div class="notices success" ><p>✅ <strong>Training Complete!</strong> Model achieves target performance and is ready for Model Registry.</p>
+</div>
+
+<h2 id="5-monitoring--results">5. Monitoring &amp; Results</h2>
+<h3 id="51-monitor-training-job-in-studio">5.1. Monitor Training Job in Studio</h3>
+<p>In <strong>SageMaker Studio (Unified Studio)</strong>:
+In <strong>SageMaker Studio (Unified Studio)</strong>:</p>
+<ol>
+<li>
+<p>Open <strong>Build</strong> section in left sidebar</p>
+</li>
+<li>
+<p>Select <strong>Training jobs</strong></p>
+</li>
+</ol>
+<p><img src="/images4-sagemake-training/08.1.png" alt="Training logs example"></p>
+<ol start="3">
+<li>
+<p>Find job starting with: retail-prediction-training-</p>
+</li>
+<li>
+<p>Click on <strong>Training Job name</strong> to open details</p>
+</li>
+</ol>
+<p><img src="/images4-sagemake-training/08.2.png" alt="Training logs example"></p>
+<ol start="5">
+<li>
+<p>Select <strong>Logs</strong> tab to view real-time logs</p>
+</li>
+<li>
+<p>(Optional) Click <strong>&ldquo;Open in CloudWatch&rdquo;</strong> to view full logs</p>
+</li>
+</ol>
+<p><img src="/images4-sagemake-training/08.3.png" alt="Training logs example"></p>
+<p><img src="/images4-sagemake-training/08.4.png" alt="Training logs example"></p>
+
+<div class="notices info" ><p><strong>Info:</strong><br>
+CloudWatch logs for Training Jobs are stored as: /aws/sagemaker/TrainingJobs/<job-name> If the job fails, Python errors will be at the end of the logs.</p>
+</div>
+
+<h2 id="6-model-registry-new-interface-in-project">6. Model Registry (New interface in Project)</h2>
+<p>After the training job completes and creates <code>model.tar.gz</code>, the next step is to register the model in <strong>Model Registry</strong>.<br>
+In the new SageMaker Unified Studio interface, Model Registry is located <strong>within each Project</strong>, not separated as before.</p>
+<hr>
+<h3 id="61-open-model-registry-in-project">6.1. Open Model Registry in Project</h3>
+<p><strong>SageMaker Studio → Projects → mlops-retail-prediction → Models → Registered models</strong></p>
+<p><img src="/images4-sagemake-training/09.1.png" alt="Model registry"></p>
+<p><img src="/images4-sagemake-training/09.2.png" alt="Model registry"></p>
+<h3 id="62-create-model-group">6.2. Create Model Group</h3>
+<ol>
+<li>Click <strong>Register model group</strong></li>
+<li>Fill in:</li>
+<li>Click <strong>Register model group</strong></li>
+<li>Fill in:
+<ul>
+<li><strong>Name</strong>: <code>retail-price-sensitivity-models</code></li>
+<li><strong>Description</strong>: <code>Model group for retail price sensitivity prediction</code></li>
+</ul>
+</li>
+<li>Click <strong>Register model group</strong></li>
+<li>Click <strong>Register model group</strong></li>
+</ol>
+<p><img src="/images4-sagemake-training/09.3.png" alt="Model registry"></p>
+<p>Model Group will appear in the list.</p>
+<p><img src="/images4-sagemake-training/09.4.png" alt="Model registry"></p>
+<hr>
+<h3 id="63-register-model-version-after-training">6.3. Register Model Version after Training</h3>
+<p><img src="/images4-sagemake-training/09.5.png" alt="Model registry"></p>
+<p><img src="/images4-sagemake-training/09.6.png" alt="Model registry"></p>
+<ol>
+<li>Go to <strong>Models → Registered models versions → Model groups</strong></li>
+<li>Go to <strong>Models → Registered models versions → Model groups</strong></li>
+</ol>
+<p><img src="/images4-sagemake-training/09.7.png" alt="Model registry"></p>
+<ol start="2">
+<li>Select group: <strong>retail-price-sensitivity-models</strong></li>
+<li>Click <strong>Register model</strong></li>
+<li>Enter information:
+<ul>
+<li><strong>Model artifact location (S3)</strong><br>
+Copy from training job output (e.g., <code>s3://bucket/artifacts/job-name/output/model.tar.gz</code>)</li>
+<li><strong>Approval status</strong>: <code>Pending manual approval</code></li>
+</ul>
+</li>
+<li>Click <strong>Register</strong></li>
+<li>Click <strong>Register</strong></li>
+</ol>
+<p><img src="/images4-sagemake-training/09.8.png" alt="Model registry"></p>
+<p>A new <em>Model Version</em> will be created.</p>
+<p><img src="/images4-sagemake-training/09.9.png" alt="Model registry"></p>
+<p><img src="/images4-sagemake-training/09.10.png" alt="Model registry"></p>
+<hr>
+<h3 id="64-approve-a-model-version">6.4. Approve a Model Version</h3>
+<ol>
+<li>Open <strong>Model group → retail-price-sensitivity-models</strong></li>
+<li>Select <strong>Version 1</strong></li>
+<li>Click <strong>Update status</strong></li>
+<li>Set to:
+<ul>
+<li><strong>Approved</strong></li>
+</ul>
+</li>
+<li>Save</li>
+</ol>
+<p><img src="/images4-sagemake-training/09.11.png" alt="Model registry"></p>
+<h3 id="task-4-completion">Task 4 Completion</h3>
+<p><strong>📁 Execution Notebook:</strong> <code>notebooks/sagemaker-retail-etl-training.ipynb</code></p>
+<p><strong>Successfully completed:</strong></p>
+<ul>
+<li>✅ <strong>Created SageMaker Domain</strong> and configuration</li>
+<li>✅ <strong>Created Project</strong> and opened Studio workspace</li>
+<li>✅ <strong>ETL entire dataset</strong> - All shop_week partitions → Gold Parquet</li>
+<li>✅ <strong>Auto-detect partitions</strong> - Scan all available shop_week</li>
+<li>✅ <strong>Train Random Forest</strong> with optimal hyperparameters</li>
+<li>✅ <strong>Single model focus</strong> to optimize performance</li>
+<li>✅ <strong>Spot instances</strong> - Cost optimization with auto-scaling</li>
+<li>✅ <strong>Complete notebook</strong> - 4 cells with detailed logging</li>
+</ul>
+<h2 id="7-clean-up-resources-aws-cli">7. Clean Up Resources (AWS CLI)</h2>
+<h3 id="71-delete-sagemaker-training-jobs">7.1. Delete SageMaker Training Jobs</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># List training jobs</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List training jobs</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-training-jobs --name-contains <span style="color:#e6db74">&#34;retail-prediction-training&#34;</span> --query <span style="color:#e6db74">&#39;TrainingJobSummaries[*].[TrainingJobName,TrainingJobStatus]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Stop running training job (if any)</span>
+</span></span><span style="display:flex;"><span>aws sagemaker stop-training-job --training-job-name &lt;job-name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Training jobs auto-cleanup after completion (no manual deletion needed)</span>
+</span></span></code></pre></div><h3 id="72-delete-model-registry">7.2. Delete Model Registry</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># List model packages</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List model packages</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-model-packages --model-package-group-name retail-price-sensitivity-models --query <span style="color:#e6db74">&#39;ModelPackageSummaryList[*].[ModelPackageArn,ModelPackageStatus]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete each model package version</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete each model package version</span>
+</span></span><span style="display:flex;"><span>aws sagemaker delete-model-package --model-package-name &lt;model-package-arn&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete model package group</span>
+</span></span><span style="display:flex;"><span>aws sagemaker delete-model-package-group --model-package-group-name retail-price-sensitivity-models
+</span></span></code></pre></div><h3 id="73-delete-sagemaker-domain-and-project">7.3. Delete SageMaker Domain and Project</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># List domains</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List domains</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-domains --query <span style="color:#e6db74">&#39;Domains[*].[DomainId,DomainName,Status]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete user profiles first</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-user-profiles --domain-id &lt;domain-id&gt; --query <span style="color:#e6db74">&#39;UserProfiles[*].UserProfileName&#39;</span> --output text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete each user profile</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete each user profile</span>
+</span></span><span style="display:flex;"><span>aws sagemaker delete-user-profile --domain-id &lt;domain-id&gt; --user-profile-name &lt;user-profile-name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete domain (after deleting all user profiles)</span>
+</span></span><span style="display:flex;"><span>aws sagemaker delete-domain --domain-id &lt;domain-id&gt;
+</span></span></code></pre></div><h3 id="74-clean-up-s3-artifacts">7.4. Clean up S3 artifacts</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Delete model artifacts</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete model artifacts</span>
+</span></span><span style="display:flex;"><span>aws s3 rm s3://amazon-sagemaker-&lt;account-id&gt;-&lt;region&gt;-&lt;random-id&gt;/artifacts/ --recursive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete gold datasets</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete gold datasets</span>
+</span></span><span style="display:flex;"><span>aws s3 rm s3://amazon-sagemaker-&lt;account-id&gt;-&lt;region&gt;-&lt;random-id&gt;/gold/ --recursive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check what&#39;s left in project bucket</span>
+</span></span><span style="display:flex;"><span>aws s3 ls s3://amazon-sagemaker-&lt;account-id&gt;-&lt;region&gt;-&lt;random-id&gt;/ --recursive
+</span></span></code></pre></div><h3 id="75-delete-cloudwatch-logs">7.5. Delete CloudWatch Logs</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># List SageMaker log groups</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List SageMaker log groups</span>
+</span></span><span style="display:flex;"><span>aws logs describe-log-groups --log-group-name-prefix <span style="color:#e6db74">&#34;/aws/sagemaker/TrainingJobs&#34;</span> --query <span style="color:#e6db74">&#39;logGroups[*].logGroupName&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete training job logs</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete training job logs</span>
+</span></span><span style="display:flex;"><span>aws logs delete-log-group --log-group-name <span style="color:#e6db74">&#34;/aws/sagemaker/TrainingJobs/retail-prediction-training-&lt;timestamp&gt;&#34;</span>
+</span></span></code></pre></div><hr>
+<h2 id="8-sagemaker-pricing-table">8. SageMaker Pricing Table</h2>
+<h3 id="81-training-instance-costs">8.1. Training Instance Costs</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Instance Type</th>
+          <th>vCPU</th>
+          <th>RAM</th>
+          <th>Price (USD/hour)</th>
+          <th>Suitable for</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>ml.m5.large</strong></td>
+          <td>2</td>
+          <td>8 GB</td>
+          <td>$0.138</td>
+          <td>Small datasets, prototyping</td>
+      </tr>
+      <tr>
+          <td><strong>ml.m5.xlarge</strong></td>
+          <td>4</td>
+          <td>16 GB</td>
+          <td>$0.276</td>
+          <td>Medium datasets (used)</td>
+      </tr>
+      <tr>
+          <td><strong>ml.m5.2xlarge</strong></td>
+          <td>8</td>
+          <td>32 GB</td>
+          <td>$0.552</td>
+          <td>Large datasets</td>
+      </tr>
+      <tr>
+          <td><strong>ml.c5.xlarge</strong></td>
+          <td>4</td>
+          <td>8 GB</td>
+          <td>$0.238</td>
+          <td>CPU-intensive training</td>
+      </tr>
+      <tr>
+          <td><strong>ml.p3.2xlarge</strong></td>
+          <td>8</td>
+          <td>61 GB</td>
+          <td>$4.284</td>
+          <td>GPU deep learning</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="82-sagemaker-studio-costs">8.2. SageMaker Studio Costs</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Price (USD)</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Studio Notebooks</strong></td>
+          <td>$0.0582/hour</td>
+          <td>ml.t3.medium default</td>
+      </tr>
+      <tr>
+          <td><strong>Domain Setup</strong></td>
+          <td>Free</td>
+          <td>One-time setup</td>
+      </tr>
+      <tr>
+          <td><strong>Data Wrangler</strong></td>
+          <td>$0.42/hour</td>
+          <td>Visual data prep</td>
+      </tr>
+      <tr>
+          <td><strong>Processing Jobs</strong></td>
+          <td>Instance pricing</td>
+          <td>Same as training</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="83-model-registry--endpoints-costs">8.3. Model Registry &amp; Endpoints Costs</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Service</th>
+          <th>Price (USD)</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Model Registry</strong></td>
+          <td>Free</td>
+          <td>Model versioning</td>
+      </tr>
+      <tr>
+          <td><strong>Real-time Endpoint</strong></td>
+          <td>$0.076/hour</td>
+          <td>ml.t2.medium</td>
+      </tr>
+      <tr>
+          <td><strong>Batch Transform</strong></td>
+          <td>Instance pricing</td>
+          <td>Pay per job</td>
+      </tr>
+      <tr>
+          <td><strong>Multi-model Endpoint</strong></td>
+          <td>$0.076/hour + storage</td>
+          <td>Cost optimization</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="84-task-4-cost-estimate">8.4. Task 4 Cost Estimate</h3>
+<p><strong>Actual Training Job:</strong></p>
+<ul>
+<li>Instance: ml.m5.xlarge</li>
+<li>Duration: ~10–15 minutes</li>
+<li><strong>Training cost:</strong> $0.276 × 0.25h = <strong>$0.07</strong></li>
+</ul>
+<p><strong>SageMaker Studio:</strong></p>
+<ul>
+<li>Notebook development: ~2 hours</li>
+<li>Instance: ml.t3.medium</li>
+<li><strong>Studio cost:</strong> $0.0582 × 2h = <strong>$0.12</strong></li>
+</ul>
+<p><strong>Storage &amp; Model Registry:</strong></p>
+<ul>
+<li>Model artifacts: ~50MB</li>
+<li>S3 storage: ~$0.001</li>
+<li>Model Registry: Free</li>
+</ul>
+<p><strong>Total Task 4 Cost:</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Duration</th>
+          <th>Cost</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Training (ml.m5.xlarge)</td>
+          <td>15 mins</td>
+          <td>$0.07</td>
+      </tr>
+      <tr>
+          <td>Studio Notebooks</td>
+          <td>2 hours</td>
+          <td>$0.12</td>
+      </tr>
+      <tr>
+          <td>S3 Storage</td>
+          <td>Monthly</td>
+          <td>$0.001</td>
+      </tr>
+      <tr>
+          <td><strong>Total</strong></td>
+          <td></td>
+          <td><strong>≈ $0.19</strong></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Comparison with other options:</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Approach</th>
+          <th>Instance</th>
+          <th>Duration</th>
+          <th>Cost</th>
+          <th>Performance</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Current (ml.m5.xlarge)</strong></td>
+          <td>4 vCPU, 16GB</td>
+          <td>15 min</td>
+          <td>$0.07</td>
+          <td>✅ Balanced</td>
+      </tr>
+      <tr>
+          <td>Smaller (ml.m5.large)</td>
+          <td>2 vCPU, 8GB</td>
+          <td>25 min</td>
+          <td>$0.06</td>
+          <td>Slower</td>
+      </tr>
+      <tr>
+          <td>Larger (ml.m5.2xlarge)</td>
+          <td>8 vCPU, 32GB</td>
+          <td>8 min</td>
+          <td>$0.07</td>
+          <td>Faster, similar cost</td>
+      </tr>
+      <tr>
+          <td>Spot instance</td>
+          <td>Same specs</td>
+          <td>15 min</td>
+          <td>$0.02–0.05</td>
+          <td>60–70% savings</td>
+      </tr>
+  </tbody>
+</table>
+
+<div class="notices info" ><p><strong>💰 Cost Optimization Tips:</strong></p>
+<ul>
+<li><strong>Spot instances:</strong> 60-70% cheaper for non-critical training</li>
+<li><strong>Smaller instances:</strong> OK for datasets &lt; 1GB</li>
+<li><strong>Studio auto-shutdown:</strong> Auto-stop notebooks after 1h idle</li>
+<li><strong>Batch jobs:</strong> Instead of real-time endpoints for inference</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="notices info" ><p><strong>📊 SageMaker Unified Studio Benefits:</strong></p>
+<ul>
+<li><strong>Integrated Workspace</strong>: Project-based collaboration with shared resources</li>
+<li><strong>Managed Infrastructure</strong>: Auto-provisioned compute for notebooks and training</li>
+<li><strong>Cross-Region Support</strong>: Built-in handling of S3 cross-region access</li>
+<li><strong>Asset Catalog</strong>: Automatic registration of models and datasets</li>
+<li><strong>Team Collaboration</strong>: Shared notebooks, workflows, and approval processes</li>
+<li><strong>Cost Optimization</strong>: Managed compute with automatic scaling</li>
+<li><strong>Unified Interface</strong>: Single pane for data, ML, and generative AI workflows</li>
+</ul>
+</div>
+
+<h2 id="-task-4-implementation-video">📹 Task 4 Implementation Video</h2>
+<div style="position: relative; width: 100%; max-width: 2000px; margin: 0 auto; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    src="https://www.youtube.com/embed/watch?v=jWCJqT_Ot18&list=PL53MEKrSAUpu0i5F-ttcVdKkSv0jb48Mc&index=3" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+</div>
+<hr>
+<p><strong>Next Step</strong>: <a href="/5-workshop/5-vpc/">Task 05: Production VPC</a></p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/5-workshop/5-vpc/" title="Production Networking" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765386116"></script>
+    <script src="/js/jquery.sticky.js?1765386116"></script>
+    <script src="/js/featherlight.min.js?1765386116"></script>
+    <script src="/js/highlight.pack.js?1765386116"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765386116"></script>
+    <script src="/js/learn.js?1765386116"></script>
+    <script src="/js/hugo-learn.js?1765386116"></script>
+
+    <link href="/mermaid/mermaid.css?1765386116" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765386116"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

@@ -1,0 +1,3185 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Data Pipeline Optimization :: AWS MLOps Docs</title>
+
+    
+    <link href="/css/nucleus.css?1765386116" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765386116" rel="stylesheet">
+    <link href="/css/hybrid.css?1765386116" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765386116" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765386116" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765386116" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765386116" rel="stylesheet">
+    <link href="/css/theme.css?1765386116" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765386116" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765386116"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/5-workshop/3-s3-data-storage/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765386116"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765386116"></script>
+<script type="text/javascript">
+    var baseurl = "https:\/\/docs.vinashoes.org\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765386116"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/" title="Worklog" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/">
+           <b> 1. </b> Worklog
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.1-week1/" title="Week 1 - Introduction to AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Week 1 - Introduction to AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.2-week2/" title="Week 2 - Networking on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Week 2 - Networking on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.3-week3/" title="Week 3 - Compute VM Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Week 3 - Compute VM Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.4-week4/" title="Week 4 - Storage Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Week 4 - Storage Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.5-week5/" title="Week 5 - Security Services on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Week 5 - Security Services on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.6-week6/" title="Week 6 - Database Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Week 6 - Database Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.7-week7/" title="Week 7 - DataLake Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Week 7 - DataLake Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.8-week8/" title="Week 8 - Serverless Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Week 8 - Serverless Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.9-week9/" title="Week 9 - Container Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Week 9 - Container Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.10-week10/" title="Week 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Week 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.11-week11/" title="Week 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Week 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.12-week12/" title="Week 12 - Capstone: Personal Project" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Week 12 - Capstone: Personal Project
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/" title="Translated blogs" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/">
+           <b> 3. </b> Translated blogs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.1-blog1/" title="Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.1-blog1/">
+           <b> 3.1. </b> Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.2-blog2/" title="Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.2-blog2/">
+           <b> 3.2. </b> Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.3-blog3/" title="AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.3-blog3/">
+           <b> 3.3. </b> AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.4-blog4/" title="Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.4-blog4/">
+           <b> 3.4. </b> Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.5-blog5/" title="Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.5-blog5/">
+           <b> 3.5. </b> Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.6-blog6/" title="Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.6-blog6/">
+           <b> 3.6. </b> Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.7-blog7/" title="Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.9-blog9/" title="AWS Partner Central now available in AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central now available in AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.10-blog10/" title="Announcing AWS Partner Central in the AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Announcing AWS Partner Central in the AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.11-blog11/" title="Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.12-blog12/" title="Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-eventparticipated/" title="Events Participated" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-eventparticipated/">
+           <b> 4. </b> Events Participated
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/" title="Workshop" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/1-introduction/" title="MLOps Architecture Design" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/1-introduction/">
+          <b>1. </b>MLOps Architecture Design
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/6-ecr-registry/" title="Amazon ECR Container Registry (MLOps)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/6-ecr-registry/">
+          <b>6. </b>Amazon ECR Container Registry (MLOps)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/7-eks-cluster/" title="EKS Cluster Setup (Production)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup (Production)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/7-feedback/" title="Sharing and Feedback" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/7-feedback/">
+           <b> 7. </b> Sharing and Feedback
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="https://docs.vinashoes.org/5-workshop/3-s3-data-storage/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="https://docs.vinashoes.org/vi/5-workshop/3-s3-data-storage/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/5-Workshop/3-s3-data-storage/_index.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Internship Report</a> > <a href='/5-workshop/'>Workshop</a> > Data Pipeline Optimization
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#-task-3-objectives">🎯 Task 3 Objectives</a></li>
+    <li><a href="#-real-lab-environment">🔧 Real lab environment</a></li>
+    <li><a href="#1-s3-bucket-structure--organization">1. S3 bucket structure &amp; organization</a>
+      <ul>
+        <li><a href="#11-general-storage-structure">1.1. General storage structure</a></li>
+        <li><a href="#12-actual-structure-in-lab">1.2. Actual structure in lab</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-create-bucket--folders-on-aws-console">2. Create bucket &amp; folders on AWS Console</a>
+      <ul>
+        <li><a href="#21-create-s3-bucket">2.1. Create S3 Bucket</a></li>
+        <li><a href="#22-create-4-main-folders">2.2. Create 4 main folders</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-enable-intelligent-tiering-cost-optimization">3. Enable Intelligent-Tiering (cost optimization)</a></li>
+    <li><a href="#4-convert-csv--parquet-using-aws-glue-studio-visual-etl">4. Convert CSV → Parquet using AWS Glue Studio (Visual ETL)</a>
+      <ul>
+        <li><a href="#41-upload-transactionscsv-to-raw">4.1. Upload <code>transactions.csv</code> to <code>raw/</code></a></li>
+        <li><a href="#42-create-glue-job-visual-etl">4.2. Create Glue Job (Visual ETL)</a></li>
+        <li><a href="#43-source-node--read-csv-from-s3">4.3. Source node – read CSV from S3</a></li>
+        <li><a href="#44-transform--applymapping-schema-optimization">4.4. Transform – ApplyMapping (schema optimization)</a></li>
+        <li><a href="#45-target--write-parquet-snappy-to-silver">4.5. Target – write Parquet (Snappy) to <code>silver/</code></a></li>
+        <li><a href="#45-target--write-parquet-snappy-to-silver-1">4.5. Target – write Parquet (Snappy) to <code>silver/</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#5-real-benchmark-on-aws-cloudshell-read-directly-from-s3">5. Real benchmark on AWS CloudShell (read directly from S3)</a>
+      <ul>
+        <li><a href="#51-dataset-info--how-to-run">5.1. Dataset info &amp; how to run</a></li>
+        <li><a href="#52-measurement-results-cloudshell">5.2. Measurement results (CloudShell)</a></li>
+        <li><a href="#53-comparison-table-cloudshell">5.3. Comparison table (CloudShell)</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-benchmark-on-local-machine">6. Benchmark on local machine</a>
+      <ul>
+        <li><a href="#61-prepare-directory--download-data">6.1. Prepare directory &amp; download data</a></li>
+        <li><a href="#62-benchmark-script">6.2. Benchmark script</a></li>
+        <li><a href="#63-actual-logs">6.3. Actual logs</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-iam--minimum-permissions-for-glue-job-summary">7. IAM – Minimum permissions for Glue Job (summary)</a></li>
+    <li><a href="#8-task-3-summary--s3-data-storage">8. Task 3 Summary – S3 Data Storage</a></li>
+    <li><a href="#9-clean-up-resources-aws-cli">9. Clean Up Resources (AWS CLI)</a>
+      <ul>
+        <li><a href="#91-delete-all-objects-in-s3-bucket">9.1. Delete all objects in S3 bucket</a></li>
+        <li><a href="#92-delete-s3-bucket">9.2. Delete S3 bucket</a></li>
+        <li><a href="#93-delete-glue-job">9.3. Delete Glue Job</a></li>
+        <li><a href="#94-delete-iam-role-if-created-specifically-for-glue">9.4. Delete IAM Role (if created specifically for Glue)</a></li>
+      </ul>
+    </li>
+    <li><a href="#10-s3-storage-pricing-table-ap-southeast-1">10. S3 Storage Pricing Table (ap-southeast-1)</a>
+      <ul>
+        <li><a href="#101-storage-cost-by-class">10.1. Storage cost by class</a></li>
+        <li><a href="#102-request-costs">10.2. Request costs</a></li>
+        <li><a href="#103-project-cost-estimate">10.3. Project cost estimate</a></li>
+      </ul>
+    </li>
+    <li><a href="#-task-3-implementation-video">📹 Task 3 Implementation Video</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Data Pipeline Optimization
+            </h1>
+          
+
+        
+
+
+
+	<h2 id="-task-3-objectives">🎯 Task 3 Objectives</h2>
+<p>Create <strong>S3 bucket</strong> and organize data for MLOps pipeline following the standard <strong>raw → silver → gold → artifacts</strong>, convert CSV → Parquet using <strong>AWS Glue Studio (Visual ETL)</strong> and <strong>measure read/write performance benchmarks</strong>:</p>
+<ul>
+<li>Measure on <strong>AWS CloudShell</strong>.</li>
+<li>Measure on <strong>local machine</strong> (Windows, 16GB RAM).</li>
+</ul>
+<p>Focus on:</p>
+<ul>
+<li><strong>Read/write performance</strong>: CSV vs Parquet.</li>
+<li><strong>Storage size</strong>: before/after compression.</li>
+<li><strong>How-to</strong>: step-by-step specifics, reproducible.</li>
+</ul>
+
+<div class="notices info" ><p><strong>💡 Task 3 – S3 Storage Optimization</strong></p>
+<ul>
+<li>✅ Optimize <strong>format</strong>: Parquet + Snappy instead of plain CSV.</li>
+<li>✅ Optimize <strong>read/write performance</strong> for ETL &amp; training.</li>
+<li>✅ Optimize <strong>storage size</strong> (significantly reduce GB).</li>
+<li>✅ Add <strong>real benchmarks</strong>: CloudShell + local.</li>
+</ul>
+</div>
+
+<hr>
+<p>📥 <strong>Input from Task 2:</strong> <code>IAM Roles &amp; Audit</code> — account ID, IAM roles/policies and CloudTrail/audit setup required to create buckets, Glue roles and permissions.</p>
+<h2 id="-real-lab-environment">🔧 Real lab environment</h2>
+<ul>
+<li><strong>Account ID:</strong> <code>842676018087</code></li>
+<li><strong>Lab region:</strong> <code>us-east-1</code></li>
+<li><strong>Lab region:</strong> <code>us-east-1</code></li>
+<li><strong>Bucket:</strong> <code>mlops-retail-prediction-dev-842676018087</code></li>
+</ul>
+<p>Main dataset:</p>
+<ul>
+<li><code>raw/transactions.csv</code><br>
+≈ <strong>4,593.65 MB</strong>, <strong>33,850,823 rows</strong></li>
+<li>Example 1 Parquet file after ETL:<br>
+≈ <strong>4,593.65 MB</strong>, <strong>33,850,823 rows</strong></li>
+<li>Example 1 Parquet file after ETL:<br>
+<code>silver/shop_week=200607/run-1761638745394-part-block-0-0-r-00000-snappy.parquet</code><br>
+≈ <strong>458.45 MB</strong>, <strong>33,850,823 rows</strong>
+≈ <strong>458.45 MB</strong>, <strong>33,850,823 rows</strong></li>
+</ul>
+<hr>
+<h2 id="1-s3-bucket-structure--organization">1. S3 bucket structure &amp; organization</h2>
+<h3 id="11-general-storage-structure">1.1. General storage structure</h3>
+<p>Apply to all accounts, using <code>{account-id}</code> as placeholder:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>s3://mlops-retail-prediction-dev-{account-id}/
+</span></span><span style="display:flex;"><span>├── raw/        # original CSV data, immutable
+</span></span><span style="display:flex;"><span>├── silver/     # cleaned/standardized Parquet data
+</span></span><span style="display:flex;"><span>├── gold/       # features, aggregated datasets for training/serving
+</span></span><span style="display:flex;"><span>└── artifacts/  # model, metadata, logs, reports
+</span></span></code></pre></div><p>Meaning:</p>
+<ul>
+<li><strong>raw/</strong>: append only, no edit/delete → serve audit &amp; reprocessing.</li>
+<li><strong>silver/</strong>: optimized Parquet storage (standard schema, clean).</li>
+<li><strong>gold/</strong>: final dataset for training/inference.</li>
+<li><strong>artifacts/</strong>: model.tar.gz, notebook export, log, benchmark CSV, etc.</li>
+</ul>
+<hr>
+
+<div class="notices tip" ><p><strong>Tip:</strong> Use clear and consistent prefixes (e.g. <code>raw/</code>, <code>silver/</code>, <code>gold/</code>) to easily set up lifecycle rules, IAM policies and S3 analytics. Add <code>ingest-date=YYYY-MM-DD/</code> if need to track by upload date.</p>
+</div>
+
+<h3 id="12-actual-structure-in-lab">1.2. Actual structure in lab</h3>
+<p>With your account ID:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>S3 Bucket: mlops-retail-prediction-dev-842676018087
+</span></span><span style="display:flex;"><span>├── raw/
+</span></span><span style="display:flex;"><span>│   └── transactions.csv                # original file ~4.59GB
+</span></span><span style="display:flex;"><span>├── silver/
+</span></span><span style="display:flex;"><span>│   ├── transactions/                   # output from Glue ETL (if not partitioned by week)
+</span></span><span style="display:flex;"><span>│   └── shop_week=200607/
+</span></span><span style="display:flex;"><span>│       └── run-1761638745394-part-block-0-0-r-00000-snappy.parquet  # ~458MB
+</span></span><span style="display:flex;"><span>├── gold/
+</span></span><span style="display:flex;"><span>│   └── (reserved for feature store / aggregated tables)
+</span></span><span style="display:flex;"><span>│   └── (reserved for feature store / aggregated tables)
+</span></span><span style="display:flex;"><span>└── artifacts/
+</span></span><span style="display:flex;"><span>    └── (store benchmark results, model, logs, etc.)
+</span></span></code></pre></div><p>You can open S3 Console to confirm correct paths, especially:</p>
+<ul>
+<li><code>raw/transactions.csv</code></li>
+<li>A typical Parquet file in <code>silver/shop_week=.../</code>.</li>
+</ul>
+<hr>
+<h2 id="2-create-bucket--folders-on-aws-console">2. Create bucket &amp; folders on AWS Console</h2>
+<h3 id="21-create-s3-bucket">2.1. Create S3 Bucket</h3>
+<ol>
+<li>Go to <strong>AWS Console → S3 → Create bucket</strong>.</li>
+<li>Configuration:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Bucket name: mlops-retail-prediction-dev-842676018087
+</span></span><span style="display:flex;"><span>Region: us-east-1
+</span></span><span style="display:flex;"><span>Block all public access: ✅ Enabled
+</span></span><span style="display:flex;"><span>Versioning: (recommended) Enabled
+</span></span><span style="display:flex;"><span>Versioning: (recommended) Enabled
+</span></span><span style="display:flex;"><span>Default encryption: ✅ SSE-S3
+</span></span></code></pre></div><!-- IMAGE PLACEHOLDER: Create-bucket - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-create-bucket.png" alt="Placeholder - Create bucket"></p>
+<hr>
+<h3 id="22-create-4-main-folders">2.2. Create 4 main folders</h3>
+<p>In S3 Console:</p>
+<ol>
+<li>Open bucket <code>mlops-retail-prediction-dev-842676018087</code>.</li>
+<li><strong>Create folder</strong> sequentially:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>raw/
+</span></span><span style="display:flex;"><span>silver/
+</span></span><span style="display:flex;"><span>gold/
+</span></span><span style="display:flex;"><span>artifacts/
+</span></span></code></pre></div><!-- IMAGE PLACEHOLDER: Create-folders - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-folders.png" alt="Placeholder - Create folders"></p>
+<hr>
+
+<div class="notices warning" ><p><strong>Warning:</strong> Avoid renaming bucket after deployment — bucket name is global and changes will affect all pipelines, IAM policies, and configs. Always enable <code>Block all public access</code> unless there&rsquo;s a specific reason and it&rsquo;s reviewed.</p>
+</div>
+
+<h2 id="3-enable-intelligent-tiering-cost-optimization">3. Enable Intelligent-Tiering (cost optimization)</h2>
+<p>Purpose: infrequently accessed data (e.g. old <code>raw/</code>, old <code>artifacts/</code> logs) automatically moved to cheaper storage tiers, URL unchanged.</p>
+<p>Steps:</p>
+<ol>
+<li>Go to bucket → <strong>Properties</strong> tab.</li>
+<li>Find <strong>Intelligent-Tiering archive configurations</strong> section → <strong>Edit</strong>.</li>
+<li>Add configuration:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Configuration name: storage-optimization
+</span></span><span style="display:flex;"><span>Status: Enabled
+</span></span><span style="display:flex;"><span>Scope: Entire bucket (or specific prefix: raw/, silver/, gold/, artifacts/)
+</span></span></code></pre></div><!-- IMAGE PLACEHOLDER: Intelligent-tiering - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-intelligent-tiering.png" alt="Placeholder - Intelligent Tiering"></p>
+<hr>
+<h2 id="4-convert-csv--parquet-using-aws-glue-studio-visual-etl">4. Convert CSV → Parquet using AWS Glue Studio (Visual ETL)</h2>
+<h3 id="41-upload-transactionscsv-to-raw">4.1. Upload <code>transactions.csv</code> to <code>raw/</code></h3>
+<p>On S3 Console:</p>
+<ol>
+<li>Open bucket → folder <code>raw/</code>.</li>
+<li><strong>Upload → Add files →</strong> select file <code>transactions.csv</code> from your machine.</li>
+<li><strong>Upload</strong>.</li>
+</ol>
+<!-- IMAGE PLACEHOLDER: Upload-csv - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-upload.png" alt="Placeholder - Upload CSV"></p>
+<hr>
+<h3 id="42-create-glue-job-visual-etl">4.2. Create Glue Job (Visual ETL)</h3>
+<ol>
+<li>Go to <strong>AWS Glue Studio → Jobs → Create job → Visual with a blank canvas</strong>.</li>
+<li>Set name:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Job name: csv-to-parquet-converter
+</span></span></code></pre></div><ol start="3">
+<li>Select/create IAM Role with permissions:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: [<span style="color:#e6db74">&#34;s3:GetObject&#34;</span>, <span style="color:#e6db74">&#34;s3:PutObject&#34;</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;arn:aws:s3:::mlops-retail-prediction-dev-842676018087/raw/*&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;arn:aws:s3:::mlops-retail-prediction-dev-842676018087/silver/*&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;glue:*&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;logs:CreateLogGroup&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;logs:CreateLogStream&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;logs:PutLogEvents&#34;</span>
+</span></span><span style="display:flex;"><span>      ],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h3 id="43-source-node--read-csv-from-s3">4.3. Source node – read CSV from S3</h3>
+<p>In Glue Studio canvas:</p>
+<ol>
+<li>Add <strong>S3 Source</strong>.</li>
+<li>Configuration:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Data source: S3
+</span></span><span style="display:flex;"><span>Format: CSV
+</span></span><span style="display:flex;"><span>S3 URL: s3://mlops-retail-prediction-dev-842676018087/raw/transactions.csv
+</span></span><span style="display:flex;"><span>First row as header: Enabled
+</span></span><span style="display:flex;"><span>Delimiter: ,
+</span></span></code></pre></div><!-- IMAGE PLACEHOLDER: Glue Source config - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-glue-source.png" alt="Placeholder - Glue Source"></p>
+<p>Summary:</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: right">Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">S3 bucket</td>
+          <td><code>mlops-retail-prediction-dev-842676018087</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: right">Path</td>
+          <td><code>raw/transactions.csv</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: right">Format</td>
+          <td>CSV</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">Header</td>
+          <td>Yes</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">Delimiter</td>
+          <td><code>,</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="44-transform--applymapping-schema-optimization">4.4. Transform – ApplyMapping (schema optimization)</h3>
+<ol>
+<li>Add <strong>ApplyMapping</strong> node.</li>
+<li>Connect <strong>Source → ApplyMapping</strong>.</li>
+<li>Data type mapping (example):</li>
+</ol>
+<table>
+  <thead>
+      <tr>
+          <th>Column</th>
+          <th style="text-align: right">Source type</th>
+          <th>Target type</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>SHOP_WEEK</td>
+          <td style="text-align: right">long</td>
+          <td>int</td>
+          <td><code>int32</code> is enough</td>
+      </tr>
+      <tr>
+          <td>SHOP_HOUR</td>
+          <td style="text-align: right">long</td>
+          <td>tinyint</td>
+          <td>0–23</td>
+      </tr>
+      <tr>
+          <td>QUANTITY</td>
+          <td style="text-align: right">long</td>
+          <td>smallint</td>
+          <td>Quantity</td>
+      </tr>
+      <tr>
+          <td>STORE_CODE</td>
+          <td style="text-align: right">string</td>
+          <td>string</td>
+          <td>Keep as is</td>
+      </tr>
+      <tr>
+          <td>SPEND</td>
+          <td style="text-align: right">decimal</td>
+          <td>decimal(10,2)</td>
+          <td>Currency, 2 decimals</td>
+      </tr>
+      <tr>
+          <td>BASKET_TYPE</td>
+          <td style="text-align: right">string</td>
+          <td>string</td>
+          <td>Categorical</td>
+      </tr>
+  </tbody>
+</table>
+<!-- IMAGE PLACEHOLDER: Transform schema - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-transform.png" alt="Placeholder - Transform schema"></p>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li>Reduce Parquet file size.</li>
+<li>Optimize scan &amp; aggregation.</li>
+<li>Reduce RAM when reading data.</li>
+</ul>
+<hr>
+<h3 id="45-target--write-parquet-snappy-to-silver">4.5. Target – write Parquet (Snappy) to <code>silver/</code></h3>
+<h3 id="45-target--write-parquet-snappy-to-silver-1">4.5. Target – write Parquet (Snappy) to <code>silver/</code></h3>
+<ol>
+<li>Add <strong>S3 Target</strong> node.</li>
+<li>Connect <strong>ApplyMapping → Target</strong>.</li>
+<li>Configuration:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Data target: S3
+</span></span><span style="display:flex;"><span>Format: Parquet
+</span></span><span style="display:flex;"><span>Compression: Snappy
+</span></span><span style="display:flex;"><span>S3 path: s3://mlops-retail-prediction-dev-842676018087/silver/transactions/
+</span></span><span style="display:flex;"><span>Partition keys: SHOP_WEEK (recommended)
+</span></span><span style="display:flex;"><span>Partition keys: SHOP_WEEK (recommended)
+</span></span></code></pre></div><p><em>Illustration:</em></p>
+<p>&ndash; Target config: <code>/imagess3-data-storage/target-config.png</code>
+&ndash; Full pipeline: <code>/imagess3-data-storage/04-glue-etl.png</code></p>
+<!-- IMAGE PLACEHOLDER: Glue Target / Pipeline - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-glue-target.png" alt="Placeholder - Glue Target"></p>
+<ol start="4">
+<li><strong>Save &amp; Run job</strong> → monitor <strong>Job run details</strong> → check output in <code>silver/</code>.</li>
+</ol>
+<p><img src="/imagess3-data-storage/04-glue-etl.png" alt="Placeholder - Glue Target"></p>
+<p><img src="/imagess3-data-storage/result-in-silver.png" alt="Placeholder - Glue Target"></p>
+<hr>
+
+<div class="notices info" ><p><strong>Info:</strong> When partitioning, balance between number of partitions and file size — too many small files will slow down queries; consider running compaction step (Glue/Athena/EMR) to merge into larger files (e.g., 128–512 MB each) if needed.</p>
+</div>
+
+
+<div class="notices tip" ><p><strong>Tip:</strong> Choose Snappy for balance between compression ratio and CPU usage. If need to save more I/O, try <code>ZSTD</code> (if your stack supports) for better ratio but check CPU cost.</p>
+</div>
+
+<h2 id="5-real-benchmark-on-aws-cloudshell-read-directly-from-s3">5. Real benchmark on AWS CloudShell (read directly from S3)</h2>
+<h3 id="51-dataset-info--how-to-run">5.1. Dataset info &amp; how to run</h3>
+<ul>
+<li>
+<p>Run on <strong>AWS CloudShell</strong>.</p>
+</li>
+<li>
+<p>Read directly:</p>
+</li>
+<li>
+<p>Run on <strong>AWS CloudShell</strong>.</p>
+</li>
+<li>
+<p>Read directly:</p>
+<ul>
+<li><code>raw/transactions.csv</code> (~4,593.65 MB, 33,850,823 rows).</li>
+<li>1 Parquet file (~458.45 MB, 33,850,823 rows).</li>
+<li>1 Parquet file (~458.45 MB, 33,850,823 rows).</li>
+</ul>
+</li>
+</ul>
+<p>You used scripts like:</p>
+<ul>
+<li><code>read_csv_s3(...)</code> to measure CSV reading.</li>
+<li><code>read_parquet_s3(...)</code> to measure Parquet reading.</li>
+</ul>
+<p>Detailed logs appeared in CloudShell.</p>
+<!-- IMAGE PLACEHOLDER: CloudShell benchmark - paste screenshot here -->
+
+<div class="notices info" ><p><strong>Info:</strong> CloudShell has resource limits (vCPU/RAM/IO) — measured timings may differ from EC2/Glue worker sizes. When comparing, specify instance/worker size to reproduce accurate results.</p>
+</div>
+
+<p>CSV read results:
+<img src="/imagess3-data-storage/placeholder-cloudshell.png" alt="Placeholder - CloudShell benchmark"></p>
+<p>Parquet read results:
+<img src="/imagess3-data-storage/placeholder-cloudshell-parquet.png" alt="Placeholder - CloudShell benchmark"></p>
+<hr>
+<h3 id="52-measurement-results-cloudshell">5.2. Measurement results (CloudShell)</h3>
+<p><strong>CSV – read entire <code>raw/transactions.csv</code> from S3</strong></p>
+<p>5 measurements:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>151.91s, 146.34s, 141.52s, 126.03s, 115.95s
+</span></span></code></pre></div><p>Average calculation (approximate):</p>
+<ul>
+<li>Avg time ≈ <strong>136.35 s</strong></li>
+<li>Size = <strong>4,593.65 MB</strong></li>
+<li>Avg throughput ≈ <strong>33.7 MB/s</strong></li>
+<li>Rows/s ≈ <strong>~248k rows/s</strong></li>
+</ul>
+<hr>
+<p><strong>Parquet – read 1 file ~458.45 MB from S3</strong></p>
+<p>5 measurements:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>61.37s, 53.65s, 52.51s, 49.66s, 49.55s
+</span></span></code></pre></div><p>Average calculation (approximate):</p>
+<ul>
+<li>Avg time ≈ <strong>53.35 s</strong></li>
+<li>Size = <strong>458.45 MB</strong></li>
+<li>Avg throughput ≈ <strong>8.6 MB/s</strong></li>
+<li>Rows/s ≈ <strong>~635k rows/s</strong></li>
+</ul>
+<hr>
+<h3 id="53-comparison-table-cloudshell">5.3. Comparison table (CloudShell)</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: right">Type</th>
+          <th style="text-align: right">Size on S3</th>
+          <th style="text-align: right">Avg time (s)</th>
+          <th style="text-align: right">Avg throughput (MB/s)</th>
+          <th style="text-align: right">Rows</th>
+          <th style="text-align: right">Rows/s (approx)</th>
+          <th style="text-align: right">Relative rows/s</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: right">CSV</td>
+          <td style="text-align: right">4,593.65 MB</td>
+          <td style="text-align: right">136.35</td>
+          <td style="text-align: right">33.7</td>
+          <td style="text-align: right">33,850,823</td>
+          <td style="text-align: right">~248k</td>
+          <td style="text-align: right">1×</td>
+      </tr>
+      <tr>
+          <td style="text-align: right">Parquet</td>
+          <td style="text-align: right">458.45 MB</td>
+          <td style="text-align: right">53.35</td>
+          <td style="text-align: right">8.6</td>
+          <td style="text-align: right">33,850,823</td>
+          <td style="text-align: right">~635k</td>
+          <td style="text-align: right">~2.6×</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Explanation:</strong>
+<strong>Explanation:</strong></p>
+<ul>
+<li>By <strong>MB/s</strong>, CSV seems &ldquo;faster&rdquo; because each run processes more MB (4.59 GB).</li>
+<li>But in terms of <strong>rows per second (rows/s)</strong>, Parquet is <strong>~2.6× faster</strong>, suitable for ETL / training.</li>
+</ul>
+
+<div class="notices info" ><p><strong>CloudShell Conclusion</strong></p>
+<ul>
+<li>Parquet (Snappy) <strong>dramatically reduces storage size</strong>: 4.59 GB → ~0.46 GB.</li>
+<li>With same 33.85M rows, Parquet processes <strong>~2.6× faster</strong> in rows/s.</li>
+</ul>
+</div>
+
+<hr>
+<h2 id="6-benchmark-on-local-machine">6. Benchmark on local machine</h2>
+<h3 id="61-prepare-directory--download-data">6.1. Prepare directory &amp; download data</h3>
+<p>On Windows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir s3-local-benchmark
+</span></span><span style="display:flex;"><span>cd s3-local-benchmark
+</span></span></code></pre></div><p>Download 2 files:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>aws s3 cp s3://mlops-retail-prediction-dev-842676018087/raw/transactions.csv ./transactions.csv
+</span></span><span style="display:flex;"><span>aws s3 cp s3://mlops-retail-prediction-dev-842676018087/silver/shop_week<span style="color:#f92672">=</span>200607/run-1761638745394-part-block-0-0-r-00000-snappy.parquet ./transactions_200607.parquet
+</span></span></code></pre></div><!-- IMAGE PLACEHOLDER: Local download - paste screenshot here -->
+<p><img src="/imagess3-data-storage/placeholder-local-download.png" alt="Placeholder - Local download"></p>
+<h3 id="62-benchmark-script">6.2. Benchmark script</h3>
+<p>Create file <code>local_benchmark.py</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bench_csv_stream</span>(path: str, runs: int <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;=== Benchmark CSV (streaming): </span><span style="color:#e6db74">{</span>path<span style="color:#e6db74">}</span><span style="color:#e6db74"> ===&#34;</span>)
+</span></span><span style="display:flex;"><span>    size_mb <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>getsize(path) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1024</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, runs <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        t0 <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>        rows <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Read in chunks to avoid RAM overflow</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> chunk <span style="color:#f92672">in</span> pd<span style="color:#f92672">.</span>read_csv(path, chunksize<span style="color:#f92672">=</span><span style="color:#ae81ff">500_000</span>):
+</span></span><span style="display:flex;"><span>            rows <span style="color:#f92672">+=</span> len(chunk)
+</span></span><span style="display:flex;"><span>        t1 <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>        elapsed <span style="color:#f92672">=</span> t1 <span style="color:#f92672">-</span> t0
+</span></span><span style="display:flex;"><span>        throughput <span style="color:#f92672">=</span> size_mb <span style="color:#f92672">/</span> elapsed
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;[local_csv_stream] run=</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74"> time=</span><span style="color:#e6db74">{</span>elapsed<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">s, &#34;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;size=</span><span style="color:#e6db74">{</span>size_mb<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> MB, throughput=</span><span style="color:#e6db74">{</span>throughput<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> MB/s, rows=</span><span style="color:#e6db74">{</span>rows<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bench_parquet_stream</span>(path: str, runs: int <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;=== Benchmark Parquet (streaming): </span><span style="color:#e6db74">{</span>path<span style="color:#e6db74">}</span><span style="color:#e6db74"> ===&#34;</span>)
+</span></span><span style="display:flex;"><span>    size_mb <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>getsize(path) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1024</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, runs <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        t0 <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>        df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_parquet(path)
+</span></span><span style="display:flex;"><span>        rows <span style="color:#f92672">=</span> len(df)
+</span></span><span style="display:flex;"><span>        t1 <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>        elapsed <span style="color:#f92672">=</span> t1 <span style="color:#f92672">-</span> t0
+</span></span><span style="display:flex;"><span>        throughput <span style="color:#f92672">=</span> size_mb <span style="color:#f92672">/</span> elapsed
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;[local_parquet_stream] run=</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74"> time=</span><span style="color:#e6db74">{</span>elapsed<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">s, &#34;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;size=</span><span style="color:#e6db74">{</span>size_mb<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> MB, throughput=</span><span style="color:#e6db74">{</span>throughput<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> MB/s, rows=</span><span style="color:#e6db74">{</span>rows<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    bench_csv_stream(<span style="color:#e6db74">&#34;transactions.csv&#34;</span>, runs<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    bench_parquet_stream(<span style="color:#e6db74">&#34;transactions_200607.parquet&#34;</span>, runs<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>)
+</span></span></code></pre></div><p>Run:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python local_benchmark.py
+</span></span></code></pre></div><hr>
+<h3 id="63-actual-logs">6.3. Actual logs</h3>
+<p><img src="/imagess3-data-storage/placeholder-result-readfile.png" alt="Placeholder - Local download"></p>
+<p><strong>Observations:</strong></p>
+<ul>
+<li>CSV full 4.59 GB: still processable thanks to chunk reading, throughput ~90–95 MB/s.</li>
+<li>Parquet (sample 1 week, 6.48 MB): read time ~0.05–0.09s → extremely low latency.</li>
+<li>With many small Parquet files (partitioned by <code>shop_week</code>), querying by week/month will be very fast.</li>
+</ul>
+<hr>
+
+<div class="notices warning" ><p><strong>Warning (Local):</strong> On local machine, reading entire Parquet dataset into memory (<code>pd.read_parquet</code>) can cause RAM shortage. Use reading by pieces (pyarrow dataset, iter_batches) or increase <code>chunksize</code> when using CSV to avoid OOM.</p>
+</div>
+
+
+<div class="notices tip" ><p><strong>Tip (Local):</strong> When benchmarking on Windows, close other heavy programs and IO results may differ between HDD and SSD — note drive type (SSD/HDD) in benchmark report.</p>
+</div>
+
+<h2 id="7-iam--minimum-permissions-for-glue-job-summary">7. IAM – Minimum permissions for Glue Job (summary)</h2>
+<p>Minimum required:</p>
+<ul>
+<li><strong>S3:</strong>
+<ul>
+<li><code>s3:GetObject</code> for <code>raw/*</code></li>
+<li><code>s3:PutObject</code> for <code>silver/*</code></li>
+<li><code>s3:GetObject</code> for <code>raw/*</code></li>
+<li><code>s3:PutObject</code> for <code>silver/*</code></li>
+</ul>
+</li>
+<li><strong>Glue:</strong>
+<ul>
+<li>Permission to create/run job, read metadata (depends on environment).</li>
+</ul>
+</li>
+<li><strong>CloudWatch Logs:</strong> write job logs.</li>
+</ul>
+<p>Example policy:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: [<span style="color:#e6db74">&#34;s3:GetObject&#34;</span>, <span style="color:#e6db74">&#34;s3:PutObject&#34;</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;arn:aws:s3:::mlops-retail-prediction-dev-842676018087/raw/*&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;arn:aws:s3:::mlops-retail-prediction-dev-842676018087/silver/*&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;glue:*&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;logs:CreateLogGroup&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;logs:CreateLogStream&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;logs:PutLogEvents&#34;</span>
+</span></span><span style="display:flex;"><span>      ],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="8-task-3-summary--s3-data-storage">8. Task 3 Summary – S3 Data Storage</h2>
+<p><strong>About architecture:</strong></p>
+<ul>
+<li>
+<p>Design bucket following MLOps standard:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>raw/ → silver/ → gold/ → artifacts/
+</span></span></code></pre></div></li>
+<li>
+<p>Maintain <strong>raw/ immutable</strong>.</p>
+</li>
+<li>
+<p>Standardize data to <strong>Parquet (Snappy)</strong> in <strong>silver/</strong>.</p>
+</li>
+</ul>
+<p><strong>About performance (from your actual measurements):</strong></p>
+<ul>
+<li>
+<p>4.59 GB CSV → ~0.46 GB Parquet for same <strong>33.85M rows</strong>.</p>
+</li>
+<li>
+<p>On CloudShell:</p>
+<ul>
+<li>CSV: ~136s, ~248k rows/s.</li>
+<li>Parquet: ~53s, ~635k rows/s → <strong>~2.6× rows/s</strong>.</li>
+</ul>
+</li>
+<li>
+<p>On local machine (16GB RAM):</p>
+</li>
+<li>
+<p>On local machine (16GB RAM):</p>
+<ul>
+<li>CSV 4.59 GB still processable with <strong>500k rows chunk</strong>.</li>
+<li>Parquet sample 1 week (~6.48 MB) read in <strong>~0.05–0.09s</strong>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>About cost &amp; operations:</strong></p>
+<ul>
+<li>Parquet + Snappy <strong>significantly reduces size</strong> → reduce S3 costs.</li>
+<li>Intelligent-Tiering helps automatically downgrade storage tier for old data.</li>
+<li>Glue Visual ETL helps minimize coding, easy to show in reports.</li>
+</ul>
+<h2 id="9-clean-up-resources-aws-cli">9. Clean Up Resources (AWS CLI)</h2>
+<h3 id="91-delete-all-objects-in-s3-bucket">9.1. Delete all objects in S3 bucket</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Delete all files in bucket</span>
+</span></span><span style="display:flex;"><span>aws s3 rm s3://mlops-retail-prediction-dev-842676018087 --recursive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check bucket is empty</span>
+</span></span><span style="display:flex;"><span>aws s3 ls s3://mlops-retail-prediction-dev-842676018087 --recursive
+</span></span></code></pre></div><h3 id="92-delete-s3-bucket">9.2. Delete S3 bucket</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Delete bucket (only when empty)</span>
+</span></span><span style="display:flex;"><span>aws s3 rb s3://mlops-retail-prediction-dev-842676018087
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check bucket is deleted</span>
+</span></span><span style="display:flex;"><span>aws s3 ls | grep mlops-retail-prediction-dev
+</span></span></code></pre></div><h3 id="93-delete-glue-job">9.3. Delete Glue Job</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># List Glue jobs</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List Glue jobs</span>
+</span></span><span style="display:flex;"><span>aws glue get-jobs --query <span style="color:#e6db74">&#39;Jobs[?contains(Name, `csv-to-parquet`)].Name&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete Glue job</span>
+</span></span><span style="display:flex;"><span>aws glue delete-job --job-name csv-to-parquet-converter
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check job is deleted</span>
+</span></span><span style="display:flex;"><span>aws glue get-job --job-name csv-to-parquet-converter
+</span></span></code></pre></div><h3 id="94-delete-iam-role-if-created-specifically-for-glue">9.4. Delete IAM Role (if created specifically for Glue)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Detach policies from role</span>
+</span></span><span style="display:flex;"><span>aws iam detach-role-policy --role-name GlueETLRole --policy-arn arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete inline policies (if any)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete inline policies (if any)</span>
+</span></span><span style="display:flex;"><span>aws iam delete-role-policy --role-name GlueETLRole --policy-name S3AccessPolicy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete role</span>
+</span></span><span style="display:flex;"><span>aws iam delete-role --role-name GlueETLRole
+</span></span></code></pre></div>
+<div class="notices success" ><p><strong>Success tip:</strong> If you delete resources to avoid costs, check CloudWatch log groups and Athena query history — some logs or query history may still store metadata and cause small costs if not cleaned up.</p>
+</div>
+
+<hr>
+<h2 id="10-s3-storage-pricing-table-ap-southeast-1">10. S3 Storage Pricing Table (ap-southeast-1)</h2>
+<h3 id="101-storage-cost-by-class">10.1. Storage cost by class</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Storage Class</th>
+          <th>Price (USD/GB/month)</th>
+          <th>Minimum Duration</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>S3 Standard</strong></td>
+          <td>$0.025</td>
+          <td>None</td>
+          <td>Frequent access</td>
+      </tr>
+      <tr>
+          <td><strong>S3 Standard-IA</strong></td>
+          <td>$0.0138</td>
+          <td>30 days</td>
+          <td>Infrequent access</td>
+      </tr>
+      <tr>
+          <td><strong>S3 One Zone-IA</strong></td>
+          <td>$0.011</td>
+          <td>30 days</td>
+          <td>Single AZ</td>
+      </tr>
+      <tr>
+          <td><strong>S3 Glacier Instant</strong></td>
+          <td>$0.005</td>
+          <td>90 days</td>
+          <td>Archive, instant retrieval</td>
+      </tr>
+      <tr>
+          <td><strong>S3 Glacier Flexible</strong></td>
+          <td>$0.0045</td>
+          <td>90 days</td>
+          <td>Archive, 1-12 hours retrieval</td>
+      </tr>
+      <tr>
+          <td><strong>S3 Deep Archive</strong></td>
+          <td>$0.002</td>
+          <td>180 days</td>
+          <td>Long-term archive, 12+ hours</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="102-request-costs">10.2. Request costs</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Request Type</th>
+          <th>Price (USD/1000 requests)</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>PUT/POST/LIST</strong></td>
+          <td>$0.0055</td>
+          <td>Write operations</td>
+      </tr>
+      <tr>
+          <td><strong>GET/SELECT</strong></td>
+          <td>$0.00044</td>
+          <td>Read operations</td>
+      </tr>
+      <tr>
+          <td><strong>Data Transfer OUT</strong></td>
+          <td>$0.12/GB</td>
+          <td>First 1GB free/month</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="103-project-cost-estimate">10.3. Project cost estimate</h3>
+<p><strong>Current data:</strong></p>
+<ul>
+<li>Raw CSV: 4.59 GB</li>
+<li>Silver Parquet: 0.46 GB</li>
+<li><strong>Total:</strong> ~5 GB</li>
+</ul>
+<p><strong>Monthly cost (S3 Standard):</strong>
+<strong>Monthly cost (S3 Standard):</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Size</th>
+          <th>Price/GB</th>
+          <th>Monthly Cost</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Raw data (CSV)</td>
+          <td>4.59 GB</td>
+          <td>$0.025</td>
+          <td>$0.11</td>
+      </tr>
+      <tr>
+          <td>Silver data (Parquet)</td>
+          <td>0.46 GB</td>
+          <td>$0.025</td>
+          <td>$0.01</td>
+      </tr>
+      <tr>
+          <td>Gold + artifacts</td>
+          <td>~0.5 GB</td>
+          <td>$0.025</td>
+          <td>$0.01</td>
+      </tr>
+      <tr>
+          <td><strong>Total Storage</strong></td>
+          <td><strong>~5.5 GB</strong></td>
+          <td></td>
+          <td><strong>$0.14</strong></td>
+      </tr>
+      <tr>
+          <td>Requests (estimated)</td>
+          <td>~1000 req</td>
+          <td>$0.0055</td>
+          <td>$0.006</td>
+      </tr>
+      <tr>
+          <td><strong>Grand Total</strong></td>
+          <td></td>
+          <td></td>
+          <td><strong>≈ $0.15/month</strong></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>With Intelligent Tiering:</strong></p>
+<ul>
+<li>After 30 days: Raw data moves to Standard-IA → save ~45%</li>
+<li>After 90 days: Old artifacts move to Glacier → save ~80%</li>
+<li><strong>Estimated savings:</strong> ~$0.05-0.08/month</li>
+</ul>
+
+<div class="notices info" ><p><strong>💰 Optimized Storage Cost</strong></p>
+<ul>
+<li><strong>Current:</strong> ~$0.15/month for 5.5GB</li>
+<li><strong>With Intelligent Tiering:</strong> ~$0.07-0.10/month</li>
+<li><strong>Parquet format:</strong> Reduces 90% storage size vs CSV</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="notices success" ><p><strong>🎯 Task 3 Completed</strong></p>
+<ul>
+<li>Clear S3 architecture, MLOps standard.</li>
+<li>CSV → Parquet using Glue Studio (Visual, with illustrations).</li>
+<li>Real benchmarks on <strong>CloudShell</strong> and <strong>local</strong>, with specific numbers.</li>
+<li>Detailed <strong>clean up commands</strong> and <strong>pricing breakdown</strong>.</li>
+<li>Easy to present in reports &amp; demo for professors.</li>
+</ul>
+</div>
+
+<hr>
+<h2 id="-task-3-implementation-video">📹 Task 3 Implementation Video</h2>
+<div style="position: relative; width: 100%; max-width: 2000px; margin: 0 auto; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    src="https://www.youtube.com/embed/watch?v=CzxyXken33Y&list=PL53MEKrSAUpu0i5F-ttcVdKkSv0jb48Mc&index=2" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+</div>
+<hr>
+<p><strong>Next Step</strong>: <a href="/5-workshop/4-sagemaker-training/">Task 4: SageMaker Training</a></p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765386116"></script>
+    <script src="/js/jquery.sticky.js?1765386116"></script>
+    <script src="/js/featherlight.min.js?1765386116"></script>
+    <script src="/js/highlight.pack.js?1765386116"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765386116"></script>
+    <script src="/js/learn.js?1765386116"></script>
+    <script src="/js/hugo-learn.js?1765386116"></script>
+
+    <link href="/mermaid/mermaid.css?1765386116" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765386116"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

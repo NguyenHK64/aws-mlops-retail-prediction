@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Workshop :: AWS MLOps Docs</title>
+
+    
+    <link href="/css/nucleus.css?1765386116" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765386116" rel="stylesheet">
+    <link href="/css/hybrid.css?1765386116" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765386116" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765386116" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765386116" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765386116" rel="stylesheet">
+    <link href="/css/theme.css?1765386116" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765386116" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765386116"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/5-workshop/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765386116"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765386116"></script>
+<script type="text/javascript">
+    var baseurl = "https:\/\/docs.vinashoes.org\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765386116"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/" title="Worklog" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/">
+           <b> 1. </b> Worklog
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.1-week1/" title="Week 1 - Introduction to AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Week 1 - Introduction to AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.2-week2/" title="Week 2 - Networking on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Week 2 - Networking on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.3-week3/" title="Week 3 - Compute VM Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Week 3 - Compute VM Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.4-week4/" title="Week 4 - Storage Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Week 4 - Storage Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.5-week5/" title="Week 5 - Security Services on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Week 5 - Security Services on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.6-week6/" title="Week 6 - Database Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Week 6 - Database Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.7-week7/" title="Week 7 - DataLake Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Week 7 - DataLake Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.8-week8/" title="Week 8 - Serverless Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Week 8 - Serverless Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.9-week9/" title="Week 9 - Container Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Week 9 - Container Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.10-week10/" title="Week 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Week 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.11-week11/" title="Week 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Week 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.12-week12/" title="Week 12 - Capstone: Personal Project" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Week 12 - Capstone: Personal Project
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/" title="Translated blogs" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/">
+           <b> 3. </b> Translated blogs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.1-blog1/" title="Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.1-blog1/">
+           <b> 3.1. </b> Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.2-blog2/" title="Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.2-blog2/">
+           <b> 3.2. </b> Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.3-blog3/" title="AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.3-blog3/">
+           <b> 3.3. </b> AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.4-blog4/" title="Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.4-blog4/">
+           <b> 3.4. </b> Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.5-blog5/" title="Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.5-blog5/">
+           <b> 3.5. </b> Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.6-blog6/" title="Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.6-blog6/">
+           <b> 3.6. </b> Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.7-blog7/" title="Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.9-blog9/" title="AWS Partner Central now available in AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central now available in AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.10-blog10/" title="Announcing AWS Partner Central in the AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Announcing AWS Partner Central in the AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.11-blog11/" title="Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.12-blog12/" title="Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-eventparticipated/" title="Events Participated" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-eventparticipated/">
+           <b> 4. </b> Events Participated
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/" title="Workshop" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/1-introduction/" title="MLOps Architecture Design" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/1-introduction/">
+          <b>1. </b>MLOps Architecture Design
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/6-ecr-registry/" title="Amazon ECR Container Registry (MLOps)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/6-ecr-registry/">
+          <b>6. </b>Amazon ECR Container Registry (MLOps)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/7-eks-cluster/" title="EKS Cluster Setup (Production)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup (Production)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/7-feedback/" title="Sharing and Feedback" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/7-feedback/">
+           <b> 7. </b> Sharing and Feedback
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="https://docs.vinashoes.org/5-workshop/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="https://docs.vinashoes.org/vi/5-workshop/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/5-Workshop/_index.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            <a href='/'>Internship Report</a> > Workshop
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents"></nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Workshop
+            </h1>
+          
+
+        
+
+
+
+	<h2 style="margin: 20px 0 30px 0; font-size: 2.5rem; color: #131314ff; text-align: center;">AWS MLOps Retail Prediction Platform</h2>
+<p style="text-align: center; font-style: italic; color: #64748b; font-size: 1.1rem; margin-bottom: 40px;">End-to-end MLOps pipeline for Retail Prediction with Infrastructure as Code and Model Deployment</p>
+<!-- Authors Section -->
+<div class="authors-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 800px; margin: 40px auto; padding: 0 20px;">
+  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+    <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 1.2rem;">👨‍💻 Author 1</h3>
+    <p style="margin: 8px 0; color: #475569; font-weight: 600;">Nguyễn Thanh Nhân</p>
+    <p style="margin: 4px 0; color: #64748b; font-size: 14px;">Cloud Engineer</p>
+    <div style="margin-top: 12px;">
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#dc2626"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <a href="mailto:npthanhnhan2003@gmail.com" style="color: #3b82f6; text-decoration: none;">npthanhnhan2003@gmail.com</a>
+      </p>
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0077b5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247/" style="color: #3b82f6; text-decoration: none;">nguyen-nhan-732a66247</a>
+      </p>
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#333"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <a href="https://github.com/uit-ntn" style="color: #3b82f6; text-decoration: none;">uit-ntn</a>
+      </p>
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        <a href="https://www.facebook.com/UIT.NTN.13" style="color: #3b82f6; text-decoration: none;">UIT.NTN.13</a>
+      </p>
+    </div>
+  </div>
+  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+    <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 1.2rem;">👩‍💻 Author 2</h3>
+    <p style="margin: 8px 0; color: #475569; font-weight: 600;">Hà Khả Nguyên</p>
+    <p style="margin: 4px 0; color: #64748b; font-size: 14px;">Data Engineer</p>
+    <div style="margin-top: 12px;">
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#dc2626"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <a href="mailto:hakhanguyen09052004@gmail.com" style="color: #3b82f6; text-decoration: none;">hakhanguyen09052004@gmail.com</a>
+      </p>
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0077b5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <a href="#" style="color: #3b82f6; text-decoration: none;">LinkedIn</a>
+      </p>
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#333"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <a href="https://github.com/NguyenHK64" style="color: #3b82f6; text-decoration: none;">NguyenHK64</a>
+      </p>
+      <p style="margin: 4px 0; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        <a href="https://www.facebook.com/shacocloner" style="color: #3b82f6; text-decoration: none;">Facebook</a>
+      </p>
+    </div>
+  </div>
+</div>
+<div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 30px; border-radius: 16px; margin: 30px 0; box-shadow: 0 8px 25px rgba(30, 60, 114, 0.4);">
+  <h2 style="margin-top: 0; color: white; font-size: 1.8rem; display: flex; align-items: center; gap: 10px;">
+    🛒 Retail Prediction MLOps Technology Stack
+  </h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+      <div style="color: #60a5fa; font-weight: bold; margin-bottom: 8px;">🏗️ Infrastructure</div>
+      <div>Terraform + EKS + VPC + IAM</div>
+    </div>
+    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+      <div style="color: #34d399; font-weight: bold; margin-bottom: 8px;">🤖 ML Training</div>
+      <div>SageMaker + Model Registry + S3</div>
+    </div>
+    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+      <div style="color: #f472b6; font-weight: bold; margin-bottom: 8px;">🐳 Containers</div>
+      <div>EKS + ECR + Docker + HPA</div>
+    </div>
+    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+      <div style="color: #fbbf24; font-weight: bold; margin-bottom: 8px;">💾 Data & Storage</div>
+      <div>S3 Data Lake + Versioning + Lifecycle</div>
+    </div>
+    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+      <div style="color: #a78bfa; font-weight: bold; margin-bottom: 8px;">🔄 CI/CD & Automation</div>
+      <div>Jenkins + Pipeline Automation</div>
+    </div>
+    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+      <div style="color: #fb7185; font-weight: bold; margin-bottom: 8px;">📊 Monitoring & Security</div>
+      <div>CloudWatch + KMS + CloudTrail</div>
+    </div>
+  </div>
+</div>
+<h2 style="margin: 40px 0 30px 0; font-size: 2.2rem; color: #1e293b; text-align: center;">📚 Retail Prediction MLOps Workshop</h2>
+<div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border: 2px dashed #cbd5e1; padding: 30px; border-radius: 16px; margin: 30px 0; text-align: center;">
+  <h3 style="margin: 0 0 15px 0; color: #1e293b; font-size: 1.5rem;">12 Complete MLOps Tasks for Retail Prediction</h3>
+  <p style="color: #64748b; font-size: 16px; margin: 0 0 20px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+    An end-to-end MLOps pipeline from Infrastructure as Code to Model Deployment, including Monitoring and Cost Optimization for Retail Prediction.
+  </p>
+  <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+    <div style="background: #3b82f6; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">🏗️ Infrastructure</div>
+    <div style="background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">🤖 ML Training</div>
+    <div style="background: #8b5cf6; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">🚀 Deployment</div>
+    <div style="background: #ef4444; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">📊 Monitoring</div>
+    <div style="background: #06b6d4; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">🔄 CI/CD</div>
+    <div style="background: #f59e0b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">💰 Cost Optimization</div>
+  </div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 25px; margin: 25px 0;">
+  <div style="border: 2px solid #3b82f6; padding: 25px; border-radius: 16px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1); transition: transform 0.3s ease;">
+    <h3 style="color: #1e40af; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
+      <span style="background: #3b82f6; color: white; padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 16px;">🏗️</span>
+      Infrastructure Foundation
+    </h3>
+    <ul style="margin: 0; padding-left: 0; list-style: none;">
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #3b82f6;">▸</span><a href="/1-introduction/" style="color: #1e40af; text-decoration: none;">Retail prediction architecture & objectives</a></li>
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #3b82f6;">▸</span><a href="/2-vpc-networking/" style="color: #1e40af; text-decoration: none;">VPC, subnets, NAT, security groups</a></li>
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #3b82f6;">▸</span><a href="/3-iam-roles-irsa/" style="color: #1e40af; text-decoration: none;">IAM roles & IRSA configuration</a></li>
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #3b82f6;">▸</span><a href="/4-eks-cluster/" style="color: #1e40af; text-decoration: none;">EKS control plane setup</a></li>
+      <li style="margin-bottom: 0; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #3b82f6;">▸</span><a href="/5-eks-nodegroup/" style="color: #1e40af; text-decoration: none;">EC2 managed node groups</a></li>
+    </ul>
+  </div>
+  <div style="border: 2px solid #10b981; padding: 25px; border-radius: 16px; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1); transition: transform 0.3s ease;">
+    <h3 style="color: #047857; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
+      <span style="background: #10b981; color: white; padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 16px;">🤖</span>
+      ML Training & Registry
+    </h3>
+    <ul style="margin: 0; padding-left: 0; list-style: none;">
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #10b981;">▸</span><a href="/3-s3-data-storage/" style="color: #047857; text-decoration: none;">S3 data lake & model artifacts</a></li>
+      <li style="margin-bottom: 0; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #10b981;">▸</span><a href="/4-sagemake-training/" style="color: #047857; text-decoration: none;">SageMaker retail prediction training & model registry</a></li>
+    </ul>
+  </div>
+  <div style="border: 2px solid #8b5cf6; padding: 25px; border-radius: 16px; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1); transition: transform 0.3s ease;">
+    <h3 style="color: #6d28d9; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
+      <span style="background: #8b5cf6; color: white; padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 16px;">🚀</span>
+      Container Deployment
+    </h3>
+    <ul style="margin: 0; padding-left: 0; list-style: none;">
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #8b5cf6;">▸</span><a href="/6-ecr-registry/" style="color: #6d28d9; text-decoration: none;">ECR container registry</a></li>
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #8b5cf6;">▸</span><a href="/7-eks-cluster/" style="color: #6d28d9; text-decoration: none;">EKS cluster setup</a></li>
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #8b5cf6;">▸</span><a href="/8-docker-build/" style="color: #6d28d9; text-decoration: none;">API containerization</a></li>
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #8b5cf6;">▸</span><a href="/9-deploy-kubernetes/" style="color: #6d28d9; text-decoration: none;">Deploy to Kubernetes</a></li>
+      <li style="margin-bottom: 0; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #8b5cf6;">▸</span><a href="/10-elastic-load-balancing/" style="color: #6d28d9; text-decoration: none;">Load balancing</a></li>
+    </ul>
+  </div>
+  <div style="border: 2px solid #ef4444; padding: 25px; border-radius: 16px; background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1); transition: transform 0.3s ease;">
+    <h3 style="color: #b91c1c; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
+      <span style="background: #ef4444; color: white; padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 16px;">📊</span>
+      Monitoring & Observability
+    </h3>
+    <ul style="margin: 0; padding-left: 0; list-style: none;">
+      <li style="margin-bottom: 8px; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">▸</span><a href="/11-cloudwatch/" style="color: #b91c1c; text-decoration: none;">CloudWatch monitoring & logs</a></li>
+      <li style="margin-bottom: 0; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #ef4444;">▸</span><a href="/12-cicd-jenkins-travis/" style="color: #b91c1c; text-decoration: none;">CI/CD pipeline</a></li>
+    </ul>
+  </div>
+  <div style="border: 2px solid #06b6d4; padding: 25px; border-radius: 16px; background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%); box-shadow: 0 4px 15px rgba(6, 182, 212, 0.1); transition: transform 0.3s ease;">
+    <h3 style="color: #0891b2; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
+      <span style="background: #06b6d4; color: white; padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 16px;">💰</span>
+      Cost & Teardown
+    </h3>
+    <ul style="margin: 0; padding-left: 0; list-style: none;">
+      <li style="margin-bottom: 0; padding-left: 20px; position: relative;"><span style="position: absolute; left: 0; color: #06b6d4;">▸</span><a href="/13-cost-&-teardown/" style="color: #0891b2; text-decoration: none;">Cost optimization & teardown</a></li>
+    </ul>
+  </div>
+</div>
+<div style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border: 1px solid #cbd5e1; border-left: 6px solid #3b82f6; padding: 30px; margin: 40px 0; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);">
+  <h3 style="margin: 0 0 20px 0; color: #1e293b; display: flex; align-items: center; gap: 12px; font-size: 1.5rem;">
+    <span style="background: #3b82f6; color: white; padding: 10px; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">🚀</span>
+    Get Started with the Retail Prediction MLOps Workshop
+  </h3>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px;">
+    <div>
+      <div style="color: #64748b; font-weight: 600; margin-bottom: 8px;">📋 Prerequisites</div>
+      <div style="color: #475569;">AWS Account, Terraform, kubectl, Docker</div>
+    </div>
+    <div>
+      <div style="color: #64748b; font-weight: 600; margin-bottom: 8px;">⏱️ Duration</div>
+      <div style="color: #475569;">12–15 hours (end-to-end MLOps)</div>
+    </div>
+    <div>
+      <div style="color: #64748b; font-weight: 600; margin-bottom: 8px;">📈 Level</div>
+      <div style="color: #475569;">Intermediate to Advanced</div>
+    </div>
+  </div>
+  <a href="/1-introduction/" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.3s ease;">
+    <span>🎯</span> Start with Task 1: Retail Prediction Architecture Overview
+    <span style="font-size: 16px;">→</span>
+  </a>
+</div>
+<div style="margin-top: 50px; padding: 30px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border: 1px solid #e2e8f0;">
+  <h3 style="margin: 0 0 25px 0; color: #1e293b; text-align: center; font-size: 1.6rem;">✨ Workshop Highlights</h3>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+      <div style="font-size: 2rem; margin-bottom: 10px;">🏗️</div>
+      <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px;">Infrastructure as Code</div>
+      <div style="color: #64748b; font-size: 14px;">Terraform automation for all AWS resources</div>
+    </div>
+    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+      <div style="font-size: 2rem; margin-bottom: 10px;">🤖</div>
+      <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px;">SageMaker Training</div>
+      <div style="color: #64748b; font-size: 14px;">Model training and registry for retail prediction</div>
+    </div>
+    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+      <div style="font-size: 2rem; margin-bottom: 10px;">🚀</div>
+      <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px;">EKS Deployment</div>
+      <div style="color: #64748b; font-size: 14px;">Kubernetes deployment for the retail prediction API</div>
+    </div>
+    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+      <div style="font-size: 2rem; margin-bottom: 10px;">🔒</div>
+      <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px;">Security-first</div>
+      <div style="color: #64748b; font-size: 14px;">KMS encryption + CloudTrail auditing</div>
+    </div>
+    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+      <div style="font-size: 2rem; margin-bottom: 10px;">🔄</div>
+      <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px;">CI/CD Pipeline</div>
+      <div style="color: #64748b; font-size: 14px;">Automated build → train → deploy</div>
+    </div>
+    <div style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+      <div style="font-size: 2rem; margin-bottom: 10px;">💰</div>
+      <div style="font-weight: 600; color: #1e293b; margin-bottom: 5px;">Cost Optimized</div>
+      <div style="color: #64748b; font-size: 14px;">Auto-scaling + Spot instances</div>
+    </div>
+  </div>
+</div>
+<!-- Floating scroll indicator -->
+<div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
+  <div onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); transition: all 0.3s ease; font-size: 24px;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    ⬆️
+  </div>
+</div>
+<style>
+  html { scroll-behavior: smooth; }
+  @media (max-width: 768px) {
+    .authors-grid { grid-template-columns: 1fr !important; gap: 20px !important; padding: 0 10px !important; }
+  }
+</style>
+<script>
+  window.addEventListener('scroll', function() {
+    const scrollTop = document.querySelector('[onclick*="scrollTo"]');
+    if (scrollTop) {
+      scrollTop.style.opacity = (window.pageYOffset > 300) ? '1' : '0';
+    }
+  });
+</script>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/4-eventparticipated/" title="Events Participated"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/5-workshop/1-introduction/" title="MLOps Architecture Design" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765386116"></script>
+    <script src="/js/jquery.sticky.js?1765386116"></script>
+    <script src="/js/featherlight.min.js?1765386116"></script>
+    <script src="/js/highlight.pack.js?1765386116"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765386116"></script>
+    <script src="/js/learn.js?1765386116"></script>
+    <script src="/js/hugo-learn.js?1765386116"></script>
+
+    <link href="/mermaid/mermaid.css?1765386116" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765386116"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

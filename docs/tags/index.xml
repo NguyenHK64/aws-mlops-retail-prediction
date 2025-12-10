@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on AWS MLOps Docs</title>
+    <link>https://docs.vinashoes.org/tags/</link>
+    <description>Recent content in Tags on AWS MLOps Docs</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 02 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://docs.vinashoes.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Announcements</title>
+      <link>https://docs.vinashoes.org/tags/announcements/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://docs.vinashoes.org/tags/announcements/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AWS Partner Network</title>
+      <link>https://docs.vinashoes.org/tags/aws-partner-network/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://docs.vinashoes.org/tags/aws-partner-network/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AWS Re:Invent</title>
+      <link>https://docs.vinashoes.org/tags/aws-reinvent/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://docs.vinashoes.org/tags/aws-reinvent/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Customer Solutions</title>
+      <link>https://docs.vinashoes.org/tags/customer-solutions/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://docs.vinashoes.org/tags/customer-solutions/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Foundational (100)</title>
+      <link>https://docs.vinashoes.org/tags/foundational-100/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://docs.vinashoes.org/tags/foundational-100/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

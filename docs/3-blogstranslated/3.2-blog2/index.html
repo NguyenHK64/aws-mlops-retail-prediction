@@ -1,0 +1,2527 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR :: AWS MLOps Docs</title>
+
+    
+    <link href="/css/nucleus.css?1765386116" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765386116" rel="stylesheet">
+    <link href="/css/hybrid.css?1765386116" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765386116" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765386116" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765386116" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765386116" rel="stylesheet">
+    <link href="/css/theme.css?1765386116" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765386116" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765386116"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/3-blogstranslated/3.2-blog2/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765386116"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765386116"></script>
+<script type="text/javascript">
+    var baseurl = "https:\/\/docs.vinashoes.org\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765386116"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/" title="Worklog" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/">
+           <b> 1. </b> Worklog
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.1-week1/" title="Week 1 - Introduction to AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Week 1 - Introduction to AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.2-week2/" title="Week 2 - Networking on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Week 2 - Networking on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.3-week3/" title="Week 3 - Compute VM Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Week 3 - Compute VM Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.4-week4/" title="Week 4 - Storage Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Week 4 - Storage Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.5-week5/" title="Week 5 - Security Services on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Week 5 - Security Services on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.6-week6/" title="Week 6 - Database Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Week 6 - Database Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.7-week7/" title="Week 7 - DataLake Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Week 7 - DataLake Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.8-week8/" title="Week 8 - Serverless Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Week 8 - Serverless Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.9-week9/" title="Week 9 - Container Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Week 9 - Container Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.10-week10/" title="Week 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Week 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.11-week11/" title="Week 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Week 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.12-week12/" title="Week 12 - Capstone: Personal Project" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Week 12 - Capstone: Personal Project
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/" title="Translated blogs" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/3-blogstranslated/">
+           <b> 3. </b> Translated blogs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.1-blog1/" title="Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.1-blog1/">
+           <b> 3.1. </b> Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.2-blog2/" title="Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/3-blogstranslated/3.2-blog2/">
+           <b> 3.2. </b> Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.3-blog3/" title="AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.3-blog3/">
+           <b> 3.3. </b> AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.4-blog4/" title="Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.4-blog4/">
+           <b> 3.4. </b> Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.5-blog5/" title="Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.5-blog5/">
+           <b> 3.5. </b> Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.6-blog6/" title="Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.6-blog6/">
+           <b> 3.6. </b> Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.7-blog7/" title="Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.9-blog9/" title="AWS Partner Central now available in AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central now available in AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.10-blog10/" title="Announcing AWS Partner Central in the AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Announcing AWS Partner Central in the AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.11-blog11/" title="Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.12-blog12/" title="Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-eventparticipated/" title="Events Participated" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-eventparticipated/">
+           <b> 4. </b> Events Participated
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/" title="Workshop" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/1-introduction/" title="MLOps Architecture Design" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/1-introduction/">
+          <b>1. </b>MLOps Architecture Design
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/6-ecr-registry/" title="Amazon ECR Container Registry (MLOps)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/6-ecr-registry/">
+          <b>6. </b>Amazon ECR Container Registry (MLOps)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/7-eks-cluster/" title="EKS Cluster Setup (Production)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup (Production)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/7-feedback/" title="Sharing and Feedback" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/7-feedback/">
+           <b> 7. </b> Sharing and Feedback
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="https://docs.vinashoes.org/3-blogstranslated/3.2-blog2/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/3-BlogsTranslated/3.2-Blog2/_index.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Internship Report</a> > <a href='/3-blogstranslated/'>Translated blogs</a> > Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cách-thức-hoạt-động-của-anti-ddos-amr">Cách thức hoạt động của Anti-DDoS AMR</a></li>
+    <li><a href="#tùy-chỉnh-phản-hồi-đối-với-các-cuộc-tấn-công-ddos-tầng-7">Tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7</a></li>
+    <li><a href="#ví-dụ-1-giảm-thiểu-nhạy-cảm-hơn-bên-ngoài-các-quốc-gia-cốt-lõi">Ví dụ 1: Giảm thiểu nhạy cảm hơn bên ngoài các quốc gia cốt lõi</a>
+      <ul>
+        <li><a href="#cấu-hình">Cấu hình</a></li>
+      </ul>
+    </li>
+    <li><a href="#ví-dụ-2-ngưỡng-giới-hạn-tốc-độ-thấp-hơn-trong-các-cuộc-tấn-công-ddos">Ví dụ 2: Ngưỡng giới hạn tốc độ thấp hơn trong các cuộc tấn công DDoS</a>
+      <ul>
+        <li><a href="#cấu-hình-1">Cấu hình</a></li>
+      </ul>
+    </li>
+    <li><a href="#ví-dụ-3-phản-hồi-thích-ứng-theo-khả-năng-mở-rộng-ứng-dụng-của-bạn">Ví dụ 3: Phản hồi thích ứng theo khả năng mở rộng ứng dụng của bạn</a>
+      <ul>
+        <li><a href="#cấu-hình-2">Cấu hình</a></li>
+      </ul>
+    </li>
+    <li><a href="#kết-luận">Kết luận</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+            </h1>
+          
+
+        
+
+
+
+	<p><em>Bởi Achraf Souk | 09 tháng 12 năm 2025 | trong Advanced (300), AWS WAF, Security, Identity, &amp; Compliance</em></p>
+<p>Trong nửa đầu năm nay, AWS WAF đã giới thiệu các biện pháp bảo vệ tầng ứng dụng mới để giải quyết xu hướng gia tăng của các cuộc tấn công từ chối dịch vụ phân tán (DDoS) tầng 7 (L7) có thời gian tồn tại ngắn và thông lượng cao. Các biện pháp bảo vệ này được cung cấp thông qua nhóm quy tắc AWS WAF Anti-DDoS AWS Managed Rules (Anti-DDoS AMR). Mặc dù cấu hình mặc định có hiệu quả đối với hầu hết các khối lượng công việc, bạn có thể muốn điều chỉnh phản hồi để phù hợp với mức độ chấp nhận rủi ro của ứng dụng.</p>
+<p>Trong bài viết này, bạn sẽ học cách Anti-DDoS AMR hoạt động và cách bạn có thể tùy chỉnh hành vi của nó bằng cách sử dụng nhãn và các quy tắc AWS WAF bổ sung. Bạn sẽ được hướng dẫn qua ba tình huống thực tế, mỗi tình huống minh họa một kỹ thuật tùy chỉnh khác nhau.</p>
+<h2 id="cách-thức-hoạt-động-của-anti-ddos-amr">Cách thức hoạt động của Anti-DDoS AMR</h2>
+<p>Hình 1, khi Anti-DDoS AMR phát hiện một cuộc tấn công DDoS, nó thêm nhãn <code>event-detected</code> vào tất cả các yêu cầu đến và nhãn <code>ddos-request</code> vào các yêu cầu đến được nghi ngờ góp phần vào cuộc tấn công. Nó cũng thêm một nhãn dựa trên mức độ tin cậy bổ sung, chẳng hạn như <code>high-suspicion-ddos-request</code>, khi yêu cầu được nghi ngờ góp phần vào cuộc tấn công. Trong AWS WAF, nhãn là siêu dữ liệu được thêm vào một yêu cầu bởi một quy tắc khi quy tắc phù hợp với yêu cầu. Sau khi được thêm, nhãn có sẵn cho các quy tắc tiếp theo, có thể sử dụng nó để làm phong phú logic đánh giá của chúng. Anti-DDoS AMR sử dụng các nhãn được thêm để giảm thiểu cuộc tấn công DDoS.</p>
+<p><img src="https://d2908q01vomqb2.cloudfront.net/22d200f8670dbdb3e253a90eee5098477c95c23d/2025/11/25/Customize-response-AWS-WAF-1.jpeg" alt="Hình 1 - Quy trình Anti-DDoS AMR"></p>
+<p><em>Hình 1 – Quy trình của Anti-DDoS AMR</em></p>
+<p>Các biện pháp giảm thiểu mặc định dựa trên sự kết hợp của các hành động <code>Block</code> và <code>JavaScript Challenge</code>. Hành động <code>Challenge</code> chỉ có thể được xử lý đúng cách bởi một máy khách đang mong đợi nội dung HTML. Vì lý do này, bạn cần loại trừ các đường dẫn của các yêu cầu không thể thách thức (chẳng hạn như lấy API) trong cấu hình Anti-DDoS AMR. Anti-DDoS AMR áp dụng nhãn <code>challengeable-request</code> cho các yêu cầu không khớp với các loại trừ thách thức được cấu hình. Theo mặc định, các quy tắc giảm thiểu sau được đánh giá theo thứ tự:</p>
+<p>• <strong>ChallengeAllDuringEvent</strong>, tương đương với logic sau: IF <code>event-detected</code> AND <code>challengeable-request</code> THEN challenge.</p>
+<p>• <strong>ChallengeDDoSRequests</strong>, tương đương với logic sau: If (<code>high-suspicion-ddos-request</code> OR <code>medium-suspicion-ddos-request</code> OR <code>low-suspicion-ddos-request</code>) AND <code>challengeable-request</code> THEN challenge. Độ nhạy của nó có thể được thay đổi để phù hợp với nhu cầu của bạn, chẳng hạn như chỉ thách thức các yêu cầu DDoS có mức độ nghi ngờ trung bình và cao.</p>
+<p>• <strong>DDoSRequests</strong>, tương đương với logic sau: IF <code>high-suspicion-ddos-request</code> THEN block. Độ nhạy của nó có thể được thay đổi để phù hợp với nhu cầu của bạn, chẳng hạn như chặn các yêu cầu DDoS có mức độ nghi ngờ trung bình ngoài việc có mức độ nghi ngờ cao.</p>
+<h2 id="tùy-chỉnh-phản-hồi-đối-với-các-cuộc-tấn-công-ddos-tầng-7">Tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7</h2>
+<p>Việc tùy chỉnh này có thể được thực hiện bằng hai cách tiếp cận khác nhau. Trong cách tiếp cận đầu tiên, bạn cấu hình Anti-DDoS AMR để thực hiện hành động mà bạn muốn, sau đó bạn thêm các quy tắc tiếp theo để củng cố thêm phản hồi của bạn trong các điều kiện nhất định. Trong cách tiếp cận thứ hai, bạn thay đổi một số hoặc tất cả các quy tắc của Anti-DDoS AMR thành chế độ đếm, sau đó tạo các quy tắc bổ sung xác định phản hồi của bạn đối với các cuộc tấn công DDoS.</p>
+<p>Trong cả hai cách tiếp cận, các quy tắc tiếp theo được cấu hình bằng cách sử dụng các điều kiện mà bạn xác định, kết hợp với các điều kiện dựa trên nhãn áp dụng cho các yêu cầu bởi Anti-DDoS AMR. Phần sau bao gồm ba ví dụ về việc tùy chỉnh phản hồi của bạn đối với các cuộc tấn công DDoS. Hai ví dụ đầu tiên dựa trên cách tiếp cận đầu tiên, trong khi ví dụ cuối cùng dựa trên cách tiếp cận thứ hai.</p>
+<h2 id="ví-dụ-1-giảm-thiểu-nhạy-cảm-hơn-bên-ngoài-các-quốc-gia-cốt-lõi">Ví dụ 1: Giảm thiểu nhạy cảm hơn bên ngoài các quốc gia cốt lõi</h2>
+<p>Giả sử rằng hoạt động kinh doanh chính của bạn được thực hiện ở hai quốc gia chính, UAE và KSA. Bạn hài lòng với hành vi mặc định của Anti-DDoS AMR ở các quốc gia này, nhưng bạn muốn chặn tích cực hơn bên ngoài các quốc gia này. Bạn có thể triển khai điều này bằng cách sử dụng các quy tắc sau:</p>
+<p>• Anti-DDoS AMR với cấu hình mặc định
+• Một quy tắc tùy chỉnh chặn nếu các điều kiện sau được đáp ứng: Yêu cầu được khởi tạo từ bên ngoài UAE hoặc KSA VÀ yêu cầu có nhãn <code>high-suspicion-ddos-request</code> hoặc <code>medium-suspicion-ddos-request</code></p>
+<h3 id="cấu-hình">Cấu hình</h3>
+<p>Sau khi Anti-DDoS AMR của bạn với cấu hình mặc định, tạo một quy tắc tùy chỉnh tiếp theo với định nghĩa JSON sau:</p>
+<p><strong>Lưu ý</strong>: Bạn cần sử dụng trình chỉnh sửa quy tắc JSON của AWS WAF hoặc các công cụ infrastructure-as-code (IaC) để định nghĩa quy tắc này. Bảng điều khiển AWS WAF hiện tại không cho phép tạo quy tắc với logic AND/OR lồng nhau.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Action&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Block&#34;</span>: {}
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;more-sensitive-ddos-mitigation-outside-of-core-countries&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;AndStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Statements&#34;</span>: [
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;NotStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;GeoMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;CountryCodes&#34;</span>: [
+</span></span><span style="display:flex;"><span>                  <span style="color:#e6db74">&#34;AE&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#e6db74">&#34;SA&#34;</span>
+</span></span><span style="display:flex;"><span>                ]
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;OrStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Statements&#34;</span>: [
+</span></span><span style="display:flex;"><span>              {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;LabelMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;Key&#34;</span>: <span style="color:#e6db74">&#34;awswaf:managed:aws:anti-ddos:high-suspicion-ddos-request&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;Scope&#34;</span>: <span style="color:#e6db74">&#34;LABEL&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>              },
+</span></span><span style="display:flex;"><span>              {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;LabelMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;Key&#34;</span>: <span style="color:#e6db74">&#34;awswaf:managed:aws:anti-ddos:medium-suspicion-ddos-request&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;Scope&#34;</span>: <span style="color:#e6db74">&#34;LABEL&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="ví-dụ-2-ngưỡng-giới-hạn-tốc-độ-thấp-hơn-trong-các-cuộc-tấn-công-ddos">Ví dụ 2: Ngưỡng giới hạn tốc độ thấp hơn trong các cuộc tấn công DDoS</h2>
+<p>Giả sử rằng ứng dụng của bạn có các URL nhạy cảm tốn nhiều tài nguyên tính toán. Để bảo vệ tính khả dụng của ứng dụng, bạn đã áp dụng một quy tắc giới hạn tốc độ cho các URL này được cấu hình với ngưỡng 100 yêu cầu trong cửa sổ 2 phút. Bạn có thể củng cố phản hồi này trong một cuộc tấn công DDoS bằng cách áp dụng ngưỡng tích cực hơn. Bạn có thể triển khai điều này bằng cách sử dụng các quy tắc sau:</p>
+<ol>
+<li>Một Anti-DDoS AMR với cấu hình mặc định</li>
+<li>Một quy tắc giới hạn tốc độ, có phạm vi cho các URL nhạy cảm, được cấu hình với ngưỡng 100 yêu cầu trong cửa sổ 2 phút</li>
+<li>Một quy tắc giới hạn tốc độ, có phạm vi cho các URL nhạy cảm và nhãn <code>event-detected</code>, được cấu hình với ngưỡng 10 yêu cầu trong cửa sổ 10 phút</li>
+</ol>
+<h3 id="cấu-hình-1">Cấu hình</h3>
+<p>Sau khi thêm Anti-DDoS AMR của bạn với cấu hình mặc định và quy tắc giới hạn tốc độ của bạn cho các URL nhạy cảm, tạo một quy tắc giới hạn tốc độ mới tiếp theo với định nghĩa JSON sau:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Action&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Block&#34;</span>: {}
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;ip-rate-limit-10-10mins-under-ddos&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;RateBasedStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;AggregateKeyType&#34;</span>: <span style="color:#e6db74">&#34;IP&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;EvaluationWindowSec&#34;</span>: <span style="color:#ae81ff">600</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Limit&#34;</span>: <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;ScopeDownStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;AndStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;Statements&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;ByteMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;FieldToMatch&#34;</span>: {
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">&#34;UriPath&#34;</span>: {}
+</span></span><span style="display:flex;"><span>                },
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;PositionalConstraint&#34;</span>: <span style="color:#e6db74">&#34;STARTS_WITH&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;SearchString&#34;</span>: <span style="color:#e6db74">&#34;/sensitive-path&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;TextTransformations&#34;</span>: [
+</span></span><span style="display:flex;"><span>                  {
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">&#34;Type&#34;</span>: <span style="color:#e6db74">&#34;LOWERCASE&#34;</span>
+</span></span><span style="display:flex;"><span>                  }
+</span></span><span style="display:flex;"><span>                ]
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">&#34;LabelMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;Key&#34;</span>: <span style="color:#e6db74">&#34;awswaf:managed:aws:anti-ddos:event-detected&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;Scope&#34;</span>: <span style="color:#e6db74">&#34;LABEL&#34;</span>
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="ví-dụ-3-phản-hồi-thích-ứng-theo-khả-năng-mở-rộng-ứng-dụng-của-bạn">Ví dụ 3: Phản hồi thích ứng theo khả năng mở rộng ứng dụng của bạn</h2>
+<p>Giả sử rằng bạn đang vận hành một ứng dụng kế thừa có thể mở rộng an toàn đến một ngưỡng nhất định về khối lượng lưu lượng, sau đó nó bị suy giảm. Nếu tổng khối lượng lưu lượng, bao gồm cả lưu lượng DDoS, nằm dưới ngưỡng này, bạn quyết định không thách thức yêu cầu trong cuộc tấn công DDoS để tránh làm suy giảm trải nghiệm người dùng. Trong tình huống này, bạn chỉ dựa vào hành động chặn mặc định của các yêu cầu DDoS có mức độ nghi ngờ cao. Nếu tổng khối lượng lưu lượng vượt quá ngưỡng an toàn của ứng dụng kế thừa để xử lý lưu lượng, thì bạn quyết định sử dụng tương đương với biện pháp giảm thiểu ChallengeDDoSRequests mặc định của Anti-DDoS AMR. Bạn có thể triển khai điều này bằng cách sử dụng các quy tắc sau:</p>
+<ol>
+<li>Một Anti-DDoS AMR với quy tắc <code>ChallengeAllDuringEvent</code> và <code>ChallengeDDoSRequests</code> được cấu hình ở chế độ đếm.</li>
+<li>Một quy tắc giới hạn tốc độ đếm lưu lượng của bạn và được cấu hình với ngưỡng tương ứng với khả năng của ứng dụng để xử lý lưu lượng bình thường. Như một hành động, nó chỉ đếm yêu cầu và áp dụng nhãn tùy chỉnh—ví dụ, <code>CapacityExceeded</code>—khi đạt ngưỡng.</li>
+<li>Một quy tắc mô phỏng <code>ChallengeDDoSRequests</code> nhưng chỉ khi nhãn <code>CapacityExceeded</code> có mặt: Thách thức nếu các nhãn <code>ddos-request</code>, <code>CapacityExceeded</code>, và <code>challengeable-request</code> có mặt</li>
+</ol>
+<h3 id="cấu-hình-2">Cấu hình</h3>
+<p>Đầu tiên, cập nhật Anti-DDoS AMR của bạn bằng cách thay đổi các hành động Challenge thành các hành động Count.</p>
+<p><img src="https://d2908q01vomqb2.cloudfront.net/22d200f8670dbdb3e253a90eee5098477c95c23d/2025/11/25/Customize-response-AWS-WAF-2.png" alt="Hình 2 – Quy tắc Anti-DDoS AMR đã cập nhật trong ví dụ 3"></p>
+<p><em>Hình 2 – Quy tắc Anti-DDoS AMR đã cập nhật trong ví dụ 3</em></p>
+<p>Sau đó tạo quy tắc giới hạn tốc độ <code>capacity-exceeded-detection</code> ở chế độ đếm, sử dụng định nghĩa JSON sau:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">7</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;RuleLabels&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;mycompany:capacityexceeded&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;RateBasedStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;AggregateKeyType&#34;</span>: <span style="color:#e6db74">&#34;IP&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;EvaluationWindowSec&#34;</span>: <span style="color:#ae81ff">120</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Limit&#34;</span>: <span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;VisibilityConfig&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;CloudWatchMetricsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;MetricName&#34;</span>: <span style="color:#e6db74">&#34;capacity-exceeded-detection&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;SampledRequestsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Cuối cùng, tạo quy tắc <code>challenge-if-ddos-and-capacity-exceeded</code> challenge bằng định nghĩa JSON sau:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Action&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Challenge&#34;</span>: {}
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;challenge-if-ddos-and-capacity-exceeded&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;AndStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Statements&#34;</span>: [
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;LabelMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Key&#34;</span>: <span style="color:#e6db74">&#34;mycompany:capacityexceeded&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Scope&#34;</span>: <span style="color:#e6db74">&#34;LABEL&#34;</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;LabelMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Key&#34;</span>: <span style="color:#e6db74">&#34;awswaf:managed:aws:anti-ddos:ddos-request&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Scope&#34;</span>: <span style="color:#e6db74">&#34;LABEL&#34;</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;LabelMatchStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Key&#34;</span>: <span style="color:#e6db74">&#34;awswaf:managed:aws:anti-ddos:challengeable-request&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Scope&#34;</span>: <span style="color:#e6db74">&#34;LABEL&#34;</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="kết-luận">Kết luận</h2>
+<p>Bằng cách kết hợp các biện pháp bảo vệ tích hợp của Anti-DDoS AMR với logic tùy chỉnh, bạn có thể điều chỉnh các biện pháp phòng thủ để phù hợp với hồ sơ rủi ro, mô hình lưu lượng và khả năng mở rộng ứng dụng độc đáo của mình. Các ví dụ trong bài viết này minh họa cách bạn có thể tinh chỉnh độ nhạy, thực thi các biện pháp giảm thiểu mạnh mẽ hơn trong các điều kiện cụ thể và thậm chí xây dựng các biện pháp phòng thủ thích ứng phản ứng động với khả năng của hệ thống.</p>
+<p>Bạn có thể sử dụng hệ thống gắn nhãn động trong AWS WAF để triển khai tùy chỉnh một cách chi tiết. Bạn cũng có thể sử dụng nhãn AWS WAF để loại trừ việc ghi log tốn kém của lưu lượng tấn công DDoS.</p>
+<p><strong>Link bài viết gốc</strong> : <a href="https://aws.amazon.com/blogs/security/how-to-customize-your-response-to-layer-7-ddos-attacks-using-aws-waf-anti-ddos-amr/">https://aws.amazon.com/blogs/security/how-to-customize-your-response-to-layer-7-ddos-attacks-using-aws-waf-anti-ddos-amr/</a></p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/3-blogstranslated/3.1-blog1/" title="Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/3-blogstranslated/3.3-blog3/" title="AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765386116"></script>
+    <script src="/js/jquery.sticky.js?1765386116"></script>
+    <script src="/js/featherlight.min.js?1765386116"></script>
+    <script src="/js/highlight.pack.js?1765386116"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765386116"></script>
+    <script src="/js/learn.js?1765386116"></script>
+    <script src="/js/hugo-learn.js?1765386116"></script>
+
+    <link href="/mermaid/mermaid.css?1765386116" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765386116"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

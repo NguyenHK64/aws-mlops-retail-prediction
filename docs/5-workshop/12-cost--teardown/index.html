@@ -1,0 +1,3352 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Cost Management &amp; Teardown :: AWS MLOps Docs</title>
+
+    
+    <link href="/css/nucleus.css?1765386116" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765386116" rel="stylesheet">
+    <link href="/css/hybrid.css?1765386116" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765386116" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765386116" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765386116" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765386116" rel="stylesheet">
+    <link href="/css/theme.css?1765386116" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765386116" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765386116" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765386116"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/5-workshop/12-cost--teardown/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765386116"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765386116"></script>
+<script type="text/javascript">
+    var baseurl = "https:\/\/docs.vinashoes.org\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765386116"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/" title="Worklog" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/">
+           <b> 1. </b> Worklog
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.1-week1/" title="Week 1 - Introduction to AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Week 1 - Introduction to AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.2-week2/" title="Week 2 - Networking on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Week 2 - Networking on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.3-week3/" title="Week 3 - Compute VM Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Week 3 - Compute VM Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.4-week4/" title="Week 4 - Storage Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Week 4 - Storage Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.5-week5/" title="Week 5 - Security Services on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Week 5 - Security Services on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.6-week6/" title="Week 6 - Database Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Week 6 - Database Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.7-week7/" title="Week 7 - DataLake Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Week 7 - DataLake Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.8-week8/" title="Week 8 - Serverless Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Week 8 - Serverless Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.9-week9/" title="Week 9 - Container Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Week 9 - Container Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.10-week10/" title="Week 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Week 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.11-week11/" title="Week 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Week 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.12-week12/" title="Week 12 - Capstone: Personal Project" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Week 12 - Capstone: Personal Project
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/" title="Translated blogs" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/">
+           <b> 3. </b> Translated blogs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.1-blog1/" title="Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.1-blog1/">
+           <b> 3.1. </b> Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.2-blog2/" title="Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.2-blog2/">
+           <b> 3.2. </b> Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.3-blog3/" title="AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.3-blog3/">
+           <b> 3.3. </b> AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.4-blog4/" title="Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.4-blog4/">
+           <b> 3.4. </b> Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.5-blog5/" title="Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.5-blog5/">
+           <b> 3.5. </b> Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.6-blog6/" title="Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.6-blog6/">
+           <b> 3.6. </b> Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.7-blog7/" title="Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.9-blog9/" title="AWS Partner Central now available in AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central now available in AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.10-blog10/" title="Announcing AWS Partner Central in the AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Announcing AWS Partner Central in the AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.11-blog11/" title="Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.12-blog12/" title="Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-eventparticipated/" title="Events Participated" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-eventparticipated/">
+           <b> 4. </b> Events Participated
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/" title="Workshop" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/1-introduction/" title="MLOps Architecture Design" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/1-introduction/">
+          <b>1. </b>MLOps Architecture Design
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/6-ecr-registry/" title="Amazon ECR Container Registry (MLOps)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/6-ecr-registry/">
+          <b>6. </b>Amazon ECR Container Registry (MLOps)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/7-eks-cluster/" title="EKS Cluster Setup (Production)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup (Production)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/7-feedback/" title="Sharing and Feedback" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/7-feedback/">
+           <b> 7. </b> Sharing and Feedback
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="https://docs.vinashoes.org/5-workshop/12-cost--teardown/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="https://docs.vinashoes.org/vi/5-workshop/12-cost--teardown/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/5-Workshop/12-cost-&amp;-teardown/_index.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Internship Report</a> > <a href='/5-workshop/'>Workshop</a> > Cost Management & Teardown
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-operational-costs-of-the-mlops-system">1. Operational Costs of the MLOps System</a>
+      <ul>
+        <li><a href="#11-cost-breakdown-by-component">1.1. Cost Breakdown by Component</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-using-ec2-spot-instances">2. Using EC2 Spot Instances</a>
+      <ul>
+        <li><a href="#21-use-spot-for-eks-nodegroup">2.1. Use Spot for EKS NodeGroup</a></li>
+        <li><a href="#22-sử-dụng-spot-cho-sagemaker-training">2.2. Sử dụng Spot cho SageMaker Training</a></li>
+        <li><a href="#22-use-spot-for-sagemaker-training">2.2. Use Spot for SageMaker Training</a></li>
+        <li><a href="#23-handling-spot-instance-interruptions">2.3. Handling Spot Instance Interruptions</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-s3-lifecycle--intelligent-tiering">3. S3 Lifecycle &amp; Intelligent-Tiering</a></li>
+    <li><a href="#3-s3-lifecycle--intelligent-tiering-1">3. S3 Lifecycle &amp; Intelligent-Tiering</a>
+      <ul>
+        <li><a href="#31-configure-lifecycle-policy-for-s3-bucket">3.1. Configure Lifecycle Policy for S3 Bucket</a></li>
+        <li><a href="#32-configure-intelligent-tiering">3.2. Configure Intelligent-Tiering</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-tự-động-dừng-tài-nguyên-ngoài-giờ">4. Tự động dừng tài nguyên ngoài giờ</a></li>
+    <li><a href="#4-automatically-stop-resources-outside-business-hours">4. Automatically Stop Resources Outside Business Hours</a>
+      <ul>
+        <li><a href="#41-schedule-lambda-with-eventbridge">4.1. Schedule Lambda with EventBridge</a></li>
+        <li><a href="#42-terraform-destroy-cho-cicd-pipeline">4.2. Terraform Destroy cho CI/CD Pipeline</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-cost-visibility--alerts">5. Cost Visibility &amp; Alerts</a>
+      <ul>
+        <li><a href="#51-tagging-strategy-for-aws-resources">5.1. Tagging Strategy for AWS Resources</a></li>
+        <li><a href="#52-aws-budgets-alert">5.2. AWS Budgets Alert</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-ecr--cloudwatch-optimization">6. ECR &amp; CloudWatch Optimization</a>
+      <ul>
+        <li><a href="#61-ecr-lifecycle-policy">6.1. ECR Lifecycle Policy</a></li>
+        <li><a href="#62-cloudwatch-log-retention-policy">6.2. CloudWatch Log Retention Policy</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-automated-teardown-of-the-entire-infrastructure">7. Automated Teardown of the Entire Infrastructure</a>
+      <ul>
+        <li><a href="#71-terraform-destroy-script">7.1. Terraform Destroy Script</a></li>
+        <li><a href="#72-add-to-github-actions-workflow">7.2. Add to GitHub Actions Workflow</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-estimated-costs-after-optimization">8. Estimated Costs After Optimization</a></li>
+    <li><a href="#9-expected-results">9. Expected Results</a>
+      <ul>
+        <li><a href="#-completed-checklist">✅ Completed Checklist</a></li>
+        <li><a href="#-verification-steps">📊 Verification Steps</a></li>
+      </ul>
+    </li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Cost Management &amp; Teardown
+            </h1>
+          
+
+        
+
+
+
+	
+<div class="notices info" ><p><strong>🎯 Task 12 Objective:</strong> Manage and optimize the operating costs of the entire MLOps infrastructure on AWS:</p>
+</div>
+
+<ul>
+<li>Minimize compute costs (EC2, SageMaker, ALB)</li>
+<li>Automatically scale down or remove unused resources</li>
+<li>Apply lifecycle policies for data and container images</li>
+<li>Ensure pipelines run efficiently while minimizing expenses</li>
+</ul>
+<h2 id="1-operational-costs-of-the-mlops-system">1. Operational Costs of the MLOps System</h2>
+<p>When deploying a complete MLOps system such as the Retail Prediction API, operating costs can quickly escalate if not properly managed. Major components contributing to costs include:</p>
+<h3 id="11-cost-breakdown-by-component">1.1. Cost Breakdown by Component</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Service</th>
+          <th>Non-optimized cost</th>
+          <th>Cause</th>
+          <th>Solution</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>EKS NodeGroup</strong></td>
+          <td>0.04 USD/hr/node</td>
+          <td>On-demand instances running 24/7</td>
+          <td>Spot instances + Auto scaling + Scheduling</td>
+      </tr>
+      <tr>
+          <td><strong>SageMaker Training</strong></td>
+          <td>0.3 USD/job</td>
+          <td>Large instance types, long runtime</td>
+          <td>Spot training + optimized hyperparameter tuning</td>
+      </tr>
+      <tr>
+          <td><strong>S3 Storage</strong></td>
+          <td>0.023 USD/GB/month</td>
+          <td>Storing all data in Standard tier</td>
+          <td>Lifecycle policies + Intelligent-Tiering</td>
+      </tr>
+      <tr>
+          <td><strong>CloudWatch Logs</strong></td>
+          <td>0.50 USD/GB</td>
+          <td>Unlimited log retention</td>
+          <td>Log retention policy + optimized Insights queries</td>
+      </tr>
+      <tr>
+          <td><strong>ALB</strong></td>
+          <td>0.027 USD/hr</td>
+          <td>Running continuously even with no traffic</td>
+          <td>Schedule shutdown when idle</td>
+      </tr>
+      <tr>
+          <td><strong>ECR Storage</strong></td>
+          <td>0.10 USD/GB/month</td>
+          <td>Storing all image versions</td>
+          <td>Lifecycle policy to remove old images</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="2-using-ec2-spot-instances">2. Using EC2 Spot Instances</h2>
+<p>EC2 Spot Instances are one of the most effective ways to save compute costs on AWS, offering reductions of up to 70–90% compared to On-demand instances.</p>
+<h3 id="21-use-spot-for-eks-nodegroup">2.1. Use Spot for EKS NodeGroup</h3>
+<p>Update the Terraform configuration for the EKS NodeGroup:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#66d9ef">module</span> <span style="color:#e6db74">&#34;eks_managed_node_group&#34;</span> {
+</span></span><span style="display:flex;"><span>  source <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;terraform-aws-modules/eks/aws//modules/eks-managed-node-group&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  name            <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-forecast-nodes&#34;</span>
+</span></span><span style="display:flex;"><span>  cluster_name    <span style="color:#f92672">=</span> <span style="color:#66d9ef">module</span>.<span style="color:#66d9ef">eks</span>.<span style="color:#66d9ef">cluster_name</span>
+</span></span><span style="display:flex;"><span>  cluster_version <span style="color:#f92672">=</span> <span style="color:#66d9ef">module</span>.<span style="color:#66d9ef">eks</span>.<span style="color:#66d9ef">cluster_version</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  # Configure Spot Instance
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  capacity_type   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;SPOT&#34;</span><span style="color:#75715e">  # instead of ON_DEMAND
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  # Diversify instance types để tăng khả năng có Spot
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  instance_types  <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;t3.medium&#34;, &#34;t3a.medium&#34;, &#34;t2.medium&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  min_size        <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  max_size        <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>  desired_size    <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  # Thêm labels và taints cho Kubernetes scheduler
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  labels <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    app <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-api&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="22-sử-dụng-spot-cho-sagemaker-training">2.2. Sử dụng Spot cho SageMaker Training</h3>
+<h3 id="22-use-spot-for-sagemaker-training">2.2. Use Spot for SageMaker Training</h3>
+<p>Update the script that creates SageMaker training jobs to use Spot instances:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># aws/script/create_training_job.py</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> boto3
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_training_job</span>(job_name, data_bucket, output_bucket, instance_type, use_spot<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>):
+</span></span><span style="display:flex;"><span>    sagemaker <span style="color:#f92672">=</span> boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#39;sagemaker&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Calculate stop time for Spot (limit 1 hour)</span>
+</span></span><span style="display:flex;"><span>    current_time <span style="color:#f92672">=</span> int(time<span style="color:#f92672">.</span>time())
+</span></span><span style="display:flex;"><span>    stop_time <span style="color:#f92672">=</span> current_time <span style="color:#f92672">+</span> <span style="color:#ae81ff">3600</span>  <span style="color:#75715e"># 1 hour</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Cấu hình training job</span>
+</span></span><span style="display:flex;"><span>    training_params <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;TrainingJobName&#39;</span>: job_name,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;AlgorithmSpecification&#39;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;TrainingImage&#39;</span>: <span style="color:#e6db74">&#39;123456789012.dkr.ecr.us-east-1.amazonaws.com/retail-forecast-training:latest&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;TrainingInputMode&#39;</span>: <span style="color:#e6db74">&#39;File&#39;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;RoleArn&#39;</span>: <span style="color:#e6db74">&#39;arn:aws:iam::123456789012:role/SageMakerExecutionRole&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;InputDataConfig&#39;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;ChannelName&#39;</span>: <span style="color:#e6db74">&#39;train&#39;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;DataSource&#39;</span>: {
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#39;S3DataSource&#39;</span>: {
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#39;S3DataType&#39;</span>: <span style="color:#e6db74">&#39;S3Prefix&#39;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#39;S3Uri&#39;</span>: <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;s3://</span><span style="color:#e6db74">{</span>data_bucket<span style="color:#e6db74">}</span><span style="color:#e6db74">/train&#39;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#39;S3DataDistributionType&#39;</span>: <span style="color:#e6db74">&#39;FullyReplicated&#39;</span>
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;OutputDataConfig&#39;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;S3OutputPath&#39;</span>: <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;s3://</span><span style="color:#e6db74">{</span>output_bucket<span style="color:#e6db74">}</span><span style="color:#e6db74">/output&#39;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;ResourceConfig&#39;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;InstanceType&#39;</span>: instance_type,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;InstanceCount&#39;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;VolumeSizeInGB&#39;</span>: <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;StoppingCondition&#39;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;MaxRuntimeInSeconds&#39;</span>: <span style="color:#ae81ff">3600</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;Tags&#39;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;Key&#39;</span>: <span style="color:#e6db74">&#39;Project&#39;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;Value&#39;</span>: <span style="color:#e6db74">&#39;RetailMLOps&#39;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Configure Spot training if requested</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> use_spot:
+</span></span><span style="display:flex;"><span>      training_params[<span style="color:#e6db74">&#39;EnableManagedSpotTraining&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>      training_params[<span style="color:#e6db74">&#39;StoppingCondition&#39;</span>][<span style="color:#e6db74">&#39;MaxWaitTimeInSeconds&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">3900</span>  <span style="color:#75715e"># Add maximum wait time</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    response <span style="color:#f92672">=</span> sagemaker<span style="color:#f92672">.</span>create_training_job(<span style="color:#f92672">**</span>training_params)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> response
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser()
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#39;--job-name&#39;</span>, type<span style="color:#f92672">=</span>str, required<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#39;--data-bucket&#39;</span>, type<span style="color:#f92672">=</span>str, required<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#39;--output-bucket&#39;</span>, type<span style="color:#f92672">=</span>str, required<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#39;--instance-type&#39;</span>, type<span style="color:#f92672">=</span>str, default<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ml.m5.large&#39;</span>)
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#39;--use-spot&#39;</span>, type<span style="color:#f92672">=</span>bool, default<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    args <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    response <span style="color:#f92672">=</span> create_training_job(
+</span></span><span style="display:flex;"><span>        args<span style="color:#f92672">.</span>job_name,
+</span></span><span style="display:flex;"><span>        args<span style="color:#f92672">.</span>data_bucket,
+</span></span><span style="display:flex;"><span>        args<span style="color:#f92672">.</span>output_bucket,
+</span></span><span style="display:flex;"><span>        args<span style="color:#f92672">.</span>instance_type,
+</span></span><span style="display:flex;"><span>        args<span style="color:#f92672">.</span>use_spot
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Training job created: </span><span style="color:#e6db74">{</span>response[<span style="color:#e6db74">&#39;TrainingJobArn&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h3 id="23-handling-spot-instance-interruptions">2.3. Handling Spot Instance Interruptions</h3>
+<p>To ensure the system remains available when Spot Instances are reclaimed, configure the following:</p>
+<ol>
+<li><strong>Pod Disruption Budget (PDB)</strong> to ensure a minimum number of pods:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># aws/k8s/pdb/retail-forecast-pdb.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">policy/v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">PodDisruptionBudget</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-pdb</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">retail-forecast</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">minAvailable</span>: <span style="color:#ae81ff">1</span> <span style="color:#75715e"># Luôn đảm bảo ít nhất 1 pod đang chạy</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-forecast-api</span>
+</span></span></code></pre></div><ol start="2">
+<li><strong>Cluster Autoscaler</strong> with Spot instance handling:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># aws/k8s/addons/cluster-autoscaler.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cluster-autoscaler</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">kube-system</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">cluster-autoscaler</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">replicas</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">cluster-autoscaler</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">app</span>: <span style="color:#ae81ff">cluster-autoscaler</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">containers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#f92672">image</span>: <span style="color:#ae81ff">k8s.gcr.io/autoscaling/cluster-autoscaler:v1.26.2</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cluster-autoscaler</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">command</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ae81ff">./cluster-autoscaler</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">v=4</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">stderrthreshold=info</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">cloud-provider=aws</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">skip-nodes-with-local-storage=false</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">expander=least-waste</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/retail-forecast-cluster</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">balance-similar-node-groups</span>
+</span></span><span style="display:flex;"><span>            - --<span style="color:#ae81ff">skip-nodes-with-system-pods=false</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">volumeMounts</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ssl-certs</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">mountPath</span>: <span style="color:#ae81ff">/etc/ssl/certs/ca-certificates.crt</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">readOnly</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ssl-certs</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">hostPath</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">path</span>: <span style="color:#e6db74">&#34;/etc/ssl/certs/ca-bundle.crt&#34;</span>
+</span></span></code></pre></div><h2 id="3-s3-lifecycle--intelligent-tiering">3. S3 Lifecycle &amp; Intelligent-Tiering</h2>
+<h2 id="3-s3-lifecycle--intelligent-tiering-1">3. S3 Lifecycle &amp; Intelligent-Tiering</h2>
+<h3 id="31-configure-lifecycle-policy-for-s3-bucket">3.1. Configure Lifecycle Policy for S3 Bucket</h3>
+<p>Deploy a lifecycle policy via Terraform:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># infra/modules/s3/main.tf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_s3_bucket&#34; &#34;retail_forecast_data&#34;</span> {
+</span></span><span style="display:flex;"><span>  bucket <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-forecast-data-${var.environment}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  tags <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    Project <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;RetailMLOps&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Lifecycle configuration
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_s3_bucket_lifecycle_configuration&#34; &#34;data_lifecycle&#34;</span> {
+</span></span><span style="display:flex;"><span>  bucket <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_s3_bucket</span>.<span style="color:#66d9ef">retail_forecast_data</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">rule</span> {
+</span></span><span style="display:flex;"><span>    id     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;raw-data-tier&#34;</span>
+</span></span><span style="display:flex;"><span>    status <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Enabled&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>      prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;raw/&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span> {
+</span></span><span style="display:flex;"><span>      days          <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>      storage_class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;INTELLIGENT_TIERING&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">rule</span> {
+</span></span><span style="display:flex;"><span>    id     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;silver-data-tier&#34;</span>
+</span></span><span style="display:flex;"><span>    status <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Enabled&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>      prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;silver/&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span> {
+</span></span><span style="display:flex;"><span>      days          <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>      storage_class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;INTELLIGENT_TIERING&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">rule</span> {
+</span></span><span style="display:flex;"><span>    id     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;artifacts-archive&#34;</span>
+</span></span><span style="display:flex;"><span>    status <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Enabled&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>      prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;artifacts/&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span> {
+</span></span><span style="display:flex;"><span>      days          <span style="color:#f92672">=</span> <span style="color:#ae81ff">90</span>
+</span></span><span style="display:flex;"><span>      storage_class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;GLACIER_IR&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span> {
+</span></span><span style="display:flex;"><span>      days          <span style="color:#f92672">=</span> <span style="color:#ae81ff">180</span>
+</span></span><span style="display:flex;"><span>      storage_class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;DEEP_ARCHIVE&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">rule</span> {
+</span></span><span style="display:flex;"><span>    id     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;logs-archive&#34;</span>
+</span></span><span style="display:flex;"><span>    status <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Enabled&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>      prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;logs/&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span> {
+</span></span><span style="display:flex;"><span>      days          <span style="color:#f92672">=</span> <span style="color:#ae81ff">90</span>
+</span></span><span style="display:flex;"><span>      storage_class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;GLACIER_IR&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">transition</span> {
+</span></span><span style="display:flex;"><span>      days          <span style="color:#f92672">=</span> <span style="color:#ae81ff">180</span>
+</span></span><span style="display:flex;"><span>      storage_class <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;DEEP_ARCHIVE&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">rule</span> {
+</span></span><span style="display:flex;"><span>    id     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;temp-cleanup&#34;</span>
+</span></span><span style="display:flex;"><span>    status <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Enabled&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">and</span> {
+</span></span><span style="display:flex;"><span>        prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tmp/&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">tag</span> {
+</span></span><span style="display:flex;"><span>          key   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;temporary&#34;</span>
+</span></span><span style="display:flex;"><span>          value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">expiration</span> {
+</span></span><span style="display:flex;"><span>      days <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="32-configure-intelligent-tiering">3.2. Configure Intelligent-Tiering</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># infra/modules/s3/intelligent_tiering.tf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_s3_bucket_intelligent_tiering_configuration&#34; &#34;retail_data_tiering&#34;</span> {
+</span></span><span style="display:flex;"><span>  bucket <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_s3_bucket</span>.<span style="color:#66d9ef">retail_forecast_data</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>  name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;RetailDataTiering&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">tiering</span> {
+</span></span><span style="display:flex;"><span>    access_tier <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ARCHIVE_ACCESS&#34;</span>
+</span></span><span style="display:flex;"><span>    days        <span style="color:#f92672">=</span> <span style="color:#ae81ff">90</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">tiering</span> {
+</span></span><span style="display:flex;"><span>    access_tier <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;DEEP_ARCHIVE_ACCESS&#34;</span>
+</span></span><span style="display:flex;"><span>    days        <span style="color:#f92672">=</span> <span style="color:#ae81ff">180</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    prefix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;data/&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="4-tự-động-dừng-tài-nguyên-ngoài-giờ">4. Tự động dừng tài nguyên ngoài giờ</h2>
+<h2 id="4-automatically-stop-resources-outside-business-hours">4. Automatically Stop Resources Outside Business Hours</h2>
+<h3 id="41-schedule-lambda-with-eventbridge">4.1. Schedule Lambda with EventBridge</h3>
+<p>Create a Lambda function to stop/start resources:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># aws/scripts/resource_scheduler.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> boto3
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">lambda_handler</span>(event, context):
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> event<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;action&#39;</span>, <span style="color:#e6db74">&#39;stop&#39;</span>)  <span style="color:#75715e"># &#39;stop&#39; or &#39;start&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># EKS NodeGroup scaling</span>
+</span></span><span style="display:flex;"><span>    eks <span style="color:#f92672">=</span> boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#39;eks&#39;</span>)
+</span></span><span style="display:flex;"><span>    autoscaling <span style="color:#f92672">=</span> boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#39;autoscaling&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    cluster_name <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;EKS_CLUSTER_NAME&#39;</span>, <span style="color:#e6db74">&#39;retail-forecast-cluster&#39;</span>)
+</span></span><span style="display:flex;"><span>    nodegroup_name <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;NODEGROUP_NAME&#39;</span>, <span style="color:#e6db74">&#39;retail-forecast-nodes&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> action <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;stop&#39;</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Scale down to 0</span>
+</span></span><span style="display:flex;"><span>      print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Scaling down nodegroup </span><span style="color:#e6db74">{</span>nodegroup_name<span style="color:#e6db74">}</span><span style="color:#e6db74"> in cluster </span><span style="color:#e6db74">{</span>cluster_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Lấy auto scaling group name từ nodegroup</span>
+</span></span><span style="display:flex;"><span>        response <span style="color:#f92672">=</span> eks<span style="color:#f92672">.</span>describe_nodegroup(
+</span></span><span style="display:flex;"><span>            clusterName<span style="color:#f92672">=</span>cluster_name,
+</span></span><span style="display:flex;"><span>            nodegroupName<span style="color:#f92672">=</span>nodegroup_name
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        asg_name <span style="color:#f92672">=</span> response[<span style="color:#e6db74">&#39;nodegroup&#39;</span>][<span style="color:#e6db74">&#39;resources&#39;</span>][<span style="color:#e6db74">&#39;autoScalingGroups&#39;</span>][<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#39;name&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Scale down ASG về 0</span>
+</span></span><span style="display:flex;"><span>        autoscaling<span style="color:#f92672">.</span>update_auto_scaling_group(
+</span></span><span style="display:flex;"><span>            AutoScalingGroupName<span style="color:#f92672">=</span>asg_name,
+</span></span><span style="display:flex;"><span>            MinSize<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>            DesiredCapacity<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;NodeGroup </span><span style="color:#e6db74">{</span>nodegroup_name<span style="color:#e6db74">}</span><span style="color:#e6db74"> scaled down to 0&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">elif</span> action <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;start&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Scale up to desired capacity</span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Scaling up nodegroup </span><span style="color:#e6db74">{</span>nodegroup_name<span style="color:#e6db74">}</span><span style="color:#e6db74"> in cluster </span><span style="color:#e6db74">{</span>cluster_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        response <span style="color:#f92672">=</span> eks<span style="color:#f92672">.</span>describe_nodegroup(
+</span></span><span style="display:flex;"><span>            clusterName<span style="color:#f92672">=</span>cluster_name,
+</span></span><span style="display:flex;"><span>            nodegroupName<span style="color:#f92672">=</span>nodegroup_name
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        asg_name <span style="color:#f92672">=</span> response[<span style="color:#e6db74">&#39;nodegroup&#39;</span>][<span style="color:#e6db74">&#39;resources&#39;</span>][<span style="color:#e6db74">&#39;autoScalingGroups&#39;</span>][<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#39;name&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Scale up ASG to desired capacity</span>
+</span></span><span style="display:flex;"><span>        autoscaling<span style="color:#f92672">.</span>update_auto_scaling_group(
+</span></span><span style="display:flex;"><span>            AutoScalingGroupName<span style="color:#f92672">=</span>asg_name,
+</span></span><span style="display:flex;"><span>            MinSize<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>            DesiredCapacity<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;NodeGroup </span><span style="color:#e6db74">{</span>nodegroup_name<span style="color:#e6db74">}</span><span style="color:#e6db74"> scaled up to 2&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># SageMaker Endpoint</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;SAGEMAKER_ENDPOINT&#39;</span>):
+</span></span><span style="display:flex;"><span>        sm_client <span style="color:#f92672">=</span> boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#39;sagemaker&#39;</span>)
+</span></span><span style="display:flex;"><span>        endpoint_name <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>environ<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;SAGEMAKER_ENDPOINT&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> action <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;stop&#39;</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Endpoints cannot be stopped but can be deleted and re-created later</span>
+</span></span><span style="display:flex;"><span>          print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Deleting SageMaker endpoint </span><span style="color:#e6db74">{</span>endpoint_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>                sm_client<span style="color:#f92672">.</span>delete_endpoint(EndpointName<span style="color:#f92672">=</span>endpoint_name)
+</span></span><span style="display:flex;"><span>                print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Endpoint </span><span style="color:#e6db74">{</span>endpoint_name<span style="color:#e6db74">}</span><span style="color:#e6db74"> deleted&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>                print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Error deleting endpoint: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;statusCode&#39;</span>: <span style="color:#ae81ff">200</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#39;body&#39;</span>: <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Successfully executed </span><span style="color:#e6db74">{</span>action<span style="color:#e6db74">}</span><span style="color:#e6db74"> action&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>Terraform để tạo EventBridge schedule và Lambda:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># infra/modules/scheduler/main.tf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_lambda_function&#34; &#34;resource_scheduler&#34;</span> {
+</span></span><span style="display:flex;"><span>  function_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-forecast-resource-scheduler&#34;</span>
+</span></span><span style="display:flex;"><span>  handler       <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;resource_scheduler.lambda_handler&#34;</span>
+</span></span><span style="display:flex;"><span>  runtime       <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;python3.9&#34;</span>
+</span></span><span style="display:flex;"><span>  role          <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_iam_role</span>.<span style="color:#66d9ef">lambda_role</span>.<span style="color:#66d9ef">arn</span>
+</span></span><span style="display:flex;"><span>  filename      <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;resource_scheduler.zip&#34;</span>
+</span></span><span style="display:flex;"><span>  timeout       <span style="color:#f92672">=</span> <span style="color:#ae81ff">300</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">environment</span> {
+</span></span><span style="display:flex;"><span>    variables <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>      EKS_CLUSTER_NAME   <span style="color:#f92672">=</span> <span style="color:#66d9ef">var</span>.<span style="color:#66d9ef">eks_cluster_name</span>
+</span></span><span style="display:flex;"><span>      NODEGROUP_NAME     <span style="color:#f92672">=</span> <span style="color:#66d9ef">var</span>.<span style="color:#66d9ef">nodegroup_name</span>
+</span></span><span style="display:flex;"><span>      SAGEMAKER_ENDPOINT <span style="color:#f92672">=</span> <span style="color:#66d9ef">var</span>.<span style="color:#66d9ef">sagemaker_endpoint</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Create EventBridge rule to stop resources at 19:00 UTC
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_cloudwatch_event_rule&#34; &#34;stop_resources&#34;</span> {
+</span></span><span style="display:flex;"><span>  name                <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-forecast-stop-resources&#34;</span>
+</span></span><span style="display:flex;"><span>  description         <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Stop resources at 19:00 UTC&#34;</span>
+</span></span><span style="display:flex;"><span>  schedule_expression <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cron(0 19 * * ? *)&#34;</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Gắn Lambda với rule stop
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_cloudwatch_event_target&#34; &#34;stop_resources_target&#34;</span> {
+</span></span><span style="display:flex;"><span>  rule      <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_cloudwatch_event_rule</span>.<span style="color:#66d9ef">stop_resources</span>.<span style="color:#66d9ef">name</span>
+</span></span><span style="display:flex;"><span>  target_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;RetailForecastStopResources&#34;</span>
+</span></span><span style="display:flex;"><span>  arn       <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_lambda_function</span>.<span style="color:#66d9ef">resource_scheduler</span>.<span style="color:#66d9ef">arn</span>
+</span></span><span style="display:flex;"><span>  input     <span style="color:#f92672">=</span> <span style="color:#66d9ef">jsonencode</span>({
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;stop&#34;</span>
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Tạo EventBridge rule để khởi động tài nguyên lúc 7:00 UTC
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_cloudwatch_event_rule&#34; &#34;start_resources&#34;</span> {
+</span></span><span style="display:flex;"><span>  name                <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-forecast-start-resources&#34;</span>
+</span></span><span style="display:flex;"><span>  description         <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Start resources at 7:00 UTC&#34;</span>
+</span></span><span style="display:flex;"><span>  schedule_expression <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cron(0 7 * * ? *)&#34;</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Attach Lambda to the start rule
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_cloudwatch_event_target&#34; &#34;start_resources_target&#34;</span> {
+</span></span><span style="display:flex;"><span>  rule      <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_cloudwatch_event_rule</span>.<span style="color:#66d9ef">start_resources</span>.<span style="color:#66d9ef">name</span>
+</span></span><span style="display:flex;"><span>  target_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;RetailForecastStartResources&#34;</span>
+</span></span><span style="display:flex;"><span>  arn       <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_lambda_function</span>.<span style="color:#66d9ef">resource_scheduler</span>.<span style="color:#66d9ef">arn</span>
+</span></span><span style="display:flex;"><span>  input     <span style="color:#f92672">=</span> <span style="color:#66d9ef">jsonencode</span>({
+</span></span><span style="display:flex;"><span>    action <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;start&#34;</span>
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Grant permission for EventBridge to invoke Lambda
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_lambda_permission&#34; &#34;allow_eventbridge_stop&#34;</span> {
+</span></span><span style="display:flex;"><span>  statement_id  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;AllowExecutionFromEventBridgeStop&#34;</span>
+</span></span><span style="display:flex;"><span>  action        <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lambda:InvokeFunction&#34;</span>
+</span></span><span style="display:flex;"><span>  function_name <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_lambda_function</span>.<span style="color:#66d9ef">resource_scheduler</span>.<span style="color:#66d9ef">function_name</span>
+</span></span><span style="display:flex;"><span>  principal     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;events.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>  source_arn    <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_cloudwatch_event_rule</span>.<span style="color:#66d9ef">stop_resources</span>.<span style="color:#66d9ef">arn</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_lambda_permission&#34; &#34;allow_eventbridge_start&#34;</span> {
+</span></span><span style="display:flex;"><span>  statement_id  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;AllowExecutionFromEventBridgeStart&#34;</span>
+</span></span><span style="display:flex;"><span>  action        <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lambda:InvokeFunction&#34;</span>
+</span></span><span style="display:flex;"><span>  function_name <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_lambda_function</span>.<span style="color:#66d9ef">resource_scheduler</span>.<span style="color:#66d9ef">function_name</span>
+</span></span><span style="display:flex;"><span>  principal     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;events.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>  source_arn    <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_cloudwatch_event_rule</span>.<span style="color:#66d9ef">start_resources</span>.<span style="color:#66d9ef">arn</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="42-terraform-destroy-cho-cicd-pipeline">4.2. Terraform Destroy cho CI/CD Pipeline</h3>
+<p>Thêm job vào GitHub Actions workflow để xóa toàn bộ tài nguyên sau khi hoàn thành:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># .github/workflows/mlops-pipeline.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Các job hiện tại...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">terraform_destroy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Destroy Infrastructure</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">needs</span>: [<span style="color:#ae81ff">deploy_eks, monitoring]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">if</span>: <span style="color:#ae81ff">github.event.inputs.destroy_after_demo == &#39;true&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">${{ needs.setup.outputs.environment }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Checkout repository</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Configure AWS credentials</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/configure-aws-credentials@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">role-to-assume</span>: <span style="color:#ae81ff">arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsRole</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-region</span>: <span style="color:#ae81ff">${{ env.AWS_REGION }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup Terraform</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">hashicorp/setup-terraform@v2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Terraform Init</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          cd aws/infra
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          terraform init</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Terraform Destroy</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          cd aws/infra
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          terraform destroy -auto-approve</span>
+</span></span></code></pre></div><h2 id="5-cost-visibility--alerts">5. Cost Visibility &amp; Alerts</h2>
+<h3 id="51-tagging-strategy-for-aws-resources">5.1. Tagging Strategy for AWS Resources</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># Add into all resource modules
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">locals</span> {
+</span></span><span style="display:flex;"><span>  common_tags <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    Project <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;RetailMLOps&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Apply these tags to all resources
+</span></span></span></code></pre></div><h3 id="52-aws-budgets-alert">5.2. AWS Budgets Alert</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># infra/modules/budget/main.tf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_budgets_budget&#34; &#34;cost&#34;</span> {
+</span></span><span style="display:flex;"><span>  name              <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-forecast-${var.environment}-monthly-budget&#34;</span>
+</span></span><span style="display:flex;"><span>  budget_type       <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;COST&#34;</span>
+</span></span><span style="display:flex;"><span>  limit_amount      <span style="color:#f92672">=</span> <span style="color:#66d9ef">var</span>.<span style="color:#66d9ef">monthly_limit</span>
+</span></span><span style="display:flex;"><span>  limit_unit        <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;USD&#34;</span>
+</span></span><span style="display:flex;"><span>  time_unit         <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;MONTHLY&#34;</span>
+</span></span><span style="display:flex;"><span>  time_period_start <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;2023-01-01_00:00&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">cost_filter</span> {
+</span></span><span style="display:flex;"><span>    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;TagKeyValue&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;user:Project$RetailForecastMLOps&#34;</span>
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">notification</span> {
+</span></span><span style="display:flex;"><span>    comparison_operator        <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;GREATER_THAN&#34;</span>
+</span></span><span style="display:flex;"><span>    threshold                  <span style="color:#f92672">=</span> <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>    threshold_type             <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;PERCENTAGE&#34;</span>
+</span></span><span style="display:flex;"><span>    notification_type          <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ACTUAL&#34;</span>
+</span></span><span style="display:flex;"><span>    subscriber_email_addresses <span style="color:#f92672">=</span> <span style="color:#66d9ef">var</span>.<span style="color:#66d9ef">notification_emails</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">notification</span> {
+</span></span><span style="display:flex;"><span>    comparison_operator        <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;GREATER_THAN&#34;</span>
+</span></span><span style="display:flex;"><span>    threshold                  <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>    threshold_type             <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;PERCENTAGE&#34;</span>
+</span></span><span style="display:flex;"><span>    notification_type          <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ACTUAL&#34;</span>
+</span></span><span style="display:flex;"><span>    subscriber_email_addresses <span style="color:#f92672">=</span> <span style="color:#66d9ef">var</span>.<span style="color:#66d9ef">notification_emails</span>
+</span></span><span style="display:flex;"><span>    subscriber_sns_topic_arns  <span style="color:#f92672">=</span> [<span style="color:#66d9ef">var</span>.<span style="color:#66d9ef">sns_topic_arn</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Script to create an AWS Budget via CLI:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># aws/scripts/create_budget.sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ACCOUNT_ID<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>aws sts get-caller-identity --query <span style="color:#e6db74">&#34;Account&#34;</span> --output text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>EMAIL<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;your-email@example.com&#34;</span>
+</span></span><span style="display:flex;"><span>BUDGET_NAME<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;MLOpsBudget&#34;</span>
+</span></span><span style="display:flex;"><span>BUDGET_LIMIT<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> <span style="color:#75715e"># USD</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create AWS Budget</span>
+</span></span><span style="display:flex;"><span>aws budgets create-budget <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --account-id $ACCOUNT_ID <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --budget <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;BudgetName&#34;: &#34;&#39;</span>$BUDGET_NAME<span style="color:#e6db74">&#39;&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;BudgetLimit&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Amount&#34;: &#34;&#39;</span>$BUDGET_LIMIT<span style="color:#e6db74">&#39;&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Unit&#34;: &#34;USD&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;CostFilters&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;TagKeyValue&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;user:Project$RetailForecastMLOps&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;BudgetType&#34;: &#34;COST&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;TimeUnit&#34;: &#34;MONTHLY&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --notifications-with-subscribers <span style="color:#e6db74">&#39;[
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Notification&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;NotificationType&#34;: &#34;ACTUAL&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;ComparisonOperator&#34;: &#34;GREATER_THAN&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;Threshold&#34;: 80,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;ThresholdType&#34;: &#34;PERCENTAGE&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Subscribers&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;SubscriptionType&#34;: &#34;EMAIL&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;Address&#34;: &#34;&#39;</span>$EMAIL<span style="color:#e6db74">&#39;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Notification&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;NotificationType&#34;: &#34;ACTUAL&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;ComparisonOperator&#34;: &#34;GREATER_THAN&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;Threshold&#34;: 100,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;ThresholdType&#34;: &#34;PERCENTAGE&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Subscribers&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;SubscriptionType&#34;: &#34;EMAIL&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;Address&#34;: &#34;&#39;</span>$EMAIL<span style="color:#e6db74">&#39;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  ]&#39;</span>
+</span></span></code></pre></div><h2 id="6-ecr--cloudwatch-optimization">6. ECR &amp; CloudWatch Optimization</h2>
+<h3 id="61-ecr-lifecycle-policy">6.1. ECR Lifecycle Policy</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># infra/modules/ecr/main.tf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_ecr_repository&#34; &#34;retail_forecast&#34;</span> {
+</span></span><span style="display:flex;"><span>  name                 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;retail-forecast&#34;</span>
+</span></span><span style="display:flex;"><span>  image_tag_mutability <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;MUTABLE&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">image_scanning_configuration</span> {
+</span></span><span style="display:flex;"><span>    scan_on_push <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_ecr_lifecycle_policy&#34; &#34;retail_forecast_policy&#34;</span> {
+</span></span><span style="display:flex;"><span>  repository <span style="color:#f92672">=</span> <span style="color:#66d9ef">aws_ecr_repository</span>.<span style="color:#66d9ef">retail_forecast</span>.<span style="color:#66d9ef">name</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  policy <span style="color:#f92672">=</span> <span style="color:#66d9ef">jsonencode</span>({
+</span></span><span style="display:flex;"><span>    rules <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        rulePriority <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        description  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Keep only 3 latest untagged images&#34;</span>,
+</span></span><span style="display:flex;"><span>        selection <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>          tagStatus     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;untagged&#34;</span>,
+</span></span><span style="display:flex;"><span>          countType     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;imageCountMoreThan&#34;</span>,
+</span></span><span style="display:flex;"><span>          countNumber   <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>          type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;expire&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        rulePriority <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>        description  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Keep only 3 latest images per tag prefix&#34;</span>,
+</span></span><span style="display:flex;"><span>        selection <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>          tagStatus     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tagged&#34;</span>,
+</span></span><span style="display:flex;"><span>          tagPrefixList <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;prod&#34;, &#34;stage&#34;, &#34;dev&#34;</span>],
+</span></span><span style="display:flex;"><span>          countType     <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;imageCountMoreThan&#34;</span>,
+</span></span><span style="display:flex;"><span>          countNumber   <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>          type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;expire&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        rulePriority <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>        description  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Keep only the 10 most recent images&#34;</span>,
+</span></span><span style="display:flex;"><span>        selection <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>          tagStatus   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;any&#34;</span>,
+</span></span><span style="display:flex;"><span>          countType   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;imageCountMoreThan&#34;</span>,
+</span></span><span style="display:flex;"><span>          countNumber <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>          type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;expire&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Or use the AWS CLI:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>aws ecr put-lifecycle-policy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --repository-name retail-forecast <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --lifecycle-policy-text <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;rules&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;rulePriority&#34;: 1,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;description&#34;: &#34;Keep only 3 latest untagged images&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;selection&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;tagStatus&#34;: &#34;untagged&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;countType&#34;: &#34;imageCountMoreThan&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;countNumber&#34;: 3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;action&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;type&#34;: &#34;expire&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;rulePriority&#34;: 2,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;description&#34;: &#34;Keep only 3 latest images per tag prefix&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;selection&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;tagStatus&#34;: &#34;tagged&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;tagPrefixList&#34;: [&#34;prod&#34;, &#34;stage&#34;, &#34;dev&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;countType&#34;: &#34;imageCountMoreThan&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;countNumber&#34;: 3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;action&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;type&#34;: &#34;expire&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;rulePriority&#34;: 3,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;description&#34;: &#34;Keep only the 10 most recent images&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;selection&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;tagStatus&#34;: &#34;any&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;countType&#34;: &#34;imageCountMoreThan&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;countNumber&#34;: 10
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;action&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;type&#34;: &#34;expire&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+</span></span></code></pre></div><h3 id="62-cloudwatch-log-retention-policy">6.2. CloudWatch Log Retention Policy</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># infra/modules/logs/main.tf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_cloudwatch_log_group&#34; &#34;eks_logs&#34;</span> {
+</span></span><span style="display:flex;"><span>  name              <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/aws/eks/mlops-retail-cluster/cluster&#34;</span>
+</span></span><span style="display:flex;"><span>  retention_in_days <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">resource</span> <span style="color:#e6db74">&#34;aws_cloudwatch_log_group&#34; &#34;app_logs&#34;</span> {
+</span></span><span style="display:flex;"><span>  name              <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/aws/retail/api&#34;</span>
+</span></span><span style="display:flex;"><span>  retention_in_days <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Or use the AWS CLI:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Set retention policy for CloudWatch Logs</span>
+</span></span><span style="display:flex;"><span>aws logs put-retention-policy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --log-group-name <span style="color:#e6db74">&#34;/aws/eks/retail-forecast-cluster/cluster&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --retention-in-days <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>aws logs put-retention-policy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --log-group-name <span style="color:#e6db74">&#34;/aws/retail-forecast/api&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --retention-in-days <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>aws logs put-retention-policy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --log-group-name <span style="color:#e6db74">&#34;/aws/sagemaker/TrainingJobs&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --retention-in-days <span style="color:#ae81ff">30</span>
+</span></span></code></pre></div><h2 id="7-automated-teardown-of-the-entire-infrastructure">7. Automated Teardown of the Entire Infrastructure</h2>
+<h3 id="71-terraform-destroy-script">7.1. Terraform Destroy Script</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># aws/scripts/teardown.sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Starting teardown...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete Kubernetes resources</span>
+</span></span><span style="display:flex;"><span>kubectl delete namespace mlops --ignore-not-found<span style="color:#f92672">=</span>true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete ECR images</span>
+</span></span><span style="display:flex;"><span>aws ecr batch-delete-image --repository-name mlops/retail-api --image-ids imageTag<span style="color:#f92672">=</span>latest imageTag<span style="color:#f92672">=</span>v2 imageTag<span style="color:#f92672">=</span>v3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Terraform destroy</span>
+</span></span><span style="display:flex;"><span>cd ../infra
+</span></span><span style="display:flex;"><span>terraform destroy -auto-approve
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Teardown completed!&#34;</span>
+</span></span></code></pre></div><h3 id="72-add-to-github-actions-workflow">7.2. Add to GitHub Actions Workflow</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># .github/workflows/teardown.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">MLOps Infrastructure Teardown</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">workflow_dispatch</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">inputs</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">confirmation</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#39;Type &#34;destroy&#34; to confirm deletion of all resources&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">required</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">env</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">AWS_REGION</span>: <span style="color:#ae81ff">us-east-1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">TF_VAR_environment</span>: <span style="color:#ae81ff">dev</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">teardown</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Teardown Infrastructure</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">if</span>: <span style="color:#ae81ff">github.event.inputs.confirmation == &#39;destroy&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Checkout repository</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Configure AWS credentials</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">aws-actions/configure-aws-credentials@v2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">role-to-assume</span>: <span style="color:#ae81ff">arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsRole</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">aws-region</span>: <span style="color:#ae81ff">${{ env.AWS_REGION }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup kubectl</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">azure/setup-kubectl@v3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Update kubeconfig</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          aws eks update-kubeconfig --name retail-forecast-cluster --region ${{ env.AWS_REGION }}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Delete Kubernetes resources</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          kubectl delete namespace retail-forecast --ignore-not-found=true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Delete SageMaker endpoints</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          ENDPOINTS=$(aws sagemaker list-endpoints --name-contains retail-forecast --query &#34;Endpoints[].EndpointName&#34; --output text)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          if [ ! -z &#34;$ENDPOINTS&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            for ENDPOINT in $ENDPOINTS; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              echo &#34;Deleting endpoint: $ENDPOINT&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              aws sagemaker delete-endpoint --endpoint-name $ENDPOINT
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup Terraform</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">hashicorp/setup-terraform@v2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Terraform Init</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          cd aws/infra
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          terraform init</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Terraform Destroy</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          cd aws/infra
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          terraform destroy -auto-approve</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Send notification</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">if</span>: <span style="color:#ae81ff">always()</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          if [ &#34;${{ job.status }}&#34; == &#34;success&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            MESSAGE=&#34;✅ Infrastructure teardown completed successfully&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            MESSAGE=&#34;❌ Infrastructure teardown failed&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          aws sns publish \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            --topic-arn ${{ secrets.SNS_TOPIC_ARN }} \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            --subject &#34;MLOps Infrastructure Teardown&#34; \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            --message &#34;$MESSAGE&#34;</span>
+</span></span></code></pre></div><h2 id="8-estimated-costs-after-optimization">8. Estimated Costs After Optimization</h2>
+<p>The following table shows projected costs after applying optimization measures:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Before Optimizing</th>
+          <th>After Optimizing</th>
+          <th>Savings (%)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>EKS NodeGroup</td>
+          <td>28.80 USD</td>
+          <td>2.40 USD</td>
+          <td>92%</td>
+      </tr>
+      <tr>
+          <td>S3 Storage</td>
+          <td>1.15 USD</td>
+          <td>0.63 USD</td>
+          <td>45%</td>
+      </tr>
+      <tr>
+          <td>CloudWatch Logs</td>
+          <td>2.50 USD</td>
+          <td>0.75 USD</td>
+          <td>70%</td>
+      </tr>
+      <tr>
+          <td>LoadBalancer</td>
+          <td>19.44 USD</td>
+          <td>5.40 USD</td>
+          <td>72%</td>
+      </tr>
+      <tr>
+          <td>ECR Storage</td>
+          <td>0.50 USD</td>
+          <td>0.20 USD</td>
+          <td>60%</td>
+      </tr>
+      <tr>
+          <td><strong>Total Cost</strong></td>
+          <td><strong>52.39 USD</strong></td>
+          <td><strong>9.38 USD</strong></td>
+          <td><strong>82%</strong></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="9-expected-results">9. Expected Results</h2>
+<h3 id="-completed-checklist">✅ Completed Checklist</h3>
+<ul>
+<li><strong>EC2 Spot Instances</strong>: Configure EKS NodeGroup and SageMaker to use Spot</li>
+<li><strong>S3 Lifecycle</strong>: Deploy lifecycle policies for data and artifacts</li>
+<li><strong>Auto Schedule</strong>: Lambda + EventBridge to automatically stop/start resources</li>
+<li><strong>Budget Alerts</strong>: Set up cost monitoring and alerts</li>
+<li><strong>ECR Lifecycle</strong>: Keep only the 3 most recent image versions</li>
+<li><strong>Log Retention</strong>: CloudWatch logs retention policy of 30 days</li>
+<li><strong>Complete Teardown</strong>: Script to fully remove resources after demos</li>
+</ul>
+<h3 id="-verification-steps">📊 Verification Steps</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 1. Check EKS NodeGroup capacity type is Spot</span>
+</span></span><span style="display:flex;"><span>aws eks describe-nodegroup <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --cluster-name retail-forecast-cluster <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --nodegroup-name retail-forecast-nodes <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;nodegroup.capacityType&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. Check S3 lifecycle policy</span>
+</span></span><span style="display:flex;"><span>aws s3api get-bucket-lifecycle-configuration <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --bucket retail-forecast-data-dev
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. Check CloudWatch logs retention</span>
+</span></span><span style="display:flex;"><span>aws logs describe-log-groups <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --log-group-name-prefix /aws/retail-forecast <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;logGroups[*].[logGroupName,retentionInDays]&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. Check ECR lifecycle policy</span>
+</span></span><span style="display:flex;"><span>aws ecr get-lifecycle-policy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --repository-name retail-forecast
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 5. Check AWS Budget was created</span>
+</span></span><span style="display:flex;"><span>aws budgets describe-budgets <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --account-id <span style="color:#66d9ef">$(</span>aws sts get-caller-identity --query <span style="color:#e6db74">&#34;Account&#34;</span> --output text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 6. Run teardown and verify resources are removed</span>
+</span></span><span style="display:flex;"><span>cd aws/scripts
+</span></span><span style="display:flex;"><span>./teardown.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify no remaining resources</span>
+</span></span><span style="display:flex;"><span>aws eks list-clusters --query <span style="color:#e6db74">&#39;clusters[*]&#39;</span> | grep retail
+</span></span><span style="display:flex;"><span>aws s3 ls | grep retail-forecast
+</span></span><span style="display:flex;"><span>aws ecr describe-repositories --query <span style="color:#e6db74">&#39;repositories[*].repositoryName&#39;</span> | grep retail
+</span></span><span style="display:flex;"><span>aws sagemaker list-endpoints --query <span style="color:#e6db74">&#39;Endpoints[*].EndpointName&#39;</span> | grep retail
+</span></span></code></pre></div><h2 id="summary">Summary</h2>
+<p>Effective cost management is one of the most important aspects of MLOps on AWS. By applying optimization strategies such as Spot Instances, S3 lifecycle policies, auto scheduling, and resource cleanup, we can reduce operating costs by up to 80% while maintaining system scalability and performance.</p>
+<p>These cost optimization measures not only help save budget but also make the MLOps system more efficient through automated resource management, cost monitoring, and lifecycle best practices for data and container images.</p>
+<p><strong>Key outcomes:</strong></p>
+<ul>
+<li>Save ~82% of operating costs (~9.38 USD/month vs ~52.39 USD/month)</li>
+<li>Automatic scheduling to start/stop resources</li>
+<li>S3 lifecycle policies to save storage costs</li>
+<li>CloudWatch logs retention set to 7 days</li>
+<li>Complete teardown script</li>
+</ul>
+<hr>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/6-self-evaluation/" title="Self-Assessment" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765386116"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765386116"></script>
+    <script src="/js/jquery.sticky.js?1765386116"></script>
+    <script src="/js/featherlight.min.js?1765386116"></script>
+    <script src="/js/highlight.pack.js?1765386116"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765386116"></script>
+    <script src="/js/learn.js?1765386116"></script>
+    <script src="/js/hugo-learn.js?1765386116"></script>
+
+    <link href="/mermaid/mermaid.css?1765386116" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765386116"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

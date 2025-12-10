@@ -1,0 +1,3486 @@
+<!DOCTYPE html>
+<html lang="vi" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Production Networking :: Tài liệu AWS MLOps</title>
+
+    
+    <link href="/css/nucleus.css?1765386117" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765386117" rel="stylesheet">
+    <link href="/css/hybrid.css?1765386117" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765386117" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765386117" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765386117" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765386117" rel="stylesheet">
+    <link href="/css/theme.css?1765386117" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765386117" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765386117" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765386117" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765386117"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/vi/5-workshop/5-vpc/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765386117"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765386117"></script>
+<script type="text/javascript">
+    var baseurl = "https:\/\/docs.vinashoes.org\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765386117"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/" title="Nhật ký công việc (Worklog)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/">
+           <b> 1. </b> Nhật ký công việc (Worklog)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.1-week1/" title="Tuần 1 - Giới thiệu về AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Tuần 1 - Giới thiệu về AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.2-week2/" title="Tuần 2 - Mạng (Networking) trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Tuần 2 - Mạng (Networking) trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.3-week3/" title="Tuần 3 - Dịch vụ máy ảo/Compute (VM) trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Tuần 3 - Dịch vụ máy ảo/Compute (VM) trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.4-week4/" title="Tuần 4 - Dịch vụ lưu trữ trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Tuần 4 - Dịch vụ lưu trữ trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.5-week5/" title="Tuần 5 - Dịch vụ bảo mật trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Tuần 5 - Dịch vụ bảo mật trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.6-week6/" title="Tuần 6 - Dịch vụ cơ sở dữ liệu trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Tuần 6 - Dịch vụ cơ sở dữ liệu trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.7-week7/" title="Tuần 7 - Dịch vụ Data Lake trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Tuần 7 - Dịch vụ Data Lake trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.8-week8/" title="Tuần 8 - Điện toán Serverless" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Tuần 8 - Điện toán Serverless
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.9-week9/" title="Tuần 9 - Điện toán Container" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Tuần 9 - Điện toán Container
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.10-week10/" title="Tuần 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Tuần 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.11-week11/" title="Tuần 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Tuần 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.12-week12/" title="Tuần 12 - Capstone: Dự án cá nhân" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Tuần 12 - Capstone: Dự án cá nhân
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/" title="Các bài blogs đã dịch" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/">
+           <b> 3. </b> Các bài blogs đã dịch
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.7-blog7/" title="Giới thiệu AWS Infrastructure as Code MCP Server: Hỗ trợ CDK và CloudFormation được hỗ trợ bởi AI" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Giới thiệu AWS Infrastructure as Code MCP Server: Hỗ trợ CDK và CloudFormation được hỗ trợ bởi AI
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms ra mắt tính năng tạo bộ dữ liệu tổng hợp tăng cường quyền riêng tư để huấn luyện mô hình ML" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms ra mắt tính năng tạo bộ dữ liệu tổng hợp tăng cường quyền riêng tư để huấn luyện mô hình ML
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.9-blog9/" title="AWS Partner Central nay đã có sẵn trong AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central nay đã có sẵn trong AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.10-blog10/" title="Công bố AWS Partner Central trong AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Công bố AWS Partner Central trong AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.11-blog11/" title="Công bố Amazon EKS Capabilities cho điều phối workload và quản lý tài nguyên đám mây" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Công bố Amazon EKS Capabilities cho điều phối workload và quản lý tài nguyên đám mây
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.12-blog12/" title="Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/4-eventparticipated/" title="Các events đã tham gia" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/4-eventparticipated/">
+           <b> 4. </b> Các events đã tham gia
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/" title="Workshop" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/vi/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/1-introduction/" title="Thiết kế kiến trúc MLOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/1-introduction/">
+          <b>1. </b>Thiết kế kiến trúc MLOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/vi/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/6-ecr-registry/" title="ECR Container Registry" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/6-ecr-registry/">
+          <b>6. </b>ECR Container Registry
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/7-eks-cluster/" title="EKS Cluster Setup" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/7-feedback/" title="Chia sẻ, đóng góp ý kiến" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/7-feedback/">
+           <b> 7. </b> Chia sẻ, đóng góp ý kiến
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="https://docs.vinashoes.org/5-workshop/5-vpc/">English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="https://docs.vinashoes.org/vi/5-workshop/5-vpc/" selected>Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/5-Workshop/5-vpc/_index.vi.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/vi/'>Báo cáo Thực tập</a> > <a href='/vi/5-workshop/'>Workshop</a> > Production Networking
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#-mục-tiêu-task-5">🎯 Mục tiêu Task 5</a></li>
+    <li><a href="#1-hybrid-vpc-infrastructure-setup">1. Hybrid VPC Infrastructure Setup</a>
+      <ul>
+        <li><a href="#11-tạo-vpc">1.1. Tạo VPC</a></li>
+        <li><a href="#12-tạo-subnets">1.2. Tạo Subnets</a></li>
+        <li><a href="#13-internet-gateway-setup">1.3. Internet Gateway Setup</a></li>
+        <li><a href="#14-route-tables-configuration">1.4. Route Tables Configuration</a></li>
+        <li><a href="#15-security-groups-setup-layered-security">1.5. Security Groups Setup (Layered Security)</a></li>
+        <li><a href="#16-enable-auto-assign-public-ip-for-alb-subnets">1.6. Enable Auto-assign Public IP for ALB Subnets</a></li>
+        <li><a href="#17-console-setup-complete">1.7. Console Setup Complete</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-vpc-endpoints-for-high-performance-internal-networking">2. VPC Endpoints for High-Performance Internal Networking</a>
+      <ul>
+        <li><a href="#21-s3-gateway-endpoint-free---modeldata-access">2.1. S3 Gateway Endpoint (FREE - Model/Data Access)</a></li>
+        <li><a href="#22-ecr-api-interface-endpoint-container-images">2.2. ECR API Interface Endpoint (Container Images)</a></li>
+        <li><a href="#23-ecr-dkr-interface-endpoint-docker-registry">2.3. ECR DKR Interface Endpoint (Docker Registry)</a></li>
+        <li><a href="#24-cloudwatch-logs-interface-endpoint">2.4. CloudWatch Logs Interface Endpoint</a></li>
+        <li><a href="#25-vpc-endpoints-verification">2.5. VPC Endpoints Verification</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-application-load-balancer-setup">3. Application Load Balancer Setup</a>
+      <ul>
+        <li><a href="#31-create-application-load-balancer">3.1. Create Application Load Balancer</a></li>
+        <li><a href="#32-create-target-group-for-eks-api">3.2. Create Target Group for EKS API</a></li>
+        <li><a href="#33-configure-alb-listeners">3.3. Configure ALB Listeners</a></li>
+        <li><a href="#34-alb-creation-complete">3.4. ALB Creation Complete</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-advanced-configuration--integration">4. Advanced Configuration &amp; Integration</a>
+      <ul>
+        <li><a href="#41-vpc-flow-logs">4.1. VPC Flow Logs</a></li>
+        <li><a href="#42-network-performance-testing">4.2. Network Performance Testing</a></li>
+        <li><a href="#43-cost-monitoring-setup">4.3. Cost Monitoring Setup</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-terraform-outputs">5. Terraform Outputs</a>
+      <ul>
+        <li><a href="#51-data-sources-reference-console-created-resources">5.1. Data Sources (Reference Console-created Resources)</a></li>
+        <li><a href="#52-outputs-for-eksalb-integration">5.2. Outputs for EKS/ALB Integration</a></li>
+        <li><a href="#53-deploy-terraform-outputs">5.3. Deploy Terraform Outputs</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-verification--performance-testing">6. Verification &amp; Performance Testing</a>
+      <ul>
+        <li><a href="#61-network-architecture-verification">6.1. Network Architecture Verification</a></li>
+        <li><a href="#62-vpc-endpoints-testing">6.2. VPC Endpoints Testing</a></li>
+        <li><a href="#63-alb-demo-testing">6.3. ALB Demo Testing</a></li>
+        <li><a href="#64-cost-monitoring">6.4. Cost Monitoring</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-troubleshooting--common-issues">7. Troubleshooting &amp; Common Issues</a>
+      <ul>
+        <li><a href="#71-vpc-endpoints-issues">7.1. VPC Endpoints Issues</a></li>
+        <li><a href="#72-alb-issues">7.2. ALB Issues</a></li>
+        <li><a href="#73-performance-issues">7.3. Performance Issues</a></li>
+      </ul>
+    </li>
+    <li><a href="#-kết-quả-task-5">👉 Kết quả Task 5</a>
+      <ul>
+        <li><a href="#architecture-delivered">Architecture Delivered</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-clean-up-resources-aws-cli">8. Clean Up Resources (AWS CLI)</a>
+      <ul>
+        <li><a href="#81-xóa-application-load-balancer-và-target-groups">8.1. Xóa Application Load Balancer và Target Groups</a></li>
+        <li><a href="#82-xóa-vpc-endpoints">8.2. Xóa VPC Endpoints</a></li>
+        <li><a href="#83-xóa-security-groups">8.3. Xóa Security Groups</a></li>
+        <li><a href="#84-xóa-subnets-và-route-tables">8.4. Xóa Subnets và Route Tables</a></li>
+        <li><a href="#85-xóa-internet-gateway-và-vpc">8.5. Xóa Internet Gateway và VPC</a></li>
+        <li><a href="#86-clean-up-helper-script">8.6. Clean Up Helper Script</a></li>
+      </ul>
+    </li>
+    <li><a href="#9-bảng-giá-vpc-và-networking-ap-southeast-1">9. Bảng giá VPC và Networking (ap-southeast-1)</a>
+      <ul>
+        <li><a href="#91-chi-phí-vpc-core-components">9.1. Chi phí VPC Core Components</a></li>
+        <li><a href="#92-chi-phí-vpc-endpoints">9.2. Chi phí VPC Endpoints</a></li>
+        <li><a href="#93-chi-phí-application-load-balancer">9.3. Chi phí Application Load Balancer</a></li>
+        <li><a href="#94-chi-phí-nat-gateway-không-dùng-trong-task-5">9.4. Chi phí NAT Gateway (Không dùng trong Task 5)</a></li>
+        <li><a href="#95-data-transfer-pricing">9.5. Data Transfer Pricing</a></li>
+        <li><a href="#96-ước-tính-tổng-chi-phí-task-5">9.6. Ước tính tổng chi phí Task 5</a></li>
+        <li><a href="#97-cost-comparison-với-traditional-setup">9.7. Cost Comparison với Traditional Setup</a></li>
+        <li><a href="#98-cost-optimization-tips">9.8. Cost Optimization Tips</a></li>
+      </ul>
+    </li>
+    <li><a href="#-video-thực-hiện-task-5">📹 Video thực hiện Task 5</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Production Networking
+            </h1>
+          
+
+        
+
+
+
+	<h2 id="-mục-tiêu-task-5">🎯 Mục tiêu Task 5</h2>
+<p>Thiết lập <strong>Production VPC</strong> cho EKS deployment và public API demo (riêng biệt với SageMaker training VPC):</p>
+<ol>
+<li><strong>Production EKS Infrastructure</strong> - EKS Cluster và Pods trong private subnets</li>
+<li><strong>Public API Access</strong> - ALB trong public subnets cho demo endpoint <code>/predict</code></li>
+<li><strong>High-Performance Internal Networking</strong> - VPC Endpoints cho S3/ECR access &lt; 50ms latency</li>
+<li><strong>Cost Optimization</strong> - Bỏ NAT Gateway, chỉ bật ALB khi demo</li>
+</ol>
+
+<div class="notices warning" ><p><strong>⚠️ VPC Separation Strategy:</strong></p>
+<ul>
+<li><strong>Task 4</strong>: SageMaker training dùng VPC mặc định (Quick setup) - đơn giản, tiết kiệm</li>
+<li><strong>Task 5</strong>: EKS production dùng VPC riêng - bảo mật, kiểm soát tốt hơn</li>
+<li><strong>Không conflict</strong>: 2 VPC độc lập, có thể kết nối qua VPC Peering nếu cần</li>
+</ul>
+</div>
+
+
+<div class="notices info" ><p><strong>🎯 Production VPC Architecture:</strong></p>
+<ul>
+<li>✅ <strong>Private Subnets</strong>: EKS Pods (secure, no direct Internet)</li>
+<li>✅ <strong>Public Subnets</strong>: ALB only (public API demo access)</li>
+<li>✅ <strong>Internal Communication</strong>: EKS ↔ S3 qua VPC Endpoints</li>
+<li>✅ <strong>Demo Ready</strong>: Public API endpoint qua ALB với SSL/health checks</li>
+</ul>
+</div>
+
+<p>📥 <strong>Input</strong></p>
+<ul>
+<li>AWS Account với VPC permissions</li>
+<li>CIDR planning: <code>10.0.0.0/16</code> (production EKS VPC)</li>
+<li>Demo requirements: Public API access qua ALB</li>
+<li>Task 4 completed: SageMaker training chạy trong VPC mặc định</li>
+<li><strong>Input từ Task 4:</strong> Task 4 (SageMaker training) — training VPC choices and requirements</li>
+<li><strong>Input từ Task 2:</strong> Task 2 (IAM Roles &amp; Audit) — roles and policies required for VPC, EKS and ECR access</li>
+</ul>
+<h2 id="1-hybrid-vpc-infrastructure-setup">1. Hybrid VPC Infrastructure Setup</h2>
+<h3 id="11-tạo-vpc">1.1. Tạo VPC</h3>
+<ol>
+<li><strong>Truy cập VPC Dashboard:</strong>
+<ul>
+<li>AWS Console → VPC service → &ldquo;Create VPC&rdquo;</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/01-create-vpc-console.png" alt="Create VPC Console"></p>
+<ol start="2">
+<li><strong>VPC Configuration:</strong>
+<pre tabindex="0"><code>VPC Name: mlops-retail-forecast-hybrid-vpc
+IPv4 CIDR: 10.0.0.0/16
+IPv6 CIDR: No IPv6 CIDR block
+Tenancy: Default
+Enable DNS hostnames: ✅ (Required for VPC Endpoints)
+Enable DNS resolution: ✅ (Required for VPC Endpoints)
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/02-vpc-configuration.png" alt="VPC Configuration"></p>
+<h3 id="12-tạo-subnets">1.2. Tạo Subnets</h3>
+<ol>
+<li>
+<p><strong>Public Subnets (ALB Only):</strong></p>
+<ul>
+<li>Navigate to &ldquo;Subnets&rdquo; → &ldquo;Create subnet&rdquo;</li>
+</ul>
+</li>
+</ol>
+<p><strong>Public Subnet 1 (ap-southeast-1a):</strong></p>
+<pre tabindex="0"><code>   Name: mlops-hybrid-public-alb-ap-southeast-1a
+   Availability Zone: ap-southeast-1a
+   IPv4 CIDR: 10.0.1.0/24
+   Purpose: ALB + Internet Gateway access
+</code></pre><p><strong>Public Subnet 2 (ap-southeast-1b):</strong></p>
+<pre tabindex="0"><code>   Name: mlops-hybrid-public-alb-ap-southeast-1b
+   Availability Zone: ap-southeast-1b
+   IPv4 CIDR: 10.0.2.0/24
+   Purpose: ALB + Internet Gateway access
+</code></pre><p><img src="../images/05-vpc-networking/03.1-create-subnets.png" alt="Create Public Subnets"></p>
+<ol start="2">
+<li><strong>Private Subnets (EKS Production):</strong></li>
+</ol>
+<p><strong>Private Subnet 1 (ap-southeast-1a):</strong></p>
+<pre tabindex="0"><code>   Name: mlops-eks-private-workloads-ap-southeast-1a
+   Availability Zone: ap-southeast-1a
+   IPv4 CIDR: 10.0.101.0/24
+   Purpose: EKS API Pods
+</code></pre><p><strong>Private Subnet 2 (ap-southeast-1b):</strong></p>
+<pre tabindex="0"><code>   Name: mlops-eks-private-workloads-ap-southeast-1b
+   Availability Zone: ap-southeast-1b
+   IPv4 CIDR: 10.0.102.0/24
+   Purpose: EKS API Pods
+</code></pre><p><img src="../images/05-vpc-networking/03.2-create-subnets.png" alt="Create Private Subnets"></p>
+<h3 id="13-internet-gateway-setup">1.3. Internet Gateway Setup</h3>
+<ol>
+<li><strong>Tạo Internet Gateway:</strong>
+<ul>
+<li>&ldquo;Internet Gateways&rdquo; → &ldquo;Create internet gateway&rdquo;</li>
+</ul>
+<pre tabindex="0"><code>Name: mlops-hybrid-igw
+Purpose: Public access for ALB demo endpoint
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/04.1-internet-gateway.png" alt="Internet Gateway Setup"></p>
+<ol start="2">
+<li><strong>Attach to VPC:</strong>
+<ul>
+<li>Select Internet Gateway → &ldquo;Actions&rdquo; → &ldquo;Attach to VPC&rdquo;</li>
+<li>Select: mlops-retail-forecast-hybrid-vpc</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/04.2-internet-gateway.png" alt="Attach IGW to VPC"></p>
+<h3 id="14-route-tables-configuration">1.4. Route Tables Configuration</h3>
+<h4 id="141-public-route-table-alb-traffic">1.4.1. Public Route Table (ALB Traffic)</h4>
+<ol>
+<li><strong>Create Public Route Table:</strong>
+<pre tabindex="0"><code>Name: mlops-hybrid-public-alb-rt
+VPC: mlops-retail-forecast-hybrid-vpc
+Purpose: Route Internet traffic to ALB
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/07.1-public-route-table.png" alt="Public Route Table"></p>
+<ol start="2">
+<li><strong>Add Internet Gateway Route:</strong>
+<ul>
+<li>Add route: <code>0.0.0.0/0</code> → Internet Gateway (mlops-hybrid-igw)</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/07.2-public-route-table.png" alt="Public Route Configuration"></p>
+<ol start="3">
+<li><strong>Associate Public Subnets:</strong>
+<ul>
+<li>Associate both ALB public subnets</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/07.3-public-route-table.png" alt="Associate Public Subnets"></p>
+<h4 id="142-private-route-table-secure-workloads">1.4.2. Private Route Table (Secure Workloads)</h4>
+<ol>
+<li>
+<p><strong>Create Private Route Table:</strong></p>
+<pre tabindex="0"><code>Name: mlops-hybrid-private-workloads-rt
+VPC: mlops-retail-forecast-hybrid-vpc
+Purpose: VPC Endpoints access only (no Internet)
+</code></pre></li>
+<li>
+<p><strong>Keep Default Local Routes:</strong></p>
+<ul>
+<li>Only local VPC route: 10.0.0.0/16 → local</li>
+<li>NO Internet Gateway route (security)</li>
+<li>VPC Endpoints will provide AWS services access</li>
+</ul>
+</li>
+<li>
+<p><strong>Associate Private Subnets:</strong></p>
+<ul>
+<li>Associate both workload private subnets</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/08-private-route-tables.png" alt="Private Route Table"></p>
+<p><img src="../images/05-vpc-networking/08-private-route-tables02.png" alt="Private Route Table"></p>
+<h3 id="15-security-groups-setup-layered-security">1.5. Security Groups Setup (Layered Security)</h3>
+<h4 id="151-alb-security-group-public-internet-access">1.5.1. ALB Security Group (Public Internet Access)</h4>
+<ol>
+<li>
+<p><strong>Basic Details:</strong></p>
+<pre tabindex="0"><code>Security group name: mlops-hybrid-alb-sg
+Description: Security group for ALB public API demo access
+VPC: mlops-retail-forecast-hybrid-vpc
+</code></pre></li>
+<li>
+<p><strong>Inbound Rules (Public Demo Access):</strong></p>
+<ul>
+<li><strong>Rule 1</strong>: HTTP (80) from 0.0.0.0/0 (redirect to HTTPS)</li>
+<li><strong>Rule 2</strong>: HTTPS (443) from 0.0.0.0/0 (secure API demo)</li>
+</ul>
+</li>
+<li>
+<p><strong>Outbound Rules:</strong></p>
+<ul>
+<li><strong>Rule</strong>: All traffic to EKS Security Group (ALB → EKS communication)</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/09.1-alb-security-group.png" alt="ALB Security Group Basic"></p>
+<h4 id="152-eks-worker-nodes-security-group-private-workloads">1.5.2. EKS Worker Nodes Security Group (Private Workloads)</h4>
+<ol>
+<li>
+<p><strong>Basic Details:</strong></p>
+<pre tabindex="0"><code>Security group name: mlops-hybrid-eks-nodes-sg
+Description: Security group for EKS worker nodes in private subnets
+VPC: mlops-retail-forecast-hybrid-vpc
+</code></pre></li>
+<li>
+<p><strong>Inbound Rules (Controlled Access):</strong></p>
+<ul>
+<li><strong>Rule 1</strong>: HTTP (80) from ALB Security Group (API traffic)</li>
+<li><strong>Rule 2</strong>: HTTPS (443) from ALB Security Group (secure API traffic)</li>
+<li><strong>Rule 3</strong>: All Traffic from self (inter-node communication)</li>
+<li><strong>Rule 4</strong>: All Traffic from EKS Control Plane SG (cluster management)</li>
+</ul>
+</li>
+<li>
+<p><strong>Outbound Rules:</strong></p>
+<ul>
+<li><strong>Rule 1</strong>: HTTPS (443) to VPC Endpoints SG (AWS services access)</li>
+<li><strong>Rule 2</strong>: All Traffic to self (inter-node communication)</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/09.4-eks-nodes-basic.png" alt="EKS Nodes Security Group"></p>
+<h4 id="153-eks-control-plane-security-group">1.5.3. EKS Control Plane Security Group</h4>
+<ol>
+<li>
+<p><strong>Basic Details:</strong></p>
+<pre tabindex="0"><code>Security group name: mlops-hybrid-eks-control-plane-sg
+Description: Security group for EKS control plane
+VPC: mlops-retail-forecast-hybrid-vpc
+</code></pre></li>
+<li>
+<p><strong>Inbound Rules:</strong></p>
+<ul>
+<li><strong>Rule</strong>: HTTPS (443) from EKS Nodes SG (cluster API access)</li>
+</ul>
+</li>
+<li>
+<p><strong>Outbound Rules:</strong></p>
+<ul>
+<li><strong>Rule</strong>: All Traffic to EKS Nodes SG (cluster management)</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/09.7-eks-control-plane.png" alt="EKS Control Plane Security Group"></p>
+<h4 id="154-vpc-endpoints-security-group-aws-services-access">1.5.4. VPC Endpoints Security Group (AWS Services Access)</h4>
+<ol>
+<li>
+<p><strong>Basic Details:</strong></p>
+<pre tabindex="0"><code>Security group name: mlops-hybrid-vpc-endpoints-sg
+Description: Security group for VPC endpoints (S3, ECR, SageMaker)
+VPC: mlops-retail-forecast-hybrid-vpc
+</code></pre></li>
+<li>
+<p><strong>Inbound Rules (Internal Access Only):</strong></p>
+<ul>
+<li><strong>Rule 1</strong>: HTTPS (443) from EKS Nodes SG (EKS → AWS services)</li>
+<li><strong>Rule 2</strong>: HTTPS (443) from SageMaker SG (SageMaker → S3/ECR)</li>
+<li><strong>Rule 3</strong>: HTTPS (443) from VPC CIDR (10.0.0.0/16) - fallback</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/09.9-vpc-endpoints-inbound.png" alt="VPC Endpoints Inbound Rules"></p>
+
+<div class="notices success" ><p><strong>🎯 Security Groups Complete!</strong></p>
+<p><strong>4 Security Groups Created:</strong></p>
+<ul>
+<li>ALB SG: Public Internet access (80/443)</li>
+<li>EKS Nodes SG: Private workloads</li>
+<li>EKS Control Plane SG: Cluster management</li>
+<li>VPC Endpoints SG: AWS services access</li>
+</ul>
+<p><strong>Note:</strong> SageMaker sẽ dùng default SG trong VPC mặc định (Task 4)</p>
+</div>
+
+<h3 id="16-enable-auto-assign-public-ip-for-alb-subnets">1.6. Enable Auto-assign Public IP for ALB Subnets</h3>
+<p><strong>Important for ALB functionality:</strong></p>
+<ol>
+<li>
+<p><strong>Navigate to Public Subnets:</strong></p>
+<ul>
+<li>VPC Dashboard → Subnets</li>
+</ul>
+</li>
+<li>
+<p><strong>Enable Auto-assign Public IP:</strong></p>
+<ul>
+<li>Select each public subnet</li>
+<li>Actions → &ldquo;Modify auto-assign IP settings&rdquo;</li>
+<li>✅ Enable auto-assign public IPv4 address</li>
+</ul>
+</li>
+</ol>
+<p><img src="../images/05-vpc-networking/06-auto-assign-public-ip.png" alt="Auto-assign Public IP"></p>
+
+<div class="notices warning" ><p><strong>⚠️ Critical for ALB:</strong> Public subnets must have auto-assign public IP enabled, otherwise ALB creation will fail.</p>
+</div>
+
+<h3 id="17-console-setup-complete">1.7. Console Setup Complete</h3>
+<p><img src="../images/05-vpc-networking/10-security-groups-overview.png" alt="Security Groups Overview">
+<img src="../images/05-vpc-networking/11-vpc-resource-map.png" alt="VPC Resource Map"></p>
+
+<div class="notices success" ><p><strong>🎯 Hybrid VPC Console Setup Complete!</strong></p>
+<p><strong>Security Architecture:</strong></p>
+<ul>
+<li><strong>Layer 1</strong>: Internet → ALB (80/443 from 0.0.0.0/0)</li>
+<li><strong>Layer 2</strong>: ALB → EKS Nodes (controlled access)</li>
+<li><strong>Layer 3</strong>: EKS → VPC Endpoints (AWS services only)</li>
+<li><strong>Layer 4</strong>: Private subnets completely isolated from Internet</li>
+</ul>
+<p><strong>Demo Ready:</strong> ALB can accept public traffic and route to private EKS API pods</p>
+</div>
+
+<h2 id="2-vpc-endpoints-for-high-performance-internal-networking">2. VPC Endpoints for High-Performance Internal Networking</h2>
+<p><strong>Bước này BẮT BUỘC phải làm để đảm bảo EKS ↔ S3 ↔ SageMaker latency &lt; 50ms:</strong></p>
+<h3 id="21-s3-gateway-endpoint-free---modeldata-access">2.1. S3 Gateway Endpoint (FREE - Model/Data Access)</h3>
+<ol>
+<li><strong>Create S3 Gateway Endpoint:</strong>
+<ul>
+<li>VPC Dashboard → &ldquo;Endpoints&rdquo; → &ldquo;Create endpoint&rdquo;</li>
+</ul>
+<pre tabindex="0"><code>Endpoint name: mlops-hybrid-s3-gateway-endpoint
+Service: com.amazonaws.ap-southeast-1.s3
+Type: Gateway
+VPC: mlops-retail-forecast-hybrid-vpc
+Route Tables: mlops-hybrid-private-workloads-rt
+Policy: Full Access (demo purposes)
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/10.2-s3-endpoint-config.png" alt="S3 Endpoint Configuration">
+<img src="../images/05-vpc-networking/10.2-s3-endpoint-config2.png" alt="S3 Endpoint Configuration"></p>
+<p><strong>Purpose:</strong> EKS Pods load model artifacts từ S3 &lt; 50ms latency</p>
+<h3 id="22-ecr-api-interface-endpoint-container-images">2.2. ECR API Interface Endpoint (Container Images)</h3>
+<ol>
+<li><strong>Create ECR API Endpoint:</strong>
+<pre tabindex="0"><code>Endpoint name: mlops-hybrid-ecr-api-endpoint
+Service: com.amazonaws.ap-southeast-1.ecr.api
+Type: Interface
+VPC: mlops-retail-forecast-hybrid-vpc
+Subnets: Both private workload subnets
+Security Groups: mlops-hybrid-vpc-endpoints-sg
+Private DNS: ✅ Enabled
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/10.3-ecr-api-endpoint.png" alt="ECR API Endpoint">
+<img src="../images/05-vpc-networking/10.4-ecr-api-config.png" alt="ECR API Configuration"></p>
+<p><strong>Purpose:</strong> EKS pull container images từ ECR repository</p>
+<h3 id="23-ecr-dkr-interface-endpoint-docker-registry">2.3. ECR DKR Interface Endpoint (Docker Registry)</h3>
+<ol>
+<li><strong>Create ECR DKR Endpoint:</strong>
+<pre tabindex="0"><code>Endpoint name: mlops-hybrid-ecr-dkr-endpoint
+Service: com.amazonaws.ap-southeast-1.ecr.dkr
+Type: Interface
+VPC: mlops-retail-forecast-hybrid-vpc
+Subnets: Both private workload subnets
+Security Groups: mlops-hybrid-vpc-endpoints-sg
+Private DNS: ✅ Enabled
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/10.5-ecr-dkr-endpoint.png" alt="ECR DKR Endpoint">
+<img src="../images/05-vpc-networking/10.5-ecr-dkr-endpoint2.png" alt="ECR DKR Endpoint"></p>
+<p><strong>Purpose:</strong> Docker layer downloads cho EKS container runtime</p>
+<h3 id="24-cloudwatch-logs-interface-endpoint">2.4. CloudWatch Logs Interface Endpoint</h3>
+<ol>
+<li><strong>Create CloudWatch Logs Endpoint:</strong>
+<pre tabindex="0"><code>Endpoint name: mlops-hybrid-logs-endpoint
+Service: com.amazonaws.ap-southeast-1.logs
+Type: Interface
+VPC: mlops-retail-forecast-hybrid-vpc
+Subnets: Both private workload subnets
+Security Groups: mlops-hybrid-vpc-endpoints-sg
+Private DNS: ✅ Enabled
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/10.7-logs-endpoint.png" alt="CloudWatch Logs Endpoint">
+<img src="../images/05-vpc-networking/10.7-logs-endpoint2.png" alt="CloudWatch Logs Endpoint"></p>
+<p><strong>Purpose:</strong> Monitoring and logging cho EKS/SageMaker workloads</p>
+<h3 id="25-vpc-endpoints-verification">2.5. VPC Endpoints Verification</h3>
+<p><img src="../images/05-vpc-networking/10.8-vpc-endpoints-overview.png" alt="VPC Endpoints Overview"></p>
+<p><strong>Expected Results:</strong></p>
+<ul>
+<li><strong>S3 Gateway</strong>: Route added to private route table automatically</li>
+<li><strong>3x Interface Endpoints</strong>: ENI created in each private subnet</li>
+<li><strong>Private DNS</strong>: All endpoints resolvable via internal DNS</li>
+</ul>
+<p><strong>🎯 VPC Endpoints Complete!</strong></p>
+<p><strong>High-Performance Internal Network:</strong></p>
+<ul>
+<li>EKS ↔ S3: &lt; 50ms (Gateway Endpoint)</li>
+<li>EKS ↔ ECR: &lt; 50ms (Interface Endpoints)</li>
+<li>EKS ↔ CloudWatch: &lt; 50ms (Logs Endpoint)</li>
+<li>No Internet dependency for AWS services</li>
+</ul>
+<p><strong>Cost Optimized:</strong> ~$7.2/month tiết kiệm (không cần SageMaker VPC Endpoint)</p>
+<h2 id="3-application-load-balancer-setup">3. Application Load Balancer Setup</h2>
+<h3 id="31-create-application-load-balancer">3.1. Create Application Load Balancer</h3>
+<ol>
+<li>
+<p><strong>Navigate to Load Balancers:</strong></p>
+<ul>
+<li>EC2 Dashboard → Load Balancers → &ldquo;Create load balancer&rdquo;</li>
+</ul>
+</li>
+<li>
+<p><strong>ALB Configuration:</strong></p>
+<pre tabindex="0"><code>Name: mlops-hybrid-api-demo-alb
+Scheme: Internet-facing
+IP address type: IPv4
+VPC: mlops-retail-forecast-hybrid-vpc
+Mappings: Both public ALB subnets
+Security groups: mlops-hybrid-alb-sg
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/11.1-alb-basic-config.png" alt="ALB Basic Configuration">
+<img src="../images/05-vpc-networking/11.2-alb-network-config.png" alt="ALB Network Configuration"></p>
+<h3 id="32-create-target-group-for-eks-api">3.2. Create Target Group for EKS API</h3>
+<ol>
+<li><strong>Target Group Configuration:</strong>
+<pre tabindex="0"><code>Target type: IP addresses
+Target group name: mlops-hybrid-eks-api-tg
+Protocol: HTTP
+Port: 80
+VPC: mlops-retail-forecast-hybrid-vpc
+Health check path: /health
+Health check port: 80
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/11.3-target-group-config.png" alt="Target Group Configuration"></p>
+<ol start="2">
+<li><strong>Health Check Settings:</strong>
+<pre tabindex="0"><code>Health check protocol: HTTP
+Health check path: /health
+Health check port: 80
+Healthy threshold: 2
+Unhealthy threshold: 2
+Timeout: 5 seconds
+Interval: 30 seconds
+Success codes: 200
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/11.4-health-check-config.png" alt="Health Check Settings"></p>
+<h3 id="33-configure-alb-listeners">3.3. Configure ALB Listeners</h3>
+<ol>
+<li>
+<p><strong>HTTP Listener (Redirect to HTTPS):</strong></p>
+<pre tabindex="0"><code>Protocol: HTTP
+Port: 80
+Default action: Redirect to HTTPS
+</code></pre></li>
+<li>
+<p><strong>HTTPS Listener (API Traffic):</strong></p>
+<pre tabindex="0"><code>Protocol: HTTPS
+Port: 443
+Default action: Forward to target group
+SSL certificate: ACM certificate (hoặc self-signed for demo)
+</code></pre></li>
+</ol>
+<p><img src="../images/05-vpc-networking/11.5-alb-listeners.png" alt="ALB Listeners Configuration">
+<img src="../images/05-vpc-networking/11.5-alb-listeners2.png" alt="ALB Listeners Configuration">
+<img src="../images/05-vpc-networking/11.5-alb-listeners3.png" alt="ALB Listeners Configuration"></p>
+
+<div class="notices info" ><p><strong>💡 SSL Certificate Options:</strong></p>
+<ul>
+<li><strong>Production</strong>: Use AWS Certificate Manager (ACM) với domain</li>
+<li><strong>Demo</strong>: Create self-signed certificate or use HTTP only</li>
+<li><strong>Development</strong>: Skip SSL, use HTTP listener only</li>
+</ul>
+</div>
+
+<h3 id="34-alb-creation-complete">3.4. ALB Creation Complete</h3>
+<p><img src="../images/05-vpc-networking/11.6-alb-complete.png" alt="ALB Creation Complete"></p>
+<p><strong>ALB DNS Name:</strong> Will be used for public API demo access</p>
+<pre tabindex="0"><code>Example: mlops-hybrid-api-demo-alb-1234567890.ap-southeast-1.elb.amazonaws.com
+</code></pre>
+<div class="notices success" ><p><strong>🎯 ALB Setup Complete!</strong></p>
+<p><strong>Public Demo Access Ready:</strong></p>
+<ul>
+<li>HTTP/HTTPS endpoints configured</li>
+<li>Target group ready for EKS API pods</li>
+<li>Health checks configured</li>
+<li>Multi-AZ availability</li>
+</ul>
+</div>
+
+<h2 id="4-advanced-configuration--integration">4. Advanced Configuration &amp; Integration</h2>
+<h3 id="41-vpc-flow-logs">4.1. VPC Flow Logs</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Enable VPC Flow Logs for security monitoring</span>
+</span></span><span style="display:flex;"><span>aws ec2 create-flow-logs <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --resource-type VPC <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --resource-ids vpc-xxxxxxxxx <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --traffic-type ALL <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --log-destination-type cloud-watch-logs <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --log-group-name VPCFlowLogs <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --deliver-logs-permission-arn arn:aws:iam::ACCOUNT:role/flowlogsRole
+</span></span></code></pre></div><h3 id="42-network-performance-testing">4.2. Network Performance Testing</h3>
+<p><strong>Test EKS ↔ S3 Latency:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># From EKS Pod (after cluster setup)</span>
+</span></span><span style="display:flex;"><span>kubectl run test-pod --image<span style="color:#f92672">=</span>amazonlinux --restart<span style="color:#f92672">=</span>Never -- sleep <span style="color:#ae81ff">3600</span>
+</span></span><span style="display:flex;"><span>kubectl exec -it test-pod -- bash
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Inside pod</span>
+</span></span><span style="display:flex;"><span>yum install -y awscli
+</span></span><span style="display:flex;"><span>time aws s3 ls s3://your-model-bucket/
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: &lt; 50ms for VPC Endpoint</span>
+</span></span></code></pre></div><p><strong>Test ALB ↔ EKS Connectivity:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Test from outside VPC</span>
+</span></span><span style="display:flex;"><span>curl -I http://your-alb-dns-name/health
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: HTTP 200 OK when EKS API is running</span>
+</span></span></code></pre></div><h3 id="43-cost-monitoring-setup">4.3. Cost Monitoring Setup</h3>
+<p><strong>CloudWatch Cost Alarms:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Create cost alarm for VPC Endpoints</span>
+</span></span><span style="display:flex;"><span>aws cloudwatch put-metric-alarm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --alarm-name <span style="color:#e6db74">&#34;VPC-Endpoints-Cost-Alert&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --alarm-description <span style="color:#e6db74">&#34;Alert when VPC Endpoints cost &gt; </span>$30<span style="color:#e6db74">/month&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metric-name EstimatedCharges <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --namespace AWS/Billing <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --statistic Maximum <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --period <span style="color:#ae81ff">86400</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --threshold <span style="color:#ae81ff">30</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --comparison-operator GreaterThanThreshold <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dimensions Name<span style="color:#f92672">=</span>Currency,Value<span style="color:#f92672">=</span>USD Name<span style="color:#f92672">=</span>ServiceName,Value<span style="color:#f92672">=</span>AmazonVPC
+</span></span></code></pre></div><h2 id="5-terraform-outputs">5. Terraform Outputs</h2>
+
+<div class="notices info" ><p><strong>💡 Khi nào cần Terraform outputs:</strong></p>
+<ul>
+<li>✅ Task 7-10 sẽ dùng Terraform (EKS cluster, ALB controller)</li>
+<li>✅ Cần automated deployment across environments</li>
+<li>✅ Want to reference infrastructure programmatically</li>
+</ul>
+<p><strong>Nếu Task 7-10 dùng Console:</strong> Skip phần này hoàn toàn!</p>
+</div>
+
+<h3 id="51-data-sources-reference-console-created-resources">5.1. Data Sources (Reference Console-created Resources)</h3>
+<p><strong>File: <code>aws/infra/vpc-data-sources.tf</code></strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># Reference VPC infrastructure từ Console
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_vpc&#34; &#34;hybrid&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tag:Name&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;mlops-retail-forecast-hybrid-vpc&#34;</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Public subnets (ALB)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_subnets&#34; &#34;public_alb&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;vpc-id&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">id</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tag:Name&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;*public-alb*&#34;</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Private subnets (EKS + SageMaker)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_subnets&#34; &#34;private_workloads&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;vpc-id&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">id</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tag:Name&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;*private-workloads*&#34;</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Security Groups
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_security_group&#34; &#34;alb&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tag:Name&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;mlops-hybrid-alb-sg&#34;</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_security_group&#34; &#34;eks_nodes&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tag:Name&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;mlops-hybrid-eks-nodes-sg&#34;</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_security_group&#34; &#34;eks_control_plane&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">filter</span> {
+</span></span><span style="display:flex;"><span>    name   <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tag:Name&#34;</span>
+</span></span><span style="display:flex;"><span>    values <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;mlops-hybrid-eks-control-plane-sg&#34;</span>]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># ALB
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_lb&#34; &#34;api_demo&#34;</span> {
+</span></span><span style="display:flex;"><span>  name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mlops-hybrid-api-demo-alb&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_lb_target_group&#34; &#34;eks_api&#34;</span> {
+</span></span><span style="display:flex;"><span>  name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mlops-hybrid-eks-api-tg&#34;</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># VPC Endpoints
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_vpc_endpoint&#34; &#34;s3&#34;</span> {
+</span></span><span style="display:flex;"><span>  vpc_id       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>  service_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;com.amazonaws.ap-southeast-1.s3&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_vpc_endpoint&#34; &#34;ecr_api&#34;</span> {
+</span></span><span style="display:flex;"><span>  vpc_id       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>  service_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;com.amazonaws.ap-southeast-1.ecr.api&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_vpc_endpoint&#34; &#34;ecr_dkr&#34;</span> {
+</span></span><span style="display:flex;"><span>  vpc_id       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>  service_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;com.amazonaws.ap-southeast-1.ecr.dkr&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;aws_vpc_endpoint&#34; &#34;sagemaker_runtime&#34;</span> {
+</span></span><span style="display:flex;"><span>  vpc_id       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>  service_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;com.amazonaws.ap-southeast-1.sagemaker.runtime&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="52-outputs-for-eksalb-integration">5.2. Outputs for EKS/ALB Integration</h3>
+<p><strong>File: <code>aws/infra/networking-outputs.tf</code></strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-hcl" data-lang="hcl"><span style="display:flex;"><span><span style="color:#75715e"># VPC Information
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;vpc_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Hybrid VPC ID&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;vpc_cidr_block&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;VPC CIDR block&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc</span>.<span style="color:#66d9ef">hybrid</span>.<span style="color:#66d9ef">cidr_block</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Subnet Information
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;public_alb_subnet_ids&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Public subnet IDs for ALB&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_subnets</span>.<span style="color:#66d9ef">public_alb</span>.<span style="color:#66d9ef">ids</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;private_workload_subnet_ids&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Private subnet IDs for EKS and SageMaker&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_subnets</span>.<span style="color:#66d9ef">private_workloads</span>.<span style="color:#66d9ef">ids</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Security Group Information
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;alb_security_group_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ALB Security Group ID&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_security_group</span>.<span style="color:#66d9ef">alb</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;eks_nodes_security_group_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;EKS Nodes Security Group ID&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_security_group</span>.<span style="color:#66d9ef">eks_nodes</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;eks_control_plane_security_group_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;EKS Control Plane Security Group ID&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_security_group</span>.<span style="color:#66d9ef">eks_control_plane</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># ALB Information
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;alb_arn&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ALB ARN for API demo&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_lb</span>.<span style="color:#66d9ef">api_demo</span>.<span style="color:#66d9ef">arn</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;alb_dns_name&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ALB DNS name for public API access&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_lb</span>.<span style="color:#66d9ef">api_demo</span>.<span style="color:#66d9ef">dns_name</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;alb_zone_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ALB Zone ID for Route53 integration&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_lb</span>.<span style="color:#66d9ef">api_demo</span>.<span style="color:#66d9ef">zone_id</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;eks_api_target_group_arn&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Target group ARN for EKS API pods&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_lb_target_group</span>.<span style="color:#66d9ef">eks_api</span>.<span style="color:#66d9ef">arn</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># VPC Endpoints Information
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;s3_vpc_endpoint_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;S3 VPC Endpoint ID&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc_endpoint</span>.<span style="color:#66d9ef">s3</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;ecr_api_vpc_endpoint_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ECR API VPC Endpoint ID&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc_endpoint</span>.<span style="color:#66d9ef">ecr_api</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;sagemaker_runtime_vpc_endpoint_id&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;SageMaker Runtime VPC Endpoint ID&#34;</span>
+</span></span><span style="display:flex;"><span>  value       <span style="color:#f92672">=</span> <span style="color:#66d9ef">data</span>.<span style="color:#66d9ef">aws_vpc_endpoint</span>.<span style="color:#66d9ef">sagemaker_runtime</span>.<span style="color:#66d9ef">id</span>
+</span></span><span style="display:flex;"><span>}<span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># Demo Configuration
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">output</span> <span style="color:#e6db74">&#34;api_demo_config&#34;</span> {
+</span></span><span style="display:flex;"><span>  description <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Configuration for API demo&#34;</span>
+</span></span><span style="display:flex;"><span>  value <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    public_endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://${data.aws_lb.api_demo.dns_name}&#34;</span>
+</span></span><span style="display:flex;"><span>    health_check    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://${data.aws_lb.api_demo.dns_name}/health&#34;</span>
+</span></span><span style="display:flex;"><span>    predict_endpoint <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://${data.aws_lb.api_demo.dns_name}/predict&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="53-deploy-terraform-outputs">5.3. Deploy Terraform Outputs</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Navigate to infrastructure directory</span>
+</span></span><span style="display:flex;"><span>cd aws/infra
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initialize Terraform</span>
+</span></span><span style="display:flex;"><span>terraform init
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Plan (should show 0 resources to create, only data sources)</span>
+</span></span><span style="display:flex;"><span>terraform plan
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Apply outputs</span>
+</span></span><span style="display:flex;"><span>terraform apply -auto-approve
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify outputs</span>
+</span></span><span style="display:flex;"><span>terraform output api_demo_config
+</span></span></code></pre></div><p>Expected output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;health_check&#34;</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#e6db74">&#34;https://mlops-hybrid-api-demo-alb-123456789.ap-southeast-1.elb.amazonaws.com/health&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;predict_endpoint&#34;</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#e6db74">&#34;https://mlops-hybrid-api-demo-alb-123456789.ap-southeast-1.elb.amazonaws.com/predict&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;public_endpoint&#34;</span> <span style="color:#960050;background-color:#1e0010">=</span> <span style="color:#e6db74">&#34;https://mlops-hybrid-api-demo-alb-123456789.ap-southeast-1.elb.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="6-verification--performance-testing">6. Verification &amp; Performance Testing</h2>
+<h3 id="61-network-architecture-verification">6.1. Network Architecture Verification</h3>
+<p><strong>Verify Hybrid VPC Setup:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check VPC configuration</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-vpcs <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=tag:Name,Values=mlops-retail-forecast-hybrid-vpc&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;Vpcs[0].{VpcId:VpcId,CidrBlock:CidrBlock,State:State}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify subnets</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-subnets <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=</span><span style="color:#66d9ef">$(</span>aws ec2 describe-vpcs --filters <span style="color:#e6db74">&#39;Name=tag:Name,Values=mlops-retail-forecast-hybrid-vpc&#39;</span> --query <span style="color:#e6db74">&#39;Vpcs[0].VpcId&#39;</span> --output text<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;Subnets[*].{Name:Tags[?Key==`Name`].Value|[0],CIDR:CidrBlock,AZ:AvailabilityZone,Type:MapPublicIpOnLaunch}&#39;</span>
+</span></span></code></pre></div><p><strong>Verify Security Groups:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># List all security groups for the VPC</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-security-groups <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=</span><span style="color:#66d9ef">$(</span>terraform output -raw vpc_id<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;SecurityGroups[*].{Name:GroupName,ID:GroupId,Description:Description}&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --output table
+</span></span></code></pre></div><h3 id="62-vpc-endpoints-testing">6.2. VPC Endpoints Testing</h3>
+<p><strong>Test S3 VPC Endpoint (after EKS setup):</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># From EKS pod</span>
+</span></span><span style="display:flex;"><span>kubectl run network-test --image<span style="color:#f92672">=</span>amazonlinux --restart<span style="color:#f92672">=</span>Never -- sleep <span style="color:#ae81ff">3600</span>
+</span></span><span style="display:flex;"><span>kubectl exec -it network-test -- bash
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test S3 access via VPC endpoint</span>
+</span></span><span style="display:flex;"><span>yum update -y <span style="color:#f92672">&amp;&amp;</span> yum install -y awscli curl time
+</span></span><span style="display:flex;"><span>time aws s3 ls s3://your-model-bucket/ --region ap-southeast-1
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: &lt; 50ms response time</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test ECR access</span>
+</span></span><span style="display:flex;"><span>time aws ecr get-login-token --region ap-southeast-1
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: &lt; 100ms response time</span>
+</span></span></code></pre></div><p><strong>Verify VPC Endpoint DNS Resolution:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Inside EKS pod</span>
+</span></span><span style="display:flex;"><span>nslookup s3.ap-southeast-1.amazonaws.com
+</span></span><span style="display:flex;"><span>nslookup api.ecr.ap-southeast-1.amazonaws.com
+</span></span><span style="display:flex;"><span>nslookup runtime.sagemaker.ap-southeast-1.amazonaws.com
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Should resolve to private IP addresses (10.0.x.x)</span>
+</span></span></code></pre></div><h3 id="63-alb-demo-testing">6.3. ALB Demo Testing</h3>
+<p><strong>Test ALB Public Access:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Get ALB DNS name</span>
+</span></span><span style="display:flex;"><span>ALB_DNS<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>aws elbv2 describe-load-balancers <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --names mlops-hybrid-api-demo-alb <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;LoadBalancers[0].DNSName&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --output text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;ALB DNS: </span>$ALB_DNS<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test connectivity (will show 503 until EKS API is deployed)</span>
+</span></span><span style="display:flex;"><span>curl -I http://$ALB_DNS/
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: Connection successful (503 Service Unavailable is normal without backend)</span>
+</span></span></code></pre></div><p><strong>Verify Target Group (after EKS deployment):</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check target group health</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-target-health <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --target-group-arn <span style="color:#66d9ef">$(</span>aws elbv2 describe-target-groups <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --names mlops-hybrid-eks-api-tg <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --query <span style="color:#e6db74">&#39;TargetGroups[0].TargetGroupArn&#39;</span> --output text<span style="color:#66d9ef">)</span>
+</span></span></code></pre></div><h3 id="64-cost-monitoring">6.4. Cost Monitoring</h3>
+<p><strong>Monthly Cost Breakdown:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check VPC Endpoints cost (should be ~$21.6/month)</span>
+</span></span><span style="display:flex;"><span>aws ce get-cost-and-usage <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --time-period Start<span style="color:#f92672">=</span>2024-01-01,End<span style="color:#f92672">=</span>2024-01-31 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --granularity MONTHLY <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metrics BlendedCost <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-by Type<span style="color:#f92672">=</span>DIMENSION,Key<span style="color:#f92672">=</span>SERVICE <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filter <span style="color:#e6db74">&#39;{&#34;Dimensions&#34;:{&#34;Key&#34;:&#34;SERVICE&#34;,&#34;Values&#34;:[&#34;Amazon Virtual Private Cloud&#34;]}}&#39;</span>
+</span></span></code></pre></div><h2 id="7-troubleshooting--common-issues">7. Troubleshooting &amp; Common Issues</h2>
+<h3 id="71-vpc-endpoints-issues">7.1. VPC Endpoints Issues</h3>
+<p><strong>Problem: EKS pods can&rsquo;t access S3</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Solution 1: Check route table</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-route-tables <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=tag:Name,Values=mlops-hybrid-private-workloads-rt&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;RouteTables[0].Routes&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Should see route to S3 endpoint</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Solution 2: Check security group</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-security-groups <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-names mlops-hybrid-vpc-endpoints-sg <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;SecurityGroups[0].IpPermissions&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Should allow HTTPS 443 from 10.0.0.0/16</span>
+</span></span></code></pre></div><p><strong>Problem: Interface endpoint DNS not resolving</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check private DNS is enabled</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-vpc-endpoints <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=</span><span style="color:#66d9ef">$(</span>terraform output -raw vpc_id<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;VpcEndpoints[*].{Service:ServiceName,PrivateDnsEnabled:PrivateDnsEnabled}&#39;</span>
+</span></span></code></pre></div><h3 id="72-alb-issues">7.2. ALB Issues</h3>
+<p><strong>Problem: ALB not accessible from Internet</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check Internet Gateway attached</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-internet-gateways <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=attachment.vpc-id,Values=</span><span style="color:#66d9ef">$(</span>terraform output -raw vpc_id<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check public subnet route table</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-route-tables <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=tag:Name,Values=mlops-hybrid-public-alb-rt&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;RouteTables[0].Routes&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Should have 0.0.0.0/0 → Internet Gateway</span>
+</span></span></code></pre></div><p><strong>Problem: ALB can&rsquo;t reach EKS targets</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check security group rules</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-security-groups <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-names mlops-hybrid-eks-nodes-sg <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;SecurityGroups[0].IpPermissions[?IpProtocol==`tcp` &amp;&amp; FromPort==`80`]&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Should allow port 80 from ALB security group</span>
+</span></span></code></pre></div><h3 id="73-performance-issues">7.3. Performance Issues</h3>
+<p><strong>Problem: High latency EKS ↔ S3</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Verify using VPC endpoint</span>
+</span></span><span style="display:flex;"><span>kubectl exec -it network-test -- traceroute s3.ap-southeast-1.amazonaws.com
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Should not go through Internet (no public IPs in trace)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check VPC endpoint policy</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-vpc-endpoints <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filters <span style="color:#e6db74">&#34;Name=service-name,Values=com.amazonaws.ap-southeast-1.s3&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;VpcEndpoints[0].PolicyDocument&#39;</span>
+</span></span></code></pre></div><h2 id="-kết-quả-task-5">👉 Kết quả Task 5</h2>
+<p>✅ <strong>Hybrid VPC Architecture</strong> - Public ALB + Private workloads security model<br>
+✅ <strong>Public API Demo Ready</strong> - ALB configured cho demo endpoint <code>/predict</code><br>
+✅ <strong>High-Performance Internal</strong> - VPC Endpoints &lt; 50ms latency EKS ↔ S3<br>
+✅ <strong>Cost Optimized</strong> - $21.6/month base + $0.02/hour ALB demo usage<br>
+✅ <strong>Production Security</strong> - Layered security groups, no Internet access for workloads</p>
+<h3 id="architecture-delivered">Architecture Delivered</h3>
+<pre tabindex="0"><code>✅ Hybrid VPC Foundation:
+   - Public Subnets: ALB demo access (Internet facing)
+   - Private Subnets: EKS + SageMaker (secure, no Internet)
+   - Multi-AZ: High availability for API demo
+
+✅ Public Demo Capability:
+   - ALB: Public endpoint for API demo
+   - Target Groups: Ready for EKS API pods
+   - SSL/Health checks: Production-ready demo
+
+✅ High-Performance Internal Network:
+   - S3 Gateway Endpoint: FREE, &lt; 50ms model access
+   - ECR Interface Endpoints: Fast container pulls
+   - SageMaker Runtime Endpoint: Low-latency inference
+
+✅ Security Architecture:
+   Internet → ALB SG → EKS SG → VPC Endpoints SG
+   (Layered access control)
+</code></pre>
+<div class="notices success" ><p><strong>🎯 Task 5 Complete - Demo-Ready Hybrid VPC!</strong></p>
+<p><strong>Public Access</strong>: ALB provides secure public API demo endpoint<br>
+<strong>Private Security</strong>: EKS/SageMaker workloads completely isolated<br>
+<strong>High Performance</strong>: &lt; 50ms internal AWS services latency<br>
+<strong>Cost Efficient</strong>: $21.6 base + demo usage only when needed<br>
+<strong>Production Ready</strong>: SSL, health checks, multi-AZ availability</p>
+</div>
+
+
+<div class="notices tip" ><p><strong>🚀 Next Steps:</strong></p>
+<ul>
+<li><strong>Task 6</strong>: ECR container registry cho API container images</li>
+<li><strong>Task 7</strong>: EKS cluster deployment trong private subnets</li>
+<li><strong>Task 8</strong>: EKS node groups với auto-scaling</li>
+<li><strong>Task 10</strong>: Deploy API service với ALB integration</li>
+<li><strong>Task 11</strong>: ALB ingress controller configuration</li>
+</ul>
+<p><strong>Demo Commands Ready:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Public API demo endpoint (after deployment)</span>
+</span></span><span style="display:flex;"><span>curl https://your-alb-dns/predict -d <span style="color:#e6db74">&#39;{&#34;data&#34;: &#34;your-input&#34;}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Health check endpoint</span>
+</span></span><span style="display:flex;"><span>curl https://your-alb-dns/health
+</span></span></code></pre></div></div>
+
+
+<div class="notices info" ><p><strong>📊 Performance Benchmarks Achieved:</strong></p>
+<ul>
+<li><strong>EKS ↔ S3 Latency</strong>: &lt; 50ms (VPC Gateway Endpoint)</li>
+<li><strong>EKS ↔ ECR Latency</strong>: &lt; 100ms (Interface Endpoints)</li>
+<li><strong>ALB ↔ EKS Latency</strong>: &lt; 10ms (same VPC)</li>
+<li><strong>Internet ↔ ALB</strong>: Standard Internet latency</li>
+<li><strong>Cost</strong>: $21.6/month base + $0.02/hour demo usage</li>
+<li><strong>Availability</strong>: Multi-AZ (99.99% SLA)</li>
+</ul>
+</div>
+
+<hr>
+<p><strong>Next Step</strong>: <a href="/vi/5-workshop/6-ecr-registry/">Task 6: ECR Container Registry</a></p>
+
+<div class="notices tip" ><p><strong>🚀 Next Steps:</strong></p>
+<ul>
+<li><strong>Task 3</strong>: IAM Roles &amp; IRSA sử dụng VPC infrastructure</li>
+<li><strong>Task 4</strong>: EKS cluster deployment với VPC Endpoints integration</li>
+<li><strong>Task 5</strong>: EKS managed node groups trong cost-optimized private subnets</li>
+</ul>
+</div>
+
+<h2 id="8-clean-up-resources-aws-cli">8. Clean Up Resources (AWS CLI)</h2>
+<h3 id="81-xóa-application-load-balancer-và-target-groups">8.1. Xóa Application Load Balancer và Target Groups</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê ALB</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-load-balancers --names mlops-hybrid-api-demo-alb --query <span style="color:#e6db74">&#39;LoadBalancers[*].[LoadBalancerArn,DNSName]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa ALB (tự động xóa listeners)</span>
+</span></span><span style="display:flex;"><span>aws elbv2 delete-load-balancer --load-balancer-arn &lt;alb-arn&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Target Groups</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-target-groups --names mlops-hybrid-eks-api-tg --query <span style="color:#e6db74">&#39;TargetGroups[*].TargetGroupArn&#39;</span> --output text | xargs -I <span style="color:#f92672">{}</span> aws elbv2 delete-target-group --target-group-arn <span style="color:#f92672">{}</span>
+</span></span></code></pre></div><h3 id="82-xóa-vpc-endpoints">8.2. Xóa VPC Endpoints</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê VPC Endpoints</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-vpc-endpoints --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=&lt;vpc-id&gt;&#34;</span> --query <span style="color:#e6db74">&#39;VpcEndpoints[*].[VpcEndpointId,ServiceName]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Interface Endpoints (ECR, CloudWatch Logs)</span>
+</span></span><span style="display:flex;"><span>aws ec2 delete-vpc-endpoints --vpc-endpoint-ids &lt;ecr-api-endpoint-id&gt; &lt;ecr-dkr-endpoint-id&gt; &lt;logs-endpoint-id&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Gateway Endpoint (S3)</span>
+</span></span><span style="display:flex;"><span>aws ec2 delete-vpc-endpoints --vpc-endpoint-ids &lt;s3-gateway-endpoint-id&gt;
+</span></span></code></pre></div><h3 id="83-xóa-security-groups">8.3. Xóa Security Groups</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê Security Groups (trừ default)</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-security-groups --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=&lt;vpc-id&gt;&#34;</span> --query <span style="color:#e6db74">&#39;SecurityGroups[?GroupName!=`default`].[GroupId,GroupName]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Security Groups (theo thứ tự ngược dependency)</span>
+</span></span><span style="display:flex;"><span>aws ec2 delete-security-group --group-id &lt;vpc-endpoints-sg-id&gt;
+</span></span><span style="display:flex;"><span>aws ec2 delete-security-group --group-id &lt;eks-control-plane-sg-id&gt;
+</span></span><span style="display:flex;"><span>aws ec2 delete-security-group --group-id &lt;eks-nodes-sg-id&gt;
+</span></span><span style="display:flex;"><span>aws ec2 delete-security-group --group-id &lt;alb-sg-id&gt;
+</span></span></code></pre></div><h3 id="84-xóa-subnets-và-route-tables">8.4. Xóa Subnets và Route Tables</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê Route Tables (trừ main)</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-route-tables --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=&lt;vpc-id&gt;&#34;</span> --query <span style="color:#e6db74">&#39;RouteTables[?Associations[0].Main!=`true`].[RouteTableId,Tags[0].Value]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Route Tables</span>
+</span></span><span style="display:flex;"><span>aws ec2 delete-route-table --route-table-id &lt;public-rt-id&gt;
+</span></span><span style="display:flex;"><span>aws ec2 delete-route-table --route-table-id &lt;private-rt-id&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê Subnets</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-subnets --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=&lt;vpc-id&gt;&#34;</span> --query <span style="color:#e6db74">&#39;Subnets[*].[SubnetId,Tags[0].Value,CidrBlock]&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Subnets</span>
+</span></span><span style="display:flex;"><span>aws ec2 delete-subnet --subnet-id &lt;public-subnet-1a-id&gt;
+</span></span><span style="display:flex;"><span>aws ec2 delete-subnet --subnet-id &lt;public-subnet-1b-id&gt;
+</span></span><span style="display:flex;"><span>aws ec2 delete-subnet --subnet-id &lt;private-subnet-1a-id&gt;
+</span></span><span style="display:flex;"><span>aws ec2 delete-subnet --subnet-id &lt;private-subnet-1b-id&gt;
+</span></span></code></pre></div><h3 id="85-xóa-internet-gateway-và-vpc">8.5. Xóa Internet Gateway và VPC</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Detach và xóa Internet Gateway</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-internet-gateways --filters <span style="color:#e6db74">&#34;Name=attachment.vpc-id,Values=&lt;vpc-id&gt;&#34;</span> --query <span style="color:#e6db74">&#39;InternetGateways[*].InternetGatewayId&#39;</span> --output text | xargs -I <span style="color:#f92672">{}</span> aws ec2 detach-internet-gateway --internet-gateway-id <span style="color:#f92672">{}</span> --vpc-id &lt;vpc-id&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>aws ec2 delete-internet-gateway --internet-gateway-id &lt;igw-id&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa VPC (cuối cùng)</span>
+</span></span><span style="display:flex;"><span>aws ec2 delete-vpc --vpc-id &lt;vpc-id&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify clean up</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-vpcs --vpc-ids &lt;vpc-id&gt;
+</span></span></code></pre></div><h3 id="86-clean-up-helper-script">8.6. Clean Up Helper Script</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e"># vpc-cleanup.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>VPC_ID<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vpc-xxxxxxxxx&#34;</span>  <span style="color:#75715e"># Thay bằng VPC ID thực tế</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;🧹 Cleaning up VPC resources for </span>$VPC_ID<span style="color:#e6db74">...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. Xóa ALB và Target Groups</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Deleting ALB...&#34;</span>
+</span></span><span style="display:flex;"><span>ALB_ARN<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>aws elbv2 describe-load-balancers --names mlops-hybrid-api-demo-alb --query <span style="color:#e6db74">&#39;LoadBalancers[0].LoadBalancerArn&#39;</span> --output text 2&gt;/dev/null<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$ALB_ARN<span style="color:#e6db74">&#34;</span> !<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;None&#34;</span> <span style="color:#f92672">]</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">[</span> ! -z <span style="color:#e6db74">&#34;</span>$ALB_ARN<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    aws elbv2 delete-load-balancer --load-balancer-arn $ALB_ARN
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;ALB deleted: </span>$ALB_ARN<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. Xóa VPC Endpoints</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Deleting VPC Endpoints...&#34;</span>
+</span></span><span style="display:flex;"><span>ENDPOINTS<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>aws ec2 describe-vpc-endpoints --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=</span>$VPC_ID<span style="color:#e6db74">&#34;</span> --query <span style="color:#e6db74">&#39;VpcEndpoints[*].VpcEndpointId&#39;</span> --output text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> endpoint in $ENDPOINTS; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    aws ec2 delete-vpc-endpoints --vpc-endpoint-ids $endpoint
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;VPC Endpoint deleted: </span>$endpoint<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. Đợi resources được xóa</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Waiting for resources to be deleted...&#34;</span>
+</span></span><span style="display:flex;"><span>sleep <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. Xóa Security Groups</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Deleting Security Groups...&#34;</span>
+</span></span><span style="display:flex;"><span>SECURITY_GROUPS<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>aws ec2 describe-security-groups --filters <span style="color:#e6db74">&#34;Name=vpc-id,Values=</span>$VPC_ID<span style="color:#e6db74">&#34;</span> --query <span style="color:#e6db74">&#39;SecurityGroups[?GroupName!=`default`].GroupId&#39;</span> --output text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> sg in $SECURITY_GROUPS; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    aws ec2 delete-security-group --group-id $sg 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Security Group deleted: </span>$sg<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;✅ VPC cleanup completed for </span>$VPC_ID<span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div><hr>
+<h2 id="9-bảng-giá-vpc-và-networking-ap-southeast-1">9. Bảng giá VPC và Networking (ap-southeast-1)</h2>
+<h3 id="91-chi-phí-vpc-core-components">9.1. Chi phí VPC Core Components</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Giá (USD)</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>VPC</strong></td>
+          <td>Free</td>
+          <td>Unlimited VPCs</td>
+      </tr>
+      <tr>
+          <td><strong>Subnets</strong></td>
+          <td>Free</td>
+          <td>Unlimited subnets</td>
+      </tr>
+      <tr>
+          <td><strong>Route Tables</strong></td>
+          <td>Free</td>
+          <td>Routing configuration</td>
+      </tr>
+      <tr>
+          <td><strong>Internet Gateway</strong></td>
+          <td>Free</td>
+          <td>One per VPC</td>
+      </tr>
+      <tr>
+          <td><strong>Security Groups</strong></td>
+          <td>Free</td>
+          <td>Firewall rules</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="92-chi-phí-vpc-endpoints">9.2. Chi phí VPC Endpoints</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Endpoint Type</th>
+          <th>Giá (USD/hour)</th>
+          <th>Giá (USD/month)</th>
+          <th>Data Transfer</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Gateway Endpoint (S3)</strong></td>
+          <td>Free</td>
+          <td>Free</td>
+          <td>Free</td>
+      </tr>
+      <tr>
+          <td><strong>Interface Endpoint</strong></td>
+          <td>$0.01</td>
+          <td>$7.2</td>
+          <td>$0.01/GB</td>
+      </tr>
+      <tr>
+          <td><strong>PrivateLink Endpoint</strong></td>
+          <td>$0.01</td>
+          <td>$7.2</td>
+          <td>$0.01/GB</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Chi phí VPC Endpoints cho Task 5:</strong></p>
+<ul>
+<li>S3 Gateway: Free</li>
+<li>ECR API Interface: $7.2/month</li>
+<li>ECR DKR Interface: $7.2/month</li>
+<li>CloudWatch Logs Interface: $7.2/month</li>
+<li><strong>Tổng:</strong> $21.6/month</li>
+</ul>
+<h3 id="93-chi-phí-application-load-balancer">9.3. Chi phí Application Load Balancer</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Giá (USD/hour)</th>
+          <th>Giá (USD/month)</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>ALB Fixed Cost</strong></td>
+          <td>$0.0225</td>
+          <td>$16.2</td>
+          <td>Always running</td>
+      </tr>
+      <tr>
+          <td><strong>LCU (Load Balancer Capacity Unit)</strong></td>
+          <td>$0.008</td>
+          <td>$5.76</td>
+          <td>Per LCU-hour</td>
+      </tr>
+      <tr>
+          <td><strong>Rule Evaluations</strong></td>
+          <td>$0.008</td>
+          <td>$5.76</td>
+          <td>Per million requests</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Ước tính ALB chi phí:</strong></p>
+<ul>
+<li>Base ALB: $16.2/month</li>
+<li>1 LCU (basic usage): $5.76/month</li>
+<li><strong>Total ALB:</strong> ~$22/month continuous</li>
+</ul>
+<h3 id="94-chi-phí-nat-gateway-không-dùng-trong-task-5">9.4. Chi phí NAT Gateway (Không dùng trong Task 5)</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Giá (USD/hour)</th>
+          <th>Giá (USD/month)</th>
+          <th>Data Transfer</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>NAT Gateway</strong></td>
+          <td>$0.045</td>
+          <td>$32.4</td>
+          <td>$0.045/GB</td>
+      </tr>
+      <tr>
+          <td><strong>Data Processing</strong></td>
+          <td></td>
+          <td></td>
+          <td>$0.045/GB</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Tiết kiệm:</strong> $32.4/month bằng cách dùng VPC Endpoints thay NAT Gateway</p>
+<h3 id="95-data-transfer-pricing">9.5. Data Transfer Pricing</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Transfer Type</th>
+          <th>Giá (USD/GB)</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>VPC Internal</strong></td>
+          <td>Free</td>
+          <td>Same AZ</td>
+      </tr>
+      <tr>
+          <td><strong>Cross-AZ</strong></td>
+          <td>$0.01</td>
+          <td>Different AZ trong region</td>
+      </tr>
+      <tr>
+          <td><strong>VPC Endpoints</strong></td>
+          <td>$0.01</td>
+          <td>Interface endpoints</td>
+      </tr>
+      <tr>
+          <td><strong>Internet OUT</strong></td>
+          <td>$0.12</td>
+          <td>First 1GB free/month</td>
+      </tr>
+      <tr>
+          <td><strong>S3 Transfer</strong></td>
+          <td>Free</td>
+          <td>Via Gateway endpoint</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="96-ước-tính-tổng-chi-phí-task-5">9.6. Ước tính tổng chi phí Task 5</h3>
+<p><strong>Monthly Baseline Cost:</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Monthly Cost</th>
+          <th>Purpose</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>VPC + Subnets + IGW</td>
+          <td>$0</td>
+          <td>Core networking</td>
+      </tr>
+      <tr>
+          <td>VPC Endpoints (3x Interface)</td>
+          <td>$21.6</td>
+          <td>ECR + CloudWatch</td>
+      </tr>
+      <tr>
+          <td>S3 Gateway Endpoint</td>
+          <td>$0</td>
+          <td>Model access</td>
+      </tr>
+      <tr>
+          <td><strong>Subtotal</strong></td>
+          <td><strong>$21.6</strong></td>
+          <td>Always running</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Demo Usage Cost:</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Usage Pattern</th>
+          <th>ALB Cost</th>
+          <th>Total Cost</th>
+          <th>Use Case</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Development (8h/day)</strong></td>
+          <td>$5.4/month</td>
+          <td>$27/month</td>
+          <td>Daily development</td>
+      </tr>
+      <tr>
+          <td><strong>Demo only (3h/day)</strong></td>
+          <td>$2.0/month</td>
+          <td>$23.6/month</td>
+          <td>Presentation demos</td>
+      </tr>
+      <tr>
+          <td><strong>Production (24/7)</strong></td>
+          <td>$22/month</td>
+          <td>$43.6/month</td>
+          <td>Live production</td>
+      </tr>
+      <tr>
+          <td><strong>Testing (1h/day)</strong></td>
+          <td>$0.7/month</td>
+          <td>$22.3/month</td>
+          <td>Occasional testing</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="97-cost-comparison-với-traditional-setup">9.7. Cost Comparison với Traditional Setup</h3>
+<p><strong>Task 5 (VPC Endpoints)</strong> vs <strong>Traditional (NAT Gateway)</strong>:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Architecture</th>
+          <th>Monthly Cost</th>
+          <th>Performance</th>
+          <th>Security</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>VPC Endpoints</strong></td>
+          <td>$21.6</td>
+          <td>&lt; 50ms latency</td>
+          <td>Private network</td>
+      </tr>
+      <tr>
+          <td><strong>NAT Gateway</strong></td>
+          <td>$32.4 + data</td>
+          <td>Variable</td>
+          <td>Internet routing</td>
+      </tr>
+      <tr>
+          <td><strong>Savings</strong></td>
+          <td><strong>-$10.8</strong></td>
+          <td><strong>Better</strong></td>
+          <td><strong>Higher</strong></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="98-cost-optimization-tips">9.8. Cost Optimization Tips</h3>
+<p><strong>Immediate Savings:</strong></p>
+<ul>
+<li>✅ Use S3 Gateway Endpoint (Free thay vì $7.2/month Interface)</li>
+<li>✅ Skip NAT Gateway (-$32.4/month)</li>
+<li>✅ Turn off ALB khi không demo (-$22/month)</li>
+</ul>
+<p><strong>Long-term Optimization:</strong></p>
+<ul>
+<li>Use Spot instances cho EKS nodes (60-70% savings)</li>
+<li>S3 Intelligent Tiering cho model storage</li>
+<li>CloudWatch Logs retention policy (7-30 days)</li>
+</ul>
+<p><strong>Demo Cost Management:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Bật ALB chỉ khi demo</span>
+</span></span><span style="display:flex;"><span>aws elbv2 create-load-balancer --name demo-alb --type application
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Tắt ALB sau demo  </span>
+</span></span><span style="display:flex;"><span>aws elbv2 delete-load-balancer --load-balancer-arn &lt;arn&gt;
+</span></span></code></pre></div>
+<div class="notices info" ><p><strong>💰 Cost Summary cho Task 5:</strong></p>
+<ul>
+<li><strong>Baseline:</strong> $21.6/month (VPC Endpoints, always on)</li>
+<li><strong>Demo usage:</strong> $0.02/hour ALB (chỉ khi cần)</li>
+<li><strong>Savings:</strong> $10.8/month so với NAT Gateway approach</li>
+<li><strong>Performance:</strong> &lt; 50ms internal latency guaranteed</li>
+</ul>
+</div>
+
+<hr>
+
+<div class="notices info" ><p><strong><em>Console-created resources</em></strong> sẵn sàng cho subsequent tasks:</p>
+<ul>
+<li>VPC ID, subnet IDs cho EKS cluster creation</li>
+<li>Security Group IDs cho EKS và ALB configuration</li>
+<li>VPC Endpoint IDs cho cost-optimized AWS services access</li>
+</ul>
+</div>
+
+<hr>
+<h2 id="-video-thực-hiện-task-5">📹 Video thực hiện Task 5</h2>
+<div style="position: relative; width: 100%; max-width: 2000px; margin: 0 auto; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    src="https://www.youtube.com/embed/watch?v=rVhZpuD1dgE&list=PL53MEKrSAUpu0i5F-ttcVdKkSv0jb48Mc&index=4" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+</div>
+<hr>
+<p><strong>Next Step</strong>: <a href="../6-erc-registry">Task 06: ERC Registry</a></p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/vi/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/vi/5-workshop/6-ecr-registry/" title="ECR Container Registry" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765386118"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765386118"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765386118"></script>
+    <script src="/js/jquery.sticky.js?1765386118"></script>
+    <script src="/js/featherlight.min.js?1765386118"></script>
+    <script src="/js/highlight.pack.js?1765386118"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765386118"></script>
+    <script src="/js/learn.js?1765386118"></script>
+    <script src="/js/hugo-learn.js?1765386118"></script>
+
+    <link href="/mermaid/mermaid.css?1765386118" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765386118"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

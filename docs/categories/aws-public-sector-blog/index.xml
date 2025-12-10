@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AWS Public Sector Blog on AWS MLOps Docs</title>
+    <link>https://docs.vinashoes.org/categories/aws-public-sector-blog/</link>
+    <description>Recent content in AWS Public Sector Blog on AWS MLOps Docs</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 10 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://docs.vinashoes.org/categories/aws-public-sector-blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang</title>
+      <link>https://docs.vinashoes.org/3-blogstranslated/3.3-blog3/</link>
+      <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://docs.vinashoes.org/3-blogstranslated/3.3-blog3/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Bài viết gốc được đăng vào ngày 09 tháng 12 năm 2025 | trong mục Thông báo, AWS Marketplace, Chính phủ, Khu vực công&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;Cảnh quan mua sắm liên bang của Hoa Kỳ đang trải qua quá trình chuyển đổi mạnh mẽ nhất trong nhiều thập kỷ. Quy định Cải cách Mua sắm Liên bang Cách mạng (FAR) và các lệnh hành pháp như &amp;ldquo;Khôi phục Lý luận Chung cho Mua sắm Liên bang&amp;rdquo; (14005) và &amp;ldquo;Nâng cao Giải pháp Hiệu quả Chi phí, Thương mại trong Hợp đồng Liên bang&amp;rdquo; (14271) đại diện cho việc tái tưởng tượng cách các cơ quan chính phủ mua hàng hóa và dịch vụ. Cải cách này nhằm mục đích mở ra một kỷ nguyên mới về mua sắm hợp lý, thương mại-đầu tiên.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital</title>
+      <link>https://docs.vinashoes.org/3-blogstranslated/3.5-blog5/</link>
+      <pubDate>Mon, 08 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://docs.vinashoes.org/3-blogstranslated/3.5-blog5/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Bài viết gốc được đăng vào ngày 08 tháng 12 năm 2025&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;Chuyển đổi số trong chính phủ không còn là tùy chọn - đó là điều bắt buộc. Văn phòng Tổng chưởng lý Quận Contra Costa đã hợp tác với AWS (Amazon Web Services) và CC Tech Digital, một Đối tác Cấp cao AWS, để hiện đại hóa quy trình xử lý trát đòi hầu tòa bằng giải pháp serverless, cloud-native trên AWS.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
