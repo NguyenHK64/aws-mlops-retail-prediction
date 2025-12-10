@@ -2,11 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>EKS Cluster Setup (Production) on AWS MLOps Docs</title>
-    <link>https://docs.vinashoes.org/5-workshop/7-eks-cluster/</link>
+    <link>https://nguyenhk64.github.io/aws-mlops-retail-prediction/5-workshop/7-eks-cluster/</link>
     <description>Recent content in EKS Cluster Setup (Production) on AWS MLOps Docs</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate></lastBuildDate>
-    <atom:link href="https://docs.vinashoes.org/5-workshop/7-eks-cluster/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://nguyenhk64.github.io/aws-mlops-retail-prediction/5-workshop/7-eks-cluster/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

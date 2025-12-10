@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders on Tài liệu AWS MLOps</title>
-    <link>https://docs.vinashoes.org/vi/3-blogstranslated/3.12-blog12/</link>
+    <link>https://nguyenhk64.github.io/aws-mlops-retail-prediction/vi/3-blogstranslated/3.12-blog12/</link>
     <description>Recent content in Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders on Tài liệu AWS MLOps</description>
     <generator>Hugo</generator>
     <language>vi</language>
-    <atom:link href="https://docs.vinashoes.org/vi/3-blogstranslated/3.12-blog12/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://nguyenhk64.github.io/aws-mlops-retail-prediction/vi/3-blogstranslated/3.12-blog12/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

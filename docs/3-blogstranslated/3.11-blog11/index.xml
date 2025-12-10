@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management on AWS MLOps Docs</title>
-    <link>https://docs.vinashoes.org/3-blogstranslated/3.11-blog11/</link>
+    <link>https://nguyenhk64.github.io/aws-mlops-retail-prediction/3-blogstranslated/3.11-blog11/</link>
     <description>Recent content in Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management on AWS MLOps Docs</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <atom:link href="https://docs.vinashoes.org/3-blogstranslated/3.11-blog11/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://nguyenhk64.github.io/aws-mlops-retail-prediction/3-blogstranslated/3.11-blog11/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

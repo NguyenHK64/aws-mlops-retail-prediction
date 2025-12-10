@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Week 2 - Networking on AWS on AWS MLOps Docs</title>
-    <link>https://docs.vinashoes.org/1-worklog/1.2-week2/</link>
+    <link>https://nguyenhk64.github.io/aws-mlops-retail-prediction/1-worklog/1.2-week2/</link>
     <description>Recent content in Week 2 - Networking on AWS on AWS MLOps Docs</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <atom:link href="https://docs.vinashoes.org/1-worklog/1.2-week2/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://nguyenhk64.github.io/aws-mlops-retail-prediction/1-worklog/1.2-week2/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
