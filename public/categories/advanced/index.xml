@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Advanced on AWS MLOps Docs</title>
+    <link>http://localhost:1313/categories/advanced/</link>
+    <description>Recent content in Advanced on AWS MLOps Docs</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 10 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/advanced/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR</title>
+      <link>http://localhost:1313/3-blogstranslated/3.2-blog2/</link>
+      <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/3-blogstranslated/3.2-blog2/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Bởi Achraf Souk | 09 tháng 12 năm 2025 | trong Advanced (300), AWS WAF, Security, Identity, &amp;amp; Compliance&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;Trong nửa đầu năm nay, AWS WAF đã giới thiệu các biện pháp bảo vệ tầng ứng dụng mới để giải quyết xu hướng gia tăng của các cuộc tấn công từ chối dịch vụ phân tán (DDoS) tầng 7 (L7) có thời gian tồn tại ngắn và thông lượng cao. Các biện pháp bảo vệ này được cung cấp thông qua nhóm quy tắc AWS WAF Anti-DDoS AWS Managed Rules (Anti-DDoS AMR). Mặc dù cấu hình mặc định có hiệu quả đối với hầu hết các khối lượng công việc, bạn có thể muốn điều chỉnh phản hồi để phù hợp với mức độ chấp nhận rủi ro của ứng dụng.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

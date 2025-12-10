@@ -1,0 +1,3613 @@
+<!DOCTYPE html>
+<html lang="vi" class="js csstransforms3d">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Load Balancing :: Tài liệu AWS MLOps</title>
+
+    
+    <link href="/css/nucleus.css?1765385197" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765385197" rel="stylesheet">
+    <link href="/css/hybrid.css?1765385197" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765385197" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765385197" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765385197" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765385197" rel="stylesheet">
+    <link href="/css/theme.css?1765385197" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765385197" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765385197" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765385197" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765385197"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/vi/5-workshop/9-elastic-load-balancing/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765385197"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765385197"></script>
+<script type="text/javascript">
+    var baseurl = "http:\/\/localhost:1313\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765385197"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/" title="Nhật ký công việc (Worklog)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/">
+           <b> 1. </b> Nhật ký công việc (Worklog)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.1-week1/" title="Tuần 1 - Giới thiệu về AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Tuần 1 - Giới thiệu về AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.2-week2/" title="Tuần 2 - Mạng (Networking) trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Tuần 2 - Mạng (Networking) trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.3-week3/" title="Tuần 3 - Dịch vụ máy ảo/Compute (VM) trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Tuần 3 - Dịch vụ máy ảo/Compute (VM) trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.4-week4/" title="Tuần 4 - Dịch vụ lưu trữ trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Tuần 4 - Dịch vụ lưu trữ trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.5-week5/" title="Tuần 5 - Dịch vụ bảo mật trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Tuần 5 - Dịch vụ bảo mật trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.6-week6/" title="Tuần 6 - Dịch vụ cơ sở dữ liệu trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Tuần 6 - Dịch vụ cơ sở dữ liệu trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.7-week7/" title="Tuần 7 - Dịch vụ Data Lake trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Tuần 7 - Dịch vụ Data Lake trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.8-week8/" title="Tuần 8 - Điện toán Serverless" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Tuần 8 - Điện toán Serverless
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.9-week9/" title="Tuần 9 - Điện toán Container" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Tuần 9 - Điện toán Container
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.10-week10/" title="Tuần 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Tuần 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.11-week11/" title="Tuần 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Tuần 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.12-week12/" title="Tuần 12 - Capstone: Dự án cá nhân" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Tuần 12 - Capstone: Dự án cá nhân
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/" title="Các bài blogs đã dịch" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/">
+           <b> 3. </b> Các bài blogs đã dịch
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.7-blog7/" title="Giới thiệu AWS Infrastructure as Code MCP Server: Hỗ trợ CDK và CloudFormation được hỗ trợ bởi AI" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Giới thiệu AWS Infrastructure as Code MCP Server: Hỗ trợ CDK và CloudFormation được hỗ trợ bởi AI
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms ra mắt tính năng tạo bộ dữ liệu tổng hợp tăng cường quyền riêng tư để huấn luyện mô hình ML" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms ra mắt tính năng tạo bộ dữ liệu tổng hợp tăng cường quyền riêng tư để huấn luyện mô hình ML
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.9-blog9/" title="AWS Partner Central nay đã có sẵn trong AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central nay đã có sẵn trong AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.10-blog10/" title="Công bố AWS Partner Central trong AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Công bố AWS Partner Central trong AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.11-blog11/" title="Công bố Amazon EKS Capabilities cho điều phối workload và quản lý tài nguyên đám mây" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Công bố Amazon EKS Capabilities cho điều phối workload và quản lý tài nguyên đám mây
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.12-blog12/" title="Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/4-eventparticipated/" title="Các events đã tham gia" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/4-eventparticipated/">
+           <b> 4. </b> Các events đã tham gia
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/" title="Workshop" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/vi/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/1-introduction/" title="Thiết kế kiến trúc MLOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/1-introduction/">
+          <b>1. </b>Thiết kế kiến trúc MLOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/6-ecr-registry/" title="ECR Container Registry" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/6-ecr-registry/">
+          <b>6. </b>ECR Container Registry
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/7-eks-cluster/" title="EKS Cluster Setup" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/vi/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/7-feedback/" title="Chia sẻ, đóng góp ý kiến" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/7-feedback/">
+           <b> 7. </b> Chia sẻ, đóng góp ý kiến
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="http://localhost:1313/5-workshop/9-elastic-load-balancing/">English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="http://localhost:1313/vi/5-workshop/9-elastic-load-balancing/" selected>Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/5-Workshop/9-elastic-load-balancing/_index.vi.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/vi/'>Báo cáo Thực tập</a> > <a href='/vi/5-workshop/'>Workshop</a> > Load Balancing
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-tổng-quan-về-load-balancing-cho-retail-prediction-api">1. Tổng quan về Load Balancing cho Retail Prediction API</a></li>
+    <li><a href="#2-thiết-lập-application-load-balancer-alb">2. Thiết lập Application Load Balancer (ALB)</a>
+      <ul>
+        <li><a href="#21-service-type-loadbalancer-với-alb">2.1 Service Type LoadBalancer với ALB</a></li>
+        <li><a href="#22-cấu-hình-health-checks-và-routing">2.2 Cấu hình Health Checks và Routing</a></li>
+        <li><a href="#23-advanced-alb-configuration">2.3 Advanced ALB Configuration</a></li>
+        <li><a href="#3-aws-load-balancer-controller-cho-ingress">3. AWS Load Balancer Controller cho Ingress</a></li>
+        <li><a href="#4-https-và-ssltls-configuration">4. HTTPS và SSL/TLS Configuration</a></li>
+        <li><a href="#5-bảo-mật-cho-retail-prediction-api">5. Bảo mật cho Retail Prediction API</a></li>
+        <li><a href="#6-deployment-và-verification">6. Deployment và Verification</a></li>
+        <li><a href="#7-load-testing-và-performance">7. Load Testing và Performance</a></li>
+        <li><a href="#8-monitoring-và-observability">8. Monitoring và Observability</a></li>
+        <li><a href="#9-troubleshooting">9. Troubleshooting</a></li>
+        <li><a href="#10-cost-optimization">10. Cost Optimization</a></li>
+      </ul>
+    </li>
+    <li><a href="#kết-quả-kỳ-vọng">Kết quả kỳ vọng</a>
+      <ul>
+        <li><a href="#-checklist-hoàn-thành">✅ Checklist Hoàn thành</a></li>
+        <li><a href="#-verification-steps">📊 Verification Steps</a></li>
+        <li><a href="#-monitoring-commands">🔍 Monitoring Commands</a></li>
+      </ul>
+    </li>
+    <li><a href="#11-clean-up-resources-aws-cli">11. Clean Up Resources (AWS CLI)</a>
+      <ul>
+        <li><a href="#111-xóa-load-balancers">11.1. Xóa Load Balancers</a></li>
+        <li><a href="#112-xóa-aws-load-balancer-controller">11.2. Xóa AWS Load Balancer Controller</a></li>
+        <li><a href="#113-xóa-ingress-resources">11.3. Xóa Ingress Resources</a></li>
+        <li><a href="#114-xóa-waf-và-security-configurations">11.4. Xóa WAF và Security Configurations</a></li>
+        <li><a href="#115-clean-up-ssl-certificates">11.5. Clean Up SSL Certificates</a></li>
+        <li><a href="#116-load-balancing-cleanup-script">11.6. Load Balancing Cleanup Script</a></li>
+      </ul>
+    </li>
+    <li><a href="#12-bảng-giá-load-balancing-ap-southeast-1">12. Bảng giá Load Balancing (ap-southeast-1)</a>
+      <ul>
+        <li><a href="#121-chi-phí-application-load-balancer-alb">12.1. Chi phí Application Load Balancer (ALB)</a></li>
+        <li><a href="#122-chi-phí-network-load-balancer-nlb">12.2. Chi phí Network Load Balancer (NLB)</a></li>
+        <li><a href="#123-chi-phí-classic-load-balancer-clb">12.3. Chi phí Classic Load Balancer (CLB)</a></li>
+        <li><a href="#124-so-sánh-các-loại-load-balancer">12.4. So sánh các loại Load Balancer</a></li>
+        <li><a href="#125-aws-load-balancer-controller-costs">12.5. AWS Load Balancer Controller Costs</a></li>
+        <li><a href="#126-ssltls-certificate-costs">12.6. SSL/TLS Certificate Costs</a></li>
+        <li><a href="#127-waf-web-application-firewall-costs">12.7. WAF (Web Application Firewall) Costs</a></li>
+        <li><a href="#128-ước-tính-chi-phí-task-9">12.8. Ước tính chi phí Task 9</a></li>
+        <li><a href="#129-cost-optimization-strategies">12.9. Cost Optimization Strategies</a></li>
+        <li><a href="#1210-monitoring-và-cost-control">12.10. Monitoring và Cost Control</a></li>
+      </ul>
+    </li>
+    <li><a href="#-video-thực-hiện-task-9">🎬 Video thực hiện Task 9</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Load Balancing
+            </h1>
+          
+
+        
+
+
+
+	
+<div class="notices info" ><p><strong>🎯 Mục tiêu Task 11:</strong></p>
+</div>
+
+<p>Thiết lập cơ chế phân phối lưu lượng (Load Balancing) cho API Retail Prediction, đảm bảo:</p>
+<ul>
+<li>Có endpoint public để demo API /predict và /docs</li>
+<li>Tự động phân phối traffic giữa nhiều Pod khi scaling</li>
+<li>Duy trì tính sẵn sàng &amp; bảo mật của dịch vụ</li>
+</ul>
+<p>📥 <strong>Input từ các Task trước:</strong></p>
+<ul>
+<li><strong>Task 5 (Production VPC):</strong> VPC subnets, security groups và VPC Endpoints để ALB và EKS hoạt động</li>
+<li><strong>Task 7 (EKS Cluster):</strong> EKS cluster và Service/Ingress targets để ALB forward traffic</li>
+<li><strong>Task 6 (ECR Container Registry):</strong> Container images (API) được deploy vào EKS và expose qua ALB</li>
+</ul>
+<h2 id="1-tổng-quan-về-load-balancing-cho-retail-prediction-api">1. Tổng quan về Load Balancing cho Retail Prediction API</h2>
+<p>Load Balancing là một thành phần thiết yếu trong kiến trúc microservices trên AWS EKS, đặc biệt quan trọng cho Retail Prediction API - dịch vụ dự đoán doanh số có thể phải xử lý khối lượng request lớn và đột biến. Load Balancing đảm bảo:</p>
+<ul>
+<li><strong>Khả năng mở rộng (Scalability)</strong>: Phân phối đồng đều requests giữa nhiều Pod, đảm bảo API phản hồi nhanh ngay cả khi lượng yêu cầu dự đoán tăng đột biến</li>
+<li><strong>Tính sẵn sàng cao (High Availability)</strong>: Tự động phát hiện và cách ly Pod không khỏe mạnh, đảm bảo dịch vụ dự đoán luôn hoạt động</li>
+<li><strong>Auto-scaling tự động</strong>: Kết hợp với HPA để tự động điều chỉnh số lượng Pod dựa trên lưu lượng thực tế</li>
+<li><strong>Endpoint nhất quán</strong>: Cung cấp một endpoint duy nhất để client (web/mobile app) kết nối tới dịch vụ dự đoán</li>
+<li><strong>Khả năng quan sát (Observability)</strong>: Thu thập metrics về lưu lượng, latency và errors cho việc theo dõi hiệu suất API</li>
+</ul>
+<h2 id="2-thiết-lập-application-load-balancer-alb">2. Thiết lập Application Load Balancer (ALB)</h2>
+<p>AWS Application Load Balancer (ALB) là lựa chọn tốt cho Retail Prediction API vì:</p>
+<ul>
+<li>Hoạt động ở Layer 7 (Application Layer)</li>
+<li>Hỗ trợ route các request dựa trên path hoặc host header</li>
+<li>Tích hợp được với AWS WAF để bảo vệ API</li>
+<li>Hỗ trợ SSL/TLS termination</li>
+</ul>
+<h3 id="21-service-type-loadbalancer-với-alb">2.1 Service Type LoadBalancer với ALB</h3>
+<p>Cách đơn giản nhất để tạo ALB là sử dụng Service với type là LoadBalancer:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># service-alb.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">retail-prediction</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-api</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Chỉ định sử dụng Application Load Balancer</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-type</span>: <span style="color:#e6db74">&#34;application&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-scheme</span>: <span style="color:#e6db74">&#34;internet-facing&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-backend-protocol</span>: <span style="color:#e6db74">&#34;http&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Health check configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-path</span>: <span style="color:#e6db74">&#34;/health&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-interval</span>: <span style="color:#e6db74">&#34;30&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-timeout</span>: <span style="color:#e6db74">&#34;5&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-healthy-threshold</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-unhealthy-threshold</span>: <span style="color:#e6db74">&#34;3&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">type</span>: <span style="color:#ae81ff">LoadBalancer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">targetPort</span>: <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">http</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-api</span>
+</span></span><span style="display:flex;"><span>---
+</span></span></code></pre></div>
+<div class="notices tip" ><p>Khi sử dụng annotation <code>service.beta.kubernetes.io/aws-load-balancer-type: &quot;application&quot;</code>, EKS sẽ tự động tạo ALB thay vì NLB hoặc Classic Load Balancer.</p>
+</div>
+
+<h3 id="22-cấu-hình-health-checks-và-routing">2.2 Cấu hình Health Checks và Routing</h3>
+<p>ALB tự động thực hiện health check đến endpoint <code>/health</code> để đảm bảo rằng chỉ các Pod khỏe mạnh mới nhận được traffic:</p>
+
+<div class="mermaid" align="center">
+sequenceDiagram
+participant ALB as Application Load Balancer
+participant Pod1 as API Pod 1 (Healthy)
+participant Pod2 as API Pod 2 (Unhealthy)
+participant Pod3 as API Pod 3 (Healthy)
+
+    ALB->>Pod1: Health Check: GET /health
+    Pod1->>ALB: 200 OK: {"status": "healthy"}
+    ALB->>Pod2: Health Check: GET /health
+    Pod2->>ALB: 500 Error: Service Unavailable
+    ALB->>Pod3: Health Check: GET /health
+    Pod3->>ALB: 200 OK: {"status": "healthy"}
+
+    Note over ALB,Pod2: Pod2 được đánh dấu unhealthy
+
+    Client->>ALB: Request: POST /predict
+    ALB->>Pod1: Forward request
+    Pod1->>ALB: Response
+    ALB->>Client: Return response
+
+    Client->>ALB: Request: GET /docs
+    ALB->>Pod3: Forward request
+    Pod3->>ALB: Response
+    ALB->>Client: Return response
+
+</div>
+
+<p><strong>Giải thích flow:</strong></p>
+<ol>
+<li>ALB liên tục kiểm tra health của tất cả Pod thông qua endpoint <code>/health</code></li>
+<li>Pod nào trả về status code không phải 200 OK sẽ bị đánh dấu unhealthy</li>
+<li>Các request từ client sẽ chỉ được forward đến các Pod healthy</li>
+<li>Khi một Pod unhealthy trở lại healthy, nó sẽ tự động được đưa vào rotation</li>
+</ol>
+<p>Nhờ cơ chế này, API luôn duy trì tính sẵn sàng cao ngay cả khi một số Pod gặp sự cố.</p>
+<h3 id="23-advanced-alb-configuration">2.3 Advanced ALB Configuration</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># service-alb-advanced.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">retail-prediction</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-api</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Application Load Balancer configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-type</span>: <span style="color:#e6db74">&#34;application&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-scheme</span>: <span style="color:#e6db74">&#34;internet-facing&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-backend-protocol</span>: <span style="color:#e6db74">&#34;http&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Health check configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-path</span>: <span style="color:#e6db74">&#34;/health&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-port</span>: <span style="color:#e6db74">&#34;8000&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol</span>: <span style="color:#e6db74">&#34;HTTP&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-interval</span>: <span style="color:#e6db74">&#34;20&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-timeout</span>: <span style="color:#e6db74">&#34;5&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-healthy-threshold</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-healthcheck-unhealthy-threshold</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Access logging (optional)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-access-log-enabled</span>: <span style="color:#e6db74">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-name</span>: <span style="color:#e6db74">&#34;retail-prediction-alb-logs&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-prefix</span>: <span style="color:#e6db74">&#34;api-access-logs&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Target group configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-attributes</span>: <span style="color:#e6db74">&#34;idle_timeout.timeout_seconds=60&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Target type (IP mode preferred for pods)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-target-type</span>: <span style="color:#e6db74">&#34;ip&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">type</span>: <span style="color:#ae81ff">LoadBalancer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">targetPort</span>: <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">http</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-forecast-api</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">externalTrafficPolicy</span>: <span style="color:#ae81ff">Local</span> <span style="color:#75715e"># Preserve source IP</span>
+</span></span><span style="display:flex;"><span>---
+</span></span></code></pre></div><h3 id="3-aws-load-balancer-controller-cho-ingress">3. AWS Load Balancer Controller cho Ingress</h3>
+<p>AWS Load Balancer Controller là một controller Kubernetes quản lý ALB (và NLB) cho các dịch vụ trong EKS. Controller này cho phép cấu hình ALB chi tiết hơn thông qua Ingress và IngressClass thay vì chỉ sử dụng annotations trên Service.</p>
+<h4 id="31-cài-đặt-aws-load-balancer-controller">3.1 Cài đặt AWS Load Balancer Controller</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Thêm eks-charts repository</span>
+</span></span><span style="display:flex;"><span>helm repo add eks https://aws.github.io/eks-charts
+</span></span><span style="display:flex;"><span>helm repo update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Tạo IAM policy cho ALB controller</span>
+</span></span><span style="display:flex;"><span>curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.6.0/docs/install/iam_policy.json
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Tạo IAM policy</span>
+</span></span><span style="display:flex;"><span>aws iam create-policy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --policy-name AWSLoadBalancerControllerIAMPolicy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --policy-document file://iam_policy.json
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Tạo IAM role và service account với IRSA</span>
+</span></span><span style="display:flex;"><span>eksctl create iamserviceaccount <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --cluster<span style="color:#f92672">=</span>retail-prediction-cluster <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --namespace<span style="color:#f92672">=</span>kube-system <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --name<span style="color:#f92672">=</span>aws-load-balancer-controller <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --role-name AmazonEKSLoadBalancerControllerRole <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --attach-policy-arn<span style="color:#f92672">=</span>arn:aws:iam::&lt;ACCOUNT_ID&gt;:policy/AWSLoadBalancerControllerIAMPolicy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --approve
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Cài đặt AWS Load Balancer Controller</span>
+</span></span><span style="display:flex;"><span>helm install aws-load-balancer-controller eks/aws-load-balancer-controller <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -n kube-system <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --set clusterName<span style="color:#f92672">=</span>retail-prediction-cluster <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --set serviceAccount.create<span style="color:#f92672">=</span>false <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --set serviceAccount.name<span style="color:#f92672">=</span>aws-load-balancer-controller
+</span></span></code></pre></div>
+<div class="notices info" ><p>Controller này hoạt động bằng cách theo dõi các resource Service và Ingress, sau đó tự động tạo và quản lý ALB tương ứng trên AWS. Bạn có thể xác nhận trạng thái của controller bằng lệnh <code>kubectl get pods -n kube-system | grep aws-load-balancer-controller</code>.</p>
+</div>
+
+<h4 id="32-alb-ingress-configuration-cho-retail-prediction-api">3.2 ALB Ingress Configuration cho Retail Prediction API</h4>
+<p>Cấu hình Ingress cho phép kiểm soát chi tiết hơn cách ALB xử lý traffic, bao gồm routing path-based, SSL termination và nhiều tính năng nâng cao khác:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># ingress-retail-prediction.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.k8s.io/v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-ingress</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">retail-prediction</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ALB Controller configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">kubernetes.io/ingress.class</span>: <span style="color:#ae81ff">alb</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/scheme</span>: <span style="color:#ae81ff">internet-facing</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/target-type</span>: <span style="color:#ae81ff">ip</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/load-balancer-name</span>: <span style="color:#ae81ff">retail-prediction-alb</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Health check configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/healthcheck-path</span>: <span style="color:#ae81ff">/health</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/healthcheck-interval-seconds</span>: <span style="color:#e6db74">&#34;20&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/healthcheck-timeout-seconds</span>: <span style="color:#e6db74">&#34;5&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/healthy-threshold-count</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/unhealthy-threshold-count</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># SSL configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/ssl-redirect</span>: <span style="color:#e6db74">&#34;443&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/listen-ports</span>: <span style="color:#e6db74">&#39;[{&#34;HTTP&#34;: 80}, {&#34;HTTPS&#34;: 443}]&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/certificate-arn</span>: <span style="color:#ae81ff">arn:aws:acm:us-east-1:&lt;ACCOUNT_ID&gt;:certificate/&lt;CERT_ID&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Access logging</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/load-balancer-attributes</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      access_logs.s3.enabled=true,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      access_logs.s3.bucket=retail-prediction-alb-logs,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      access_logs.s3.prefix=api-access-logs,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      idle_timeout.timeout_seconds=60</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Performance and deregistration configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/target-group-attributes</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      deregistration_delay.timeout_seconds=30,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      slow_start.duration_seconds=30,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      load_balancing.algorithm.type=least_outstanding_requests</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># WAF integration for API protection</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/wafv2-acl-arn</span>: <span style="color:#ae81ff">arn:aws:wafv2:us-east-1:&lt;ACCOUNT_ID&gt;:regional/webacl/retail-prediction-waf/&lt;WAF_ID&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Tags for cost allocation</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/tags</span>: <span style="color:#ae81ff">Environment=Production,Project=RetailPrediction,Service=API</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">http</span>: <span style="color:#75715e"># Default rule for all incoming requests</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># API Documentation</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/docs</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Prefix</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Swagger JSON endpoint</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/openapi.json</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Health check and readiness endpoints</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/health</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Prediction API endpoints</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/predict</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Default catch-all for all other paths</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Prefix</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span></code></pre></div><h4 id="33-advanced-alb-with-multiple-paths">3.3 Advanced ALB with Multiple Paths</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># ingress-alb-advanced.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.k8s.io/v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-alb-advanced</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">mlops</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">kubernetes.io/ingress.class</span>: <span style="color:#ae81ff">alb</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/scheme</span>: <span style="color:#ae81ff">internet-facing</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/target-type</span>: <span style="color:#ae81ff">ip</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Listen ports for HTTP and HTTPS</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/listen-ports</span>: <span style="color:#e6db74">&#39;[{&#34;HTTP&#34;: 80}, {&#34;HTTPS&#34;: 443}]&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Actions for different paths</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/actions.weighted-routing</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;type&#34;: &#34;forward&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;forwardConfig&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;targetGroups&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              &#34;serviceName&#34;: &#34;retail-forecast-service&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              &#34;servicePort&#34;: 80,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              &#34;weight&#34;: 100
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Rate limiting</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/target-group-attributes</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      stickiness.enabled=false,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      load_balancing.algorithm.type=round_robin,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      slow_start.duration_seconds=30</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">host</span>: <span style="color:#ae81ff">api.retail-forecast.com</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Health check endpoint</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/healthz</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Prediction endpoints</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/predict</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Batch prediction</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/batch-predict</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Model information</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/model-info</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Metrics endpoint</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/metrics</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Exact</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># Default catch-all</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Prefix</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-service</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>---
+</span></span></code></pre></div><h3 id="4-https-và-ssltls-configuration">4. HTTPS và SSL/TLS Configuration</h3>
+<p>Bảo mật API bằng HTTPS là một yêu cầu quan trọng cho mọi dịch vụ production, đặc biệt là dịch vụ dự đoán có thể chứa dữ liệu nhạy cảm của doanh nghiệp.</p>
+<h4 id="41-tạo-ssl-certificate-với-aws-certificate-manager-acm">4.1 Tạo SSL Certificate với AWS Certificate Manager (ACM)</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Request SSL certificate</span>
+</span></span><span style="display:flex;"><span>aws acm request-certificate <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --domain-name api.retail-prediction.example.com <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --validation-method DNS <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --region us-east-1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Get certificate ARN</span>
+</span></span><span style="display:flex;"><span>CERT_ARN<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>aws acm list-certificates --region us-east-1 --query <span style="color:#e6db74">&#34;CertificateSummaryList[?DomainName==&#39;api.retail-prediction.example.com&#39;].CertificateArn&#34;</span> --output text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>echo $CERT_ARN
+</span></span></code></pre></div><h4 id="42-cấu-hình-https-cho-alb">4.2 Cấu hình HTTPS cho ALB</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># service-alb-https.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api-service</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">retail-prediction</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Basic ALB configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-type</span>: <span style="color:#e6db74">&#34;application&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-scheme</span>: <span style="color:#e6db74">&#34;internet-facing&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># SSL configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-ssl-cert</span>: <span style="color:#e6db74">&#34;arn:aws:acm:us-east-1:123456789012:certificate/abcdef12-3456-7890-abcd-ef1234567890&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-ssl-ports</span>: <span style="color:#e6db74">&#34;443&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-backend-protocol</span>: <span style="color:#e6db74">&#34;http&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy</span>: <span style="color:#e6db74">&#34;ELBSecurityPolicy-TLS-1-2-2017-01&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Redirect HTTP to HTTPS</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-ssl-redirect</span>: <span style="color:#e6db74">&#34;443&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Other configurations...</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">type</span>: <span style="color:#ae81ff">LoadBalancer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">targetPort</span>: <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">https</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">targetPort</span>: <span style="color:#ae81ff">8000</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">http</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-api</span>
+</span></span></code></pre></div>
+<div class="mermaid" align="center">
+sequenceDiagram
+participant Client
+participant ALB as Application Load Balancer
+participant API as API Pod
+
+    Client->>ALB: HTTPS Request (port 443)
+    Note over ALB: SSL Termination
+    ALB->>API: HTTP Request (port 8080)
+    API->>ALB: HTTP Response
+    ALB->>Client: HTTPS Response
+
+    Client->>ALB: HTTP Request (port 80)
+    Note over ALB: HTTP to HTTPS Redirect
+    ALB->>Client: 301 Redirect to HTTPS
+    Client->>ALB: HTTPS Request (port 443)
+    Note over ALB: SSL Termination
+    ALB->>API: HTTP Request (port 8080)
+    API->>ALB: HTTP Response
+    ALB->>Client: HTTPS Response
+
+</div>
+
+<h4 id="43-route-53-dns-setup">4.3 Route 53 DNS Setup</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Get the ALB DNS name</span>
+</span></span><span style="display:flex;"><span>ALB_DNS<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>kubectl get service retail-api-service -n retail-prediction -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.status.loadBalancer.ingress[0].hostname}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create Route 53 record</span>
+</span></span><span style="display:flex;"><span>aws route53 change-resource-record-sets <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --hosted-zone-id YOUR_HOSTED_ZONE_ID <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --change-batch <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;Changes&#34;: [{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Action&#34;: &#34;CREATE&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;ResourceRecordSet&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;Name&#34;: &#34;api.retail-prediction.example.com&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;Type&#34;: &#34;CNAME&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;TTL&#34;: 300,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;ResourceRecords&#34;: [{&#34;Value&#34;: &#34;&#39;</span>$ALB_DNS<span style="color:#e6db74">&#39;&#34;}]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span>
+</span></span></code></pre></div><h4 id="44-xác-nhận-https-đang-hoạt-động">4.4 Xác nhận HTTPS đang hoạt động</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Test HTTPS endpoint</span>
+</span></span><span style="display:flex;"><span>curl -k https://api.retail-prediction.example.com/health
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify with proper SSL validation</span>
+</span></span><span style="display:flex;"><span>curl https://api.retail-prediction.example.com/health
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test HTTP to HTTPS redirect</span>
+</span></span><span style="display:flex;"><span>curl -v http://api.retail-prediction.example.com/health
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: HTTP/1.1 301 Moved Permanently</span>
+</span></span></code></pre></div><h3 id="5-bảo-mật-cho-retail-prediction-api">5. Bảo mật cho Retail Prediction API</h3>
+<p>Việc bảo mật cho API dự đoán retail rất quan trọng vì API có thể chứa thông tin nhạy cảm về doanh số và chiến lược kinh doanh. Chúng ta sẽ triển khai nhiều lớp bảo mật:</p>
+<h4 id="51-aws-waf-web-application-firewall">5.1 AWS WAF (Web Application Firewall)</h4>
+<p>WAF giúp bảo vệ API khỏi các cuộc tấn công phổ biến như SQL Injection, XSS và các tấn công DDoS:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Tạo WAF Web ACL</span>
+</span></span><span style="display:flex;"><span>aws wafv2 create-web-acl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --name retail-prediction-waf <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --scope REGIONAL <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --region us-east-1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --default-action Allow<span style="color:#f92672">={}</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --visibility-config SampledRequestsEnabled<span style="color:#f92672">=</span>true,CloudWatchMetricsEnabled<span style="color:#f92672">=</span>true,MetricName<span style="color:#f92672">=</span>RetailAPI <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --rules file://waf-rules.json
+</span></span></code></pre></div><p>Nội dung file <code>waf-rules.json</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>[
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;API-RateLimit&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;RateBasedStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Limit&#34;</span>: <span style="color:#ae81ff">3000</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;AggregateKeyType&#34;</span>: <span style="color:#e6db74">&#34;IP&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Action&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Block&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;VisibilityConfig&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;SampledRequestsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;CloudWatchMetricsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;MetricName&#34;</span>: <span style="color:#e6db74">&#34;API-RateLimit&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;AWSManagedRulesSQLiRuleSet&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;ManagedRuleGroupStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;VendorName&#34;</span>: <span style="color:#e6db74">&#34;AWS&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;AWSManagedRulesSQLiRuleSet&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;OverrideAction&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;None&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;VisibilityConfig&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;SampledRequestsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;CloudWatchMetricsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;MetricName&#34;</span>: <span style="color:#e6db74">&#34;SQLiRuleSet&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;BlockHighRiskRequests&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Priority&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Statement&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;ManagedRuleGroupStatement&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;VendorName&#34;</span>: <span style="color:#e6db74">&#34;AWS&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;AWSManagedRulesKnownBadInputsRuleSet&#34;</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;OverrideAction&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;None&#34;</span>: {}
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;VisibilityConfig&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;SampledRequestsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;CloudWatchMetricsEnabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;MetricName&#34;</span>: <span style="color:#e6db74">&#34;BadInputs&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><h4 id="52-security-group-configuration">5.2 Security Group Configuration</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Tạo security group cho ALB</span>
+</span></span><span style="display:flex;"><span>aws ec2 create-security-group <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-name retail-prediction-alb-sg <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --description <span style="color:#e6db74">&#34;Security group for Retail Prediction API ALB&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --vpc-id vpc-0123456789abcdef0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Cho phép traffic HTTPS (port 443)</span>
+</span></span><span style="display:flex;"><span>aws ec2 authorize-security-group-ingress <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-id sg-0123456789abcdef0 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --protocol tcp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --port <span style="color:#ae81ff">443</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --cidr 0.0.0.0/0 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --description <span style="color:#e6db74">&#34;HTTPS from anywhere&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Cho phép traffic HTTP (port 80) - chỉ để redirect sang HTTPS</span>
+</span></span><span style="display:flex;"><span>aws ec2 authorize-security-group-ingress <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-id sg-0123456789abcdef0 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --protocol tcp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --port <span style="color:#ae81ff">80</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --cidr 0.0.0.0/0 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --description <span style="color:#e6db74">&#34;HTTP from anywhere (for redirect only)&#34;</span>
+</span></span></code></pre></div><h4 id="53-phân-quyền-api-với-jwt-authentication">5.3 Phân quyền API với JWT Authentication</h4>
+<p>Để bảo vệ API khỏi truy cập trái phép, chúng ta nên triển khai xác thực JWT:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Thêm mã sau vào file main.py của FastAPI</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> fastapi <span style="color:#f92672">import</span> Depends, FastAPI, HTTPException, status
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> fastapi.security <span style="color:#f92672">import</span> OAuth2PasswordBearer
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> jwt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> jwt.exceptions <span style="color:#f92672">import</span> PyJWTError
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Setup OAuth2</span>
+</span></span><span style="display:flex;"><span>oauth2_scheme <span style="color:#f92672">=</span> OAuth2PasswordBearer(tokenUrl<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;token&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># JWT Configuration</span>
+</span></span><span style="display:flex;"><span>JWT_SECRET_KEY <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;JWT_SECRET_KEY&#34;</span>, <span style="color:#e6db74">&#34;your-secret-key&#34;</span>)  <span style="color:#75715e"># Nên lưu trong AWS Secrets Manager</span>
+</span></span><span style="display:flex;"><span>JWT_ALGORITHM <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;HS256&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify JWT token</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_current_user</span>(token: str <span style="color:#f92672">=</span> Depends(oauth2_scheme)):
+</span></span><span style="display:flex;"><span>    credentials_exception <span style="color:#f92672">=</span> HTTPException(
+</span></span><span style="display:flex;"><span>        status_code<span style="color:#f92672">=</span>status<span style="color:#f92672">.</span>HTTP_401_UNAUTHORIZED,
+</span></span><span style="display:flex;"><span>        detail<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Could not validate credentials&#34;</span>,
+</span></span><span style="display:flex;"><span>        headers<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;WWW-Authenticate&#34;</span>: <span style="color:#e6db74">&#34;Bearer&#34;</span>},
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=</span> jwt<span style="color:#f92672">.</span>decode(token, JWT_SECRET_KEY, algorithms<span style="color:#f92672">=</span>[JWT_ALGORITHM])
+</span></span><span style="display:flex;"><span>        username: str <span style="color:#f92672">=</span> payload<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;sub&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> username <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> credentials_exception
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;username&#34;</span>: username}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> PyJWTError:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> credentials_exception
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Protected API endpoint</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.post</span>(<span style="color:#e6db74">&#34;/predict&#34;</span>, response_model<span style="color:#f92672">=</span>PredictionResponse)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict</span>(
+</span></span><span style="display:flex;"><span>    request: PredictionRequest,
+</span></span><span style="display:flex;"><span>    current_user: dict <span style="color:#f92672">=</span> Depends(get_current_user)
+</span></span><span style="display:flex;"><span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Log the user who made the prediction</span>
+</span></span><span style="display:flex;"><span>    logger<span style="color:#f92672">.</span>info(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Prediction requested by user: </span><span style="color:#e6db74">{</span>current_user[<span style="color:#e6db74">&#39;username&#39;</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Process prediction as normal</span>
+</span></span><span style="display:flex;"><span>    prediction <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(request<span style="color:#f92672">.</span>features)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;prediction&#34;</span>: float(prediction), <span style="color:#e6db74">&#34;model_version&#34;</span>: model<span style="color:#f92672">.</span>version}
+</span></span></code></pre></div>
+<div class="mermaid" align="center">
+sequenceDiagram
+participant Client
+participant ALB as ALB + WAF
+participant API as Retail API
+participant Auth as Authentication Service
+
+    Client->>Auth: Request JWT token (username/password)
+    Auth->>Auth: Verify credentials
+    Auth->>Client: Return JWT token
+
+    Client->>ALB: POST /predict with Bearer token
+    ALB->>ALB: WAF rules check
+    ALB->>API: Forward request
+    API->>API: Validate JWT token
+    API->>API: Perform prediction
+    API->>ALB: Return prediction result
+    ALB->>Client: Return response
+
+    Client->>ALB: POST /predict (no token)
+    ALB->>ALB: WAF rules check
+    ALB->>API: Forward request
+    API->>ALB: 401 Unauthorized
+    ALB->>Client: 401 Unauthorized
+
+</div>
+
+<h3 id="6-deployment-và-verification">6. Deployment và Verification</h3>
+<h4 id="61-deploy-load-balancer-services">6.1 Deploy Load Balancer Services</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Create mlops namespace if not exists</span>
+</span></span><span style="display:flex;"><span>kubectl create namespace mlops
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Deploy LoadBalancer service</span>
+</span></span><span style="display:flex;"><span>kubectl apply -f service-nlb-advanced.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Or deploy ALB Ingress</span>
+</span></span><span style="display:flex;"><span>kubectl apply -f ingress-alb.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check service status</span>
+</span></span><span style="display:flex;"><span>kubectl get services -n mlops
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check ingress status</span>
+</span></span><span style="display:flex;"><span>kubectl get ingress -n mlops
+</span></span></code></pre></div><h4 id="62-verify-external-access">6.2 Verify External Access</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Get external IP/hostname</span>
+</span></span><span style="display:flex;"><span>EXTERNAL_IP<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>kubectl get service retail-forecast-nlb -n mlops -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.status.loadBalancer.ingress[0].hostname}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;External endpoint: </span>$EXTERNAL_IP<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test health check</span>
+</span></span><span style="display:flex;"><span>curl http://$EXTERNAL_IP/healthz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test prediction endpoint</span>
+</span></span><span style="display:flex;"><span>curl -X POST http://$EXTERNAL_IP/predict <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;features&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;store_id&#34;: 1,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;product_id&#34;: 123,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;date&#34;: &#34;2024-01-01&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;price&#34;: 29.99,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;promotion&#34;: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span>
+</span></span></code></pre></div><h3 id="7-load-testing-và-performance">7. Load Testing và Performance</h3>
+<h4 id="71-load-testing-with-apache-bench">7.1 Load Testing with Apache Bench</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install Apache Bench</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># For Ubuntu/Debian: sudo apt-get install apache2-utils</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># For CentOS/RHEL: sudo yum install httpd-tools</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Basic load test</span>
+</span></span><span style="display:flex;"><span>ab -n <span style="color:#ae81ff">1000</span> -c <span style="color:#ae81ff">10</span> http://$EXTERNAL_IP/healthz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># POST request load test</span>
+</span></span><span style="display:flex;"><span>ab -n <span style="color:#ae81ff">100</span> -c <span style="color:#ae81ff">5</span> -p data.json -T application/json http://$EXTERNAL_IP/predict
+</span></span></code></pre></div><h4 id="72-load-testing-with-artillery">7.2 Load Testing with Artillery</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Install Artillery</span>
+</span></span><span style="display:flex;"><span>npm install -g artillery
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create load test configuration</span>
+</span></span><span style="display:flex;"><span>cat &gt; load-test.yml <span style="color:#e6db74">&lt;&lt; EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">config:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  target: &#39;http://$EXTERNAL_IP&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  phases:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - duration: 60
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      arrivalRate: 10
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - duration: 120
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      arrivalRate: 20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - duration: 60
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      arrivalRate: 5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">scenarios:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  - name: &#34;Health Check&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    weight: 30
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    flow:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - get:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          url: &#34;/healthz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  - name: &#34;Prediction&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    weight: 70
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    flow:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - post:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          url: &#34;/predict&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          json:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            features:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              store_id: 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              product_id: 123
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              date: &#34;2024-01-01&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              price: 29.99
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">              promotion: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run load test</span>
+</span></span><span style="display:flex;"><span>artillery run load-test.yml
+</span></span></code></pre></div><h3 id="8-monitoring-và-observability">8. Monitoring và Observability</h3>
+<h4 id="81-cloudwatch-metrics">8.1 CloudWatch Metrics</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Create CloudWatch dashboard for ALB metrics</span>
+</span></span><span style="display:flex;"><span>aws cloudwatch put-dashboard <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dashboard-name <span style="color:#e6db74">&#34;RetailForecastALB&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dashboard-body <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;widgets&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;type&#34;: &#34;metric&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;properties&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;metrics&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [&#34;AWS/ApplicationELB&#34;, &#34;RequestCount&#34;, &#34;LoadBalancer&#34;, &#34;retail-forecast-alb&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [&#34;.&#34;, &#34;TargetResponseTime&#34;, &#34;.&#34;, &#34;.&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [&#34;.&#34;, &#34;HTTPCode_Target_2XX_Count&#34;, &#34;.&#34;, &#34;.&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [&#34;.&#34;, &#34;HTTPCode_Target_4XX_Count&#34;, &#34;.&#34;, &#34;.&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [&#34;.&#34;, &#34;HTTPCode_Target_5XX_Count&#34;, &#34;.&#34;, &#34;.&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          ],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;period&#34;: 300,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;stat&#34;: &#34;Sum&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;region&#34;: &#34;us-east-1&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;title&#34;: &#34;ALB Metrics&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span>
+</span></span></code></pre></div><h4 id="82-prometheus-monitoring">8.2 Prometheus Monitoring</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># servicemonitor-loadbalancer.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">monitoring.coreos.com/v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ServiceMonitor</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-forecast-lb-monitor</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">mlops</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-forecast-api</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">retail-forecast-api</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">endpoints</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">http</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/metrics</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">interval</span>: <span style="color:#ae81ff">30s</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">scrapeTimeout</span>: <span style="color:#ae81ff">10s</span>
+</span></span><span style="display:flex;"><span>---
+</span></span></code></pre></div><h3 id="9-troubleshooting">9. Troubleshooting</h3>
+<h4 id="91-common-load-balancer-issues">9.1 Common Load Balancer Issues</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check service events</span>
+</span></span><span style="display:flex;"><span>kubectl describe service retail-forecast-nlb -n mlops
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check ingress events</span>
+</span></span><span style="display:flex;"><span>kubectl describe ingress retail-forecast-alb-ingress -n mlops
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check ALB controller logs</span>
+</span></span><span style="display:flex;"><span>kubectl logs -n kube-system -l app.kubernetes.io/name<span style="color:#f92672">=</span>aws-load-balancer-controller
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check target group health</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-target-health --target-group-arn arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/k8s-mlops-retailfo-1234567890
+</span></span></code></pre></div><h4 id="92-debug-network-connectivity">9.2 Debug Network Connectivity</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Test from inside cluster</span>
+</span></span><span style="display:flex;"><span>kubectl run debug-pod --image<span style="color:#f92672">=</span>nicolaka/netshoot -n mlops --rm -it -- /bin/bash
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Inside the debug pod:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test service connectivity</span>
+</span></span><span style="display:flex;"><span>curl http://retail-forecast-service.mlops.svc.cluster.local/healthz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test DNS resolution</span>
+</span></span><span style="display:flex;"><span>nslookup retail-forecast-service.mlops.svc.cluster.local
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test external connectivity</span>
+</span></span><span style="display:flex;"><span>curl http://api.retail-forecast.com/healthz
+</span></span></code></pre></div><h3 id="10-cost-optimization">10. Cost Optimization</h3>
+<h4 id="101-alb-vs-nlb-cost-comparison">10.1 ALB vs NLB Cost Comparison</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># ALB pricing (approximate)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - $0.0225 per ALB-hour</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - $0.008 per LCU-hour (Load Balancer Capacity Unit)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># NLB pricing (approximate)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - $0.0225 per NLB-hour</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - $0.006 per NLCU-hour (Network Load Balancer Capacity Unit)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Monitor usage with AWS Cost Explorer</span>
+</span></span><span style="display:flex;"><span>aws ce get-cost-and-usage <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --time-period Start<span style="color:#f92672">=</span>2024-01-01,End<span style="color:#f92672">=</span>2024-01-31 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --granularity MONTHLY <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metrics BlendedCost <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-by Type<span style="color:#f92672">=</span>DIMENSION,Key<span style="color:#f92672">=</span>SERVICE
+</span></span></code></pre></div><h4 id="102-resource-optimization">10.2 Resource Optimization</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># Use target type &#34;ip&#34; for better performance</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-target-type</span>: <span style="color:#e6db74">&#34;ip&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Enable cross-zone load balancing only if needed</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled</span>: <span style="color:#e6db74">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Use Local traffic policy to reduce network hops</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">externalTrafficPolicy</span>: <span style="color:#ae81ff">Local</span>
+</span></span><span style="display:flex;"><span>---
+</span></span></code></pre></div><h2 id="kết-quả-kỳ-vọng">Kết quả kỳ vọng</h2>
+<h3 id="-checklist-hoàn-thành">✅ Checklist Hoàn thành</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>Application Load Balancer</strong>: Service type LoadBalancer với annotation <code>aws-load-balancer-type: &quot;application&quot;</code> được deploy thành công</li>
+<li><input disabled="" type="checkbox"> <strong>External Endpoint</strong>: ALB DNS được assign và có thể truy cập</li>
+<li><input disabled="" type="checkbox"> <strong>Health Checks</strong>: ALB health checks tới endpoint <code>/health</code> hoạt động đúng</li>
+<li><input disabled="" type="checkbox"> <strong>API Access</strong>: Các endpoint <code>/predict</code> và <code>/docs</code> có thể truy cập từ internet</li>
+<li><input disabled="" type="checkbox"> <strong>Logging</strong>: Access logs được ghi vào S3 bucket</li>
+<li><input disabled="" type="checkbox"> <strong>SSL/TLS</strong>: HTTPS endpoint được cấu hình (optional)</li>
+<li><input disabled="" type="checkbox"> <strong>Domain Name</strong>: Custom domain được mapping qua Route 53 (optional)</li>
+<li><input disabled="" type="checkbox"> <strong>Security</strong>: WAF rules và security groups được cấu hình</li>
+<li><input disabled="" type="checkbox"> <strong>Monitoring</strong>: CloudWatch ALB metrics được kích hoạt</li>
+<li><input disabled="" type="checkbox"> <strong>Load Testing</strong>: Performance testing đạt các target về throughput và latency</li>
+</ul>
+<h3 id="-verification-steps">📊 Verification Steps</h3>
+<ol>
+<li>
+<p><strong>Service trong namespace retail-prediction có EXTERNAL-IP hiển thị</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get services -n retail-prediction
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected output:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># NAME               TYPE           CLUSTER-IP      EXTERNAL-IP                                      PORT(S)        AGE</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># retail-api-service LoadBalancer   10.100.123.45   retail-alb-123456789.us-east-1.elb.amazonaws.com 80:31234/TCP   5m</span>
+</span></span></code></pre></div></li>
+<li>
+<p><strong>Có thể gửi request từ bên ngoài và nhận kết quả inference</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Health check</span>
+</span></span><span style="display:flex;"><span>curl http://EXTERNAL-IP/health
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: {&#34;status&#34;: &#34;healthy&#34;, &#34;timestamp&#34;: &#34;2024-01-01T12:00:00Z&#34;}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># API Documentation</span>
+</span></span><span style="display:flex;"><span>curl http://EXTERNAL-IP/docs
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: FastAPI Swagger UI loads</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Prediction request</span>
+</span></span><span style="display:flex;"><span>curl -X POST http://EXTERNAL-IP/predict <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{&#34;features&#34;: {&#34;store_id&#34;: 1, &#34;product_id&#34;: 123, &#34;date&#34;: &#34;2024-01-01&#34;, &#34;price&#34;: 29.99, &#34;promotion&#34;: 0}}&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: {&#34;prediction&#34;: 150.75, &#34;model_version&#34;: &#34;v1.0&#34;}</span>
+</span></span></code></pre></div></li>
+<li>
+<p><strong>Load Balancer hoạt động ổn định và phân phối traffic</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check target health</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-target-health --target-group-arn &lt;target-group-arn&gt;
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expected: All targets should be &#34;healthy&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Monitor load distribution</span>
+</span></span><span style="display:flex;"><span>kubectl logs -f deployment/retail-api -n retail-prediction
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Should see requests distributed across different pods</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check ALB metrics</span>
+</span></span><span style="display:flex;"><span>aws cloudwatch get-metric-statistics <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --namespace AWS/ApplicationELB <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metric-name RequestCount <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dimensions Name<span style="color:#f92672">=</span>LoadBalancer,Value<span style="color:#f92672">=</span>app/retail-alb/1234567890123456 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --start-time <span style="color:#66d9ef">$(</span>date -u +<span style="color:#e6db74">&#34;%Y-%m-%dT%H:%M:%SZ&#34;</span> -d <span style="color:#e6db74">&#34;1 hour ago&#34;</span><span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --end-time <span style="color:#66d9ef">$(</span>date -u +<span style="color:#e6db74">&#34;%Y-%m-%dT%H:%M:%SZ&#34;</span><span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --period <span style="color:#ae81ff">300</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --statistics Sum
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="-monitoring-commands">🔍 Monitoring Commands</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Check service status</span>
+</span></span><span style="display:flex;"><span>kubectl get svc -n retail-prediction -w
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Monitor ALB controller status</span>
+</span></span><span style="display:flex;"><span>kubectl get deployment -n kube-system aws-load-balancer-controller
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check load balancer controller logs</span>
+</span></span><span style="display:flex;"><span>kubectl logs -n kube-system -l app.kubernetes.io/name<span style="color:#f92672">=</span>aws-load-balancer-controller -f
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Monitor target group health</span>
+</span></span><span style="display:flex;"><span>watch <span style="color:#e6db74">&#34;aws elbv2 describe-target-health --target-group-arn &lt;your-target-group-arn&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Get ALB details</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-load-balancers --names retail-api-alb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check ALB metrics</span>
+</span></span><span style="display:flex;"><span>aws cloudwatch get-metric-statistics <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --namespace AWS/ApplicationELB <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metric-name RequestCount <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dimensions Name<span style="color:#f92672">=</span>LoadBalancer,Value<span style="color:#f92672">=</span>app/retail-api-alb/1234567890123456 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --start-time <span style="color:#66d9ef">$(</span>date -u +<span style="color:#e6db74">&#34;%Y-%m-%dT%H:%M:%SZ&#34;</span> -d <span style="color:#e6db74">&#34;1 hour ago&#34;</span><span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --end-time <span style="color:#66d9ef">$(</span>date -u +<span style="color:#e6db74">&#34;%Y-%m-%dT%H:%M:%SZ&#34;</span><span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --period <span style="color:#ae81ff">300</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --statistics Sum
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check target response time metrics</span>
+</span></span><span style="display:flex;"><span>aws cloudwatch get-metric-statistics <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --namespace AWS/ApplicationELB <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metric-name TargetResponseTime <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dimensions Name<span style="color:#f92672">=</span>LoadBalancer,Value<span style="color:#f92672">=</span>app/retail-api-alb/1234567890123456 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --start-time <span style="color:#66d9ef">$(</span>date -u +<span style="color:#e6db74">&#34;%Y-%m-%dT%H:%M:%SZ&#34;</span> -d <span style="color:#e6db74">&#34;1 hour ago&#34;</span><span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --end-time <span style="color:#66d9ef">$(</span>date -u +<span style="color:#e6db74">&#34;%Y-%m-%dT%H:%M:%SZ&#34;</span><span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --period <span style="color:#ae81ff">300</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --statistics Average
+</span></span></code></pre></div><h2 id="11-clean-up-resources-aws-cli">11. Clean Up Resources (AWS CLI)</h2>
+<h3 id="111-xóa-load-balancers">11.1. Xóa Load Balancers</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê ALBs</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-load-balancers --query <span style="color:#e6db74">&#39;LoadBalancers[?contains(LoadBalancerName, `retail`)].{Name:LoadBalancerName,ARN:LoadBalancerArn}&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa ALB (tự động xóa listeners)</span>
+</span></span><span style="display:flex;"><span>aws elbv2 delete-load-balancer --load-balancer-arn &lt;alb-arn&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê Target Groups</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-target-groups --query <span style="color:#e6db74">&#39;TargetGroups[?contains(TargetGroupName, `retail`)].{Name:TargetGroupName,ARN:TargetGroupArn}&#39;</span> --output table
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Target Groups</span>
+</span></span><span style="display:flex;"><span>aws elbv2 delete-target-group --target-group-arn &lt;target-group-arn&gt;
+</span></span></code></pre></div><h3 id="112-xóa-aws-load-balancer-controller">11.2. Xóa AWS Load Balancer Controller</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Uninstall AWS Load Balancer Controller</span>
+</span></span><span style="display:flex;"><span>helm uninstall aws-load-balancer-controller -n kube-system
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa IRSA role cho load balancer controller</span>
+</span></span><span style="display:flex;"><span>aws iam detach-role-policy <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --role-name AmazonEKSLoadBalancerControllerRole <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --policy-arn arn:aws:iam::&lt;account-id&gt;:policy/AWSLoadBalancerControllerIAMPolicy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>aws iam delete-role --role-name AmazonEKSLoadBalancerControllerRole
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa IAM policy</span>
+</span></span><span style="display:flex;"><span>aws iam delete-policy --policy-arn arn:aws:iam::&lt;account-id&gt;:policy/AWSLoadBalancerControllerIAMPolicy
+</span></span></code></pre></div><h3 id="113-xóa-ingress-resources">11.3. Xóa Ingress Resources</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Xóa Ingress resources</span>
+</span></span><span style="display:flex;"><span>kubectl delete ingress --all -n mlops
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa IngressClass</span>
+</span></span><span style="display:flex;"><span>kubectl delete ingressclass alb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Verify cleanup</span>
+</span></span><span style="display:flex;"><span>kubectl get ingress -A
+</span></span><span style="display:flex;"><span>kubectl get ingressclass
+</span></span></code></pre></div><h3 id="114-xóa-waf-và-security-configurations">11.4. Xóa WAF và Security Configurations</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê WAF Web ACLs</span>
+</span></span><span style="display:flex;"><span>aws wafv2 list-web-acls --scope REGIONAL --region ap-southeast-1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa WAF rules trước</span>
+</span></span><span style="display:flex;"><span>aws wafv2 update-web-acl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --scope REGIONAL <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --id &lt;web-acl-id&gt; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --lock-token &lt;lock-token&gt; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --rules <span style="color:#e6db74">&#39;[]&#39;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --default-action Allow<span style="color:#f92672">={}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa WAF Web ACL</span>
+</span></span><span style="display:flex;"><span>aws wafv2 delete-web-acl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --scope REGIONAL <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --id &lt;web-acl-id&gt; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --lock-token &lt;lock-token&gt;
+</span></span></code></pre></div><h3 id="115-clean-up-ssl-certificates">11.5. Clean Up SSL Certificates</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Liệt kê ACM certificates</span>
+</span></span><span style="display:flex;"><span>aws acm list-certificates --region ap-southeast-1 --query <span style="color:#e6db74">&#39;CertificateSummaryList[*].{Domain:DomainName,ARN:CertificateArn}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa certificate (chỉ khi không còn sử dụng)</span>
+</span></span><span style="display:flex;"><span>aws acm delete-certificate --certificate-arn &lt;certificate-arn&gt; --region ap-southeast-1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Xóa Route53 records</span>
+</span></span><span style="display:flex;"><span>aws route53 change-resource-record-sets <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --hosted-zone-id &lt;zone-id&gt; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --change-batch <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;Changes&#34;: [{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;Action&#34;: &#34;DELETE&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;ResourceRecordSet&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;Name&#34;: &#34;api.retail-prediction.example.com&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;Type&#34;: &#34;A&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;AliasTarget&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;DNSName&#34;: &#34;&lt;alb-dns-name&gt;&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;EvaluateTargetHealth&#34;: false,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          &#34;HostedZoneId&#34;: &#34;&lt;alb-zone-id&gt;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span>
+</span></span></code></pre></div><h3 id="116-load-balancing-cleanup-script">11.6. Load Balancing Cleanup Script</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e"># loadbalancer-cleanup.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>NAMESPACE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mlops&#34;</span>
+</span></span><span style="display:flex;"><span>CLUSTER_NAME<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;retail-prediction-cluster&#34;</span>
+</span></span><span style="display:flex;"><span>REGION<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ap-southeast-1&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;🧹 Cleaning up Load Balancer resources...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. Delete Kubernetes resources</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Deleting Ingress resources...&#34;</span>
+</span></span><span style="display:flex;"><span>kubectl delete ingress --all -n $NAMESPACE
+</span></span><span style="display:flex;"><span>kubectl delete service --selector<span style="color:#f92672">=</span>app<span style="color:#f92672">=</span>retail-api -n $NAMESPACE
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. Wait for ALB deletion</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Waiting for ALB deletion...&#34;</span>
+</span></span><span style="display:flex;"><span>sleep <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. Clean up AWS resources</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Cleaning up AWS Load Balancer Controller...&#34;</span>
+</span></span><span style="display:flex;"><span>helm uninstall aws-load-balancer-controller -n kube-system 2&gt;/dev/null <span style="color:#f92672">||</span> true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. Delete remaining target groups</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Cleaning up target groups...&#34;</span>
+</span></span><span style="display:flex;"><span>TARGET_GROUPS<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>aws elbv2 describe-target-groups --query <span style="color:#e6db74">&#39;TargetGroups[?contains(TargetGroupName, `k8s-`)].TargetGroupArn&#39;</span> --output text<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> tg in $TARGET_GROUPS; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    aws elbv2 delete-target-group --target-group-arn $tg 2&gt;/dev/null <span style="color:#f92672">||</span> true
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;✅ Load Balancer cleanup completed&#34;</span>
+</span></span></code></pre></div><hr>
+<h2 id="12-bảng-giá-load-balancing-ap-southeast-1">12. Bảng giá Load Balancing (ap-southeast-1)</h2>
+<h3 id="121-chi-phí-application-load-balancer-alb">12.1. Chi phí Application Load Balancer (ALB)</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Giá (USD/hour)</th>
+          <th>Giá (USD/month)</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>ALB Base Cost</strong></td>
+          <td>$0.0225</td>
+          <td>$16.43</td>
+          <td>Per ALB instance</td>
+      </tr>
+      <tr>
+          <td><strong>LCU (Load Balancer Capacity Unit)</strong></td>
+          <td>$0.008</td>
+          <td>$5.84</td>
+          <td>Per LCU-hour</td>
+      </tr>
+      <tr>
+          <td><strong>New connections</strong></td>
+          <td>Included</td>
+          <td>Included</td>
+          <td>Up to 25/second per LCU</td>
+      </tr>
+      <tr>
+          <td><strong>Active connections</strong></td>
+          <td>Included</td>
+          <td>Included</td>
+          <td>Up to 3,000 per LCU</td>
+      </tr>
+      <tr>
+          <td><strong>Data processed</strong></td>
+          <td>Included</td>
+          <td>Included</td>
+          <td>Up to 1GB per LCU</td>
+      </tr>
+      <tr>
+          <td><strong>Rule evaluations</strong></td>
+          <td>Included</td>
+          <td>Included</td>
+          <td>Up to 1,000 per LCU</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="122-chi-phí-network-load-balancer-nlb">12.2. Chi phí Network Load Balancer (NLB)</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Giá (USD/hour)</th>
+          <th>Giá (USD/month)</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>NLB Base Cost</strong></td>
+          <td>$0.0225</td>
+          <td>$16.43</td>
+          <td>Per NLB instance</td>
+      </tr>
+      <tr>
+          <td><strong>NLCU (Network LCU)</strong></td>
+          <td>$0.006</td>
+          <td>$4.38</td>
+          <td>Per NLCU-hour</td>
+      </tr>
+      <tr>
+          <td><strong>New connections/flows</strong></td>
+          <td>Included</td>
+          <td>Included</td>
+          <td>Up to 800/second per NLCU</td>
+      </tr>
+      <tr>
+          <td><strong>Active connections/flows</strong></td>
+          <td>Included</td>
+          <td>Included</td>
+          <td>Up to 100,000 per NLCU</td>
+      </tr>
+      <tr>
+          <td><strong>Data processed</strong></td>
+          <td>Included</td>
+          <td>Included</td>
+          <td>Up to 1GB per NLCU</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="123-chi-phí-classic-load-balancer-clb">12.3. Chi phí Classic Load Balancer (CLB)</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Giá (USD/hour)</th>
+          <th>Giá (USD/month)</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>CLB Base Cost</strong></td>
+          <td>$0.025</td>
+          <td>$18.25</td>
+          <td>Per CLB instance</td>
+      </tr>
+      <tr>
+          <td><strong>Data Transfer</strong></td>
+          <td>$0.008/GB</td>
+          <td>Variable</td>
+          <td>Data processed</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="124-so-sánh-các-loại-load-balancer">12.4. So sánh các loại Load Balancer</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Feature</th>
+          <th>ALB</th>
+          <th>NLB</th>
+          <th>CLB</th>
+          <th>Best For</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Layer</strong></td>
+          <td>Layer 7 (HTTP/HTTPS)</td>
+          <td>Layer 4 (TCP/UDP)</td>
+          <td>Layer 4/7</td>
+          <td>ALB: Web apps, NLB: High performance</td>
+      </tr>
+      <tr>
+          <td><strong>Base Cost</strong></td>
+          <td>$16.43/month</td>
+          <td>$16.43/month</td>
+          <td>$18.25/month</td>
+          <td>ALB/NLB cheaper</td>
+      </tr>
+      <tr>
+          <td><strong>Capacity Units</strong></td>
+          <td>LCU ($5.84)</td>
+          <td>NLCU ($4.38)</td>
+          <td>Fixed</td>
+          <td>NLB most cost-effective</td>
+      </tr>
+      <tr>
+          <td><strong>SSL Termination</strong></td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>All support</td>
+      </tr>
+      <tr>
+          <td><strong>Path-based Routing</strong></td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>ALB only</td>
+      </tr>
+      <tr>
+          <td><strong>WebSocket</strong></td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>ALB/NLB</td>
+      </tr>
+      <tr>
+          <td><strong>Static IP</strong></td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>NLB only</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="125-aws-load-balancer-controller-costs">12.5. AWS Load Balancer Controller Costs</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Cost</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Controller Pods</strong></td>
+          <td>Free</td>
+          <td>Runs on existing EKS nodes</td>
+      </tr>
+      <tr>
+          <td><strong>IRSA Role</strong></td>
+          <td>Free</td>
+          <td>IAM integration</td>
+      </tr>
+      <tr>
+          <td><strong>Webhook Certificate</strong></td>
+          <td>Free</td>
+          <td>TLS for admission controller</td>
+      </tr>
+      <tr>
+          <td><strong>Target Group Binding</strong></td>
+          <td>Free</td>
+          <td>CRD for pod registration</td>
+      </tr>
+      <tr>
+          <td><strong>Ingress Management</strong></td>
+          <td>Free</td>
+          <td>Kubernetes native</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="126-ssltls-certificate-costs">12.6. SSL/TLS Certificate Costs</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Service</th>
+          <th>Cost</th>
+          <th>Features</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>AWS Certificate Manager (ACM)</strong></td>
+          <td>Free</td>
+          <td>Public SSL certificates</td>
+      </tr>
+      <tr>
+          <td><strong>Route 53 DNS</strong></td>
+          <td>$0.50/hosted zone</td>
+          <td>Domain validation</td>
+      </tr>
+      <tr>
+          <td><strong>Third-party Certificates</strong></td>
+          <td>$10-100/year</td>
+          <td>Extended validation options</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="127-waf-web-application-firewall-costs">12.7. WAF (Web Application Firewall) Costs</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Giá (USD/month)</th>
+          <th>Ghi chú</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>WAF Web ACL</strong></td>
+          <td>$1</td>
+          <td>Per Web ACL</td>
+      </tr>
+      <tr>
+          <td><strong>WAF Rules</strong></td>
+          <td>$0.60</td>
+          <td>Per rule per month</td>
+      </tr>
+      <tr>
+          <td><strong>WAF Requests</strong></td>
+          <td>$0.60</td>
+          <td>Per million requests</td>
+      </tr>
+      <tr>
+          <td><strong>Bot Control</strong></td>
+          <td>$10</td>
+          <td>Advanced bot protection</td>
+      </tr>
+      <tr>
+          <td><strong>Rate Limiting</strong></td>
+          <td>$2</td>
+          <td>Per rate-based rule</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="128-ước-tính-chi-phí-task-9">12.8. Ước tính chi phí Task 9</h3>
+<p><strong>Basic ALB Setup:</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Usage</th>
+          <th>Monthly Cost</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>ALB Base</strong></td>
+          <td>1 ALB</td>
+          <td>$16.43</td>
+      </tr>
+      <tr>
+          <td><strong>LCU Usage</strong></td>
+          <td>1 LCU average</td>
+          <td>$5.84</td>
+      </tr>
+      <tr>
+          <td><strong>ACM Certificate</strong></td>
+          <td>1 domain</td>
+          <td>$0</td>
+      </tr>
+      <tr>
+          <td><strong>Route 53</strong></td>
+          <td>1 hosted zone</td>
+          <td>$0.50</td>
+      </tr>
+      <tr>
+          <td><strong>WAF (optional)</strong></td>
+          <td>Basic rules</td>
+          <td>$3.20</td>
+      </tr>
+      <tr>
+          <td><strong>Total</strong></td>
+          <td></td>
+          <td><strong>$26.00</strong></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Production Setup với High Availability:</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Usage</th>
+          <th>Monthly Cost</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>ALB Base</strong></td>
+          <td>1 ALB (Multi-AZ)</td>
+          <td>$16.43</td>
+      </tr>
+      <tr>
+          <td><strong>LCU Usage</strong></td>
+          <td>3 LCU average</td>
+          <td>$17.52</td>
+      </tr>
+      <tr>
+          <td><strong>ACM Certificate</strong></td>
+          <td>2 domains</td>
+          <td>$0</td>
+      </tr>
+      <tr>
+          <td><strong>Route 53</strong></td>
+          <td>2 hosted zones</td>
+          <td>$1.00</td>
+      </tr>
+      <tr>
+          <td><strong>WAF</strong></td>
+          <td>Advanced rules</td>
+          <td>$15.20</td>
+      </tr>
+      <tr>
+          <td><strong>CloudFront</strong></td>
+          <td>CDN integration</td>
+          <td>$8.50</td>
+      </tr>
+      <tr>
+          <td><strong>Total</strong></td>
+          <td></td>
+          <td><strong>$58.65</strong></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="129-cost-optimization-strategies">12.9. Cost Optimization Strategies</h3>
+<p><strong>Single ALB for Multiple Services:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># Cost-effective: 1 ALB serves multiple applications</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.k8s.io/v1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">shared-alb-ingress</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">kubernetes.io/ingress.class</span>: <span style="color:#ae81ff">alb</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alb.ingress.kubernetes.io/group.name</span>: <span style="color:#ae81ff">shared-alb</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">host</span>: <span style="color:#ae81ff">api.retail.com</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/predict</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">retail-api</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">host</span>: <span style="color:#ae81ff">admin.retail.com</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">paths</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">admin-dashboard</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">port</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">80</span>
+</span></span></code></pre></div><p><strong>Right-size Load Balancer:</strong></p>
+<ul>
+<li>Monitor LCU/NLCU usage với CloudWatch</li>
+<li>Optimize connection pooling</li>
+<li>Use appropriate health check intervals</li>
+<li>Configure proper idle timeouts</li>
+</ul>
+<h3 id="1210-monitoring-và-cost-control">12.10. Monitoring và Cost Control</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Monitor ALB metrics</span>
+</span></span><span style="display:flex;"><span>aws cloudwatch get-metric-statistics <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --namespace AWS/ApplicationELB <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metric-name ConsumedLCUs <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dimensions Name<span style="color:#f92672">=</span>LoadBalancer,Value<span style="color:#f92672">=</span>&lt;alb-full-name&gt; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --start-time 2024-01-01T00:00:00Z <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --end-time 2024-01-31T23:59:59Z <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --period <span style="color:#ae81ff">3600</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --statistics Average,Maximum
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check ALB costs</span>
+</span></span><span style="display:flex;"><span>aws ce get-cost-and-usage <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --time-period Start<span style="color:#f92672">=</span>2024-01-01,End<span style="color:#f92672">=</span>2024-01-31 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --granularity MONTHLY <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metrics BlendedCost <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --group-by Type<span style="color:#f92672">=</span>DIMENSION,Key<span style="color:#f92672">=</span>SERVICE <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --filter <span style="color:#e6db74">&#39;{&#34;Dimensions&#34;:{&#34;Key&#34;:&#34;SERVICE&#34;,&#34;Values&#34;:[&#34;Amazon Elastic Load Balancing&#34;]}}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Monitor target health</span>
+</span></span><span style="display:flex;"><span>aws elbv2 describe-target-health <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --target-group-arn &lt;target-group-arn&gt; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --query <span style="color:#e6db74">&#39;TargetHealthDescriptions[*].{Target:Target.Id,Health:TargetHealth.State}&#39;</span>
+</span></span></code></pre></div><p><strong>Cost alerts:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Create cost alarm for Load Balancing</span>
+</span></span><span style="display:flex;"><span>aws cloudwatch put-metric-alarm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --alarm-name <span style="color:#e6db74">&#34;LoadBalancer-Cost-Alert&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --alarm-description <span style="color:#e6db74">&#34;Alert when Load Balancer cost &gt; </span>$50<span style="color:#e6db74">/month&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --metric-name EstimatedCharges <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --namespace AWS/Billing <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --statistic Maximum <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --period <span style="color:#ae81ff">86400</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --threshold <span style="color:#ae81ff">50</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --comparison-operator GreaterThanThreshold <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  --dimensions Name<span style="color:#f92672">=</span>Currency,Value<span style="color:#f92672">=</span>USD Name<span style="color:#f92672">=</span>ServiceName,Value<span style="color:#f92672">=</span>AmazonELB
+</span></span></code></pre></div>
+<div class="notices info" ><p><strong>💰 Cost Summary cho Task 9:</strong></p>
+<ul>
+<li><strong>Basic ALB:</strong> $26/month (single service)</li>
+<li><strong>Shared ALB:</strong> $22/month (multiple services sharing 1 ALB)</li>
+<li><strong>Production:</strong> $58.65/month (với WAF, CloudFront)</li>
+<li><strong>Optimization:</strong> 15-30% savings với proper resource sharing</li>
+</ul>
+</div>
+
+<hr>
+<h2 id="-video-thực-hiện-task-9">🎬 Video thực hiện Task 9</h2>
+<div style="position: relative; width: 100%; max-width: 2000px; margin: 0 auto; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    src="https://www.youtube.com/embed/gYYxZNCSR_Q" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen>
+  </iframe>
+</div>
+<hr>
+<p><strong>Next Step</strong>: <a href="/vi/5-workshop/10-cloudwatch/">Task 10: CloudWatch Monitoring &amp; Alerting</a></p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/vi/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/vi/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765385197"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765385197"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765385197"></script>
+    <script src="/js/jquery.sticky.js?1765385197"></script>
+    <script src="/js/featherlight.min.js?1765385197"></script>
+    <script src="/js/highlight.pack.js?1765385197"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765385197"></script>
+    <script src="/js/learn.js?1765385197"></script>
+    <script src="/js/hugo-learn.js?1765385197"></script>
+
+    <link href="/mermaid/mermaid.css?1765385197" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765385197"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

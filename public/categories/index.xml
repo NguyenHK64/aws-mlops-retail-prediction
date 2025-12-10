@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on AWS MLOps Docs</title>
+    <link>http://localhost:1313/categories/</link>
+    <description>Recent content in Categories on AWS MLOps Docs</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 10 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Advanced</title>
+      <link>http://localhost:1313/categories/advanced/</link>
+      <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/advanced/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AWS Public Sector Blog</title>
+      <link>http://localhost:1313/categories/aws-public-sector-blog/</link>
+      <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/aws-public-sector-blog/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AWS WAF</title>
+      <link>http://localhost:1313/categories/aws-waf/</link>
+      <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/aws-waf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Identity &amp; Compliance</title>
+      <link>http://localhost:1313/categories/identity--compliance/</link>
+      <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/identity--compliance/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Security</title>
+      <link>http://localhost:1313/categories/security/</link>
+      <pubDate>Wed, 10 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/security/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Artificial Intelligence</title>
+      <link>http://localhost:1313/categories/artificial-intelligence/</link>
+      <pubDate>Mon, 08 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/artificial-intelligence/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AWS Partner Network (APN) Blog</title>
+      <link>http://localhost:1313/categories/aws-partner-network-apn-blog/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/aws-partner-network-apn-blog/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AWS Web3 Blog</title>
+      <link>http://localhost:1313/categories/aws-web3-blog/</link>
+      <pubDate>Fri, 19 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/aws-web3-blog/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

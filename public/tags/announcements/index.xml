@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Announcements on AWS MLOps Docs</title>
+    <link>http://localhost:1313/tags/announcements/</link>
+    <description>Recent content in Announcements on AWS MLOps Docs</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 02 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/announcements/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi</title>
+      <link>http://localhost:1313/3-blogstranslated/3.1-blog1/</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/3-blogstranslated/3.1-blog1/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Bài viết gốc được đăng vào ngày 02 tháng 12 năm 2025&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;Chúng tôi hào hứng công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi (EMEA). Những giải thưởng hàng năm này ghi nhận các thành viên của Mạng lưới Đối tác AWS (APN) luôn mang lại kết quả xuất sắc và thúc đẩy đổi mới cho khách hàng của chúng tôi.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

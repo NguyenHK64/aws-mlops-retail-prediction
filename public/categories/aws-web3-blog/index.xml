@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AWS Web3 Blog on AWS MLOps Docs</title>
+    <link>http://localhost:1313/categories/aws-web3-blog/</link>
+    <description>Recent content in AWS Web3 Blog on AWS MLOps Docs</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 19 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/aws-web3-blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain</title>
+      <link>http://localhost:1313/3-blogstranslated/3.6-blog6/</link>
+      <pubDate>Fri, 19 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/3-blogstranslated/3.6-blog6/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Bài viết gốc được đăng vào ngày 19 tháng 9 năm 2024&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;Theo Cục Thống kê Hoa Kỳ, hơn 7,9 triệu người Mỹ đã chuyển từ bang này sang bang khác chỉ trong năm 2021. Một trong những nhiệm vụ mà cá nhân phải hoàn thành khi chuyển từ bang này sang bang khác là đổi giấy phép lái xe từ bang cư trú cũ để lấy giấy phép ở bang cư trú mới. Sở Giao thông Vận tải (DMV) của mỗi bang chịu trách nhiệm cấp và quản lý giấy phép lái xe trong bang đó, và điều này đòi hỏi sự hợp tác với các DMV bang khác để thu thập dữ liệu quan trọng như vi phạm giao thông xảy ra ngoài bang.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="vi" class="js csstransforms3d">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>AWS Partner Central nay đã có sẵn trong AWS Management Console :: Tài liệu AWS MLOps</title>
+
+    
+    <link href="/css/nucleus.css?1765385197" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765385197" rel="stylesheet">
+    <link href="/css/hybrid.css?1765385197" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765385197" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765385197" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765385197" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765385197" rel="stylesheet">
+    <link href="/css/theme.css?1765385197" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765385197" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765385197" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765385197" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765385197"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/vi/3-blogstranslated/3.9-blog9/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765385197"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765385197"></script>
+<script type="text/javascript">
+    var baseurl = "http:\/\/localhost:1313\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765385197"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/" title="Nhật ký công việc (Worklog)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/">
+           <b> 1. </b> Nhật ký công việc (Worklog)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.1-week1/" title="Tuần 1 - Giới thiệu về AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Tuần 1 - Giới thiệu về AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.2-week2/" title="Tuần 2 - Mạng (Networking) trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Tuần 2 - Mạng (Networking) trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.3-week3/" title="Tuần 3 - Dịch vụ máy ảo/Compute (VM) trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Tuần 3 - Dịch vụ máy ảo/Compute (VM) trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.4-week4/" title="Tuần 4 - Dịch vụ lưu trữ trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Tuần 4 - Dịch vụ lưu trữ trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.5-week5/" title="Tuần 5 - Dịch vụ bảo mật trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Tuần 5 - Dịch vụ bảo mật trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.6-week6/" title="Tuần 6 - Dịch vụ cơ sở dữ liệu trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Tuần 6 - Dịch vụ cơ sở dữ liệu trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.7-week7/" title="Tuần 7 - Dịch vụ Data Lake trên AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Tuần 7 - Dịch vụ Data Lake trên AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.8-week8/" title="Tuần 8 - Điện toán Serverless" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Tuần 8 - Điện toán Serverless
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.9-week9/" title="Tuần 9 - Điện toán Container" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Tuần 9 - Điện toán Container
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.10-week10/" title="Tuần 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Tuần 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.11-week11/" title="Tuần 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Tuần 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-worklog/1.12-week12/" title="Tuần 12 - Capstone: Dự án cá nhân" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Tuần 12 - Capstone: Dự án cá nhân
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/" title="Các bài blogs đã dịch" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/">
+           <b> 3. </b> Các bài blogs đã dịch
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.7-blog7/" title="Giới thiệu AWS Infrastructure as Code MCP Server: Hỗ trợ CDK và CloudFormation được hỗ trợ bởi AI" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Giới thiệu AWS Infrastructure as Code MCP Server: Hỗ trợ CDK và CloudFormation được hỗ trợ bởi AI
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms ra mắt tính năng tạo bộ dữ liệu tổng hợp tăng cường quyền riêng tư để huấn luyện mô hình ML" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms ra mắt tính năng tạo bộ dữ liệu tổng hợp tăng cường quyền riêng tư để huấn luyện mô hình ML
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.9-blog9/" title="AWS Partner Central nay đã có sẵn trong AWS Management Console" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central nay đã có sẵn trong AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.10-blog10/" title="Công bố AWS Partner Central trong AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Công bố AWS Partner Central trong AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.11-blog11/" title="Công bố Amazon EKS Capabilities cho điều phối workload và quản lý tài nguyên đám mây" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Công bố Amazon EKS Capabilities cho điều phối workload và quản lý tài nguyên đám mây
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-blogstranslated/3.12-blog12/" title="Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Đơn giản hóa việc tạo chính sách IAM với IAM Policy Autopilot, một MCP server mã nguồn mở mới dành cho builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/4-eventparticipated/" title="Các events đã tham gia" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/4-eventparticipated/">
+           <b> 4. </b> Các events đã tham gia
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/" title="Workshop" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/1-introduction/" title="Thiết kế kiến trúc MLOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/1-introduction/">
+          <b>1. </b>Thiết kế kiến trúc MLOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/6-ecr-registry/" title="ECR Container Registry" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/6-ecr-registry/">
+          <b>6. </b>ECR Container Registry
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/7-eks-cluster/" title="EKS Cluster Setup" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/7-feedback/" title="Chia sẻ, đóng góp ý kiến" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/7-feedback/">
+           <b> 7. </b> Chia sẻ, đóng góp ý kiến
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="http://localhost:1313/3-blogstranslated/3.9-blog9/">English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="http://localhost:1313/vi/3-blogstranslated/3.9-blog9/" selected>Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/3-BlogsTranslated/3.9-Blog9/_index.vi.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/vi/'>Báo cáo Thực tập</a> > <a href='/vi/3-blogstranslated/'>Các bài blogs đã dịch</a> > AWS Partner Central nay đã có sẵn trong AWS Management Console
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#một-trải-nghiệm-console-hợp-nhất-mới">Một trải nghiệm console hợp nhất mới</a></li>
+    <li><a href="#trở-thành-một-aws-partner">Trở thành một AWS Partner</a></li>
+    <li><a href="#hãy-xem-partner-central-console-mới">Hãy xem Partner Central console mới</a>
+      <ul>
+        <li><a href="#1-nó-giúp-bạn-bán-các-giải-pháp-của-mình">1. Nó giúp bạn bán các giải pháp của mình</a></li>
+        <li><a href="#2-nó-giúp-bạn-cập-nhật-và-quản-lý-hồ-sơ-partner-của-mình">2. Nó giúp bạn cập nhật và quản lý hồ sơ Partner của mình</a></li>
+        <li><a href="#3-nó-giúp-bạn-theo-dõi-các-cơ-hội">3. Nó giúp bạn theo dõi các cơ hội</a></li>
+        <li><a href="#4-nó-cung-cấp-cho-bạn-khả-năng-khám-phá-và-kết-nối-với-các-partners-khác">4. Nó cung cấp cho bạn khả năng khám phá và kết nối với các Partners khác</a></li>
+      </ul>
+    </li>
+    <li><a href="#nền-tảng-kỹ-thuật-di-chuyển-hệ-thống-định-danh">Nền tảng kỹ thuật: Di chuyển hệ thống định danh</a></li>
+    <li><a href="#thêm-một-điều-nữa">Thêm một điều nữa</a></li>
+    <li><a href="#bắt-đầu-ngay-hôm-nay">Bắt đầu ngay hôm nay</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              AWS Partner Central nay đã có sẵn trong AWS Management Console
+            </h1>
+          
+
+        
+
+
+
+	<p><em>Tác giả: Sébastien Stormacq — 30 NOV 2025</em></p>
+<p>Hôm nay, chúng tôi công bố rằng AWS Partner Central hiện đã có sẵn trực tiếp trong AWS Management Console, tạo ra một trải nghiệm hợp nhất giúp chuyển đổi cách bạn tương tác với AWS với vai trò vừa là khách hàng vừa là AWS Partners.</p>
+<p>Là người đã làm việc với vô số khách hàng AWS trong nhiều năm qua, tôi đã quan sát cách các tổ chức phát triển trong hành trình AWS của họ. Nhiều Partners thành công nhất của chúng tôi bắt đầu là khách hàng AWS—trước hết sử dụng các dịch vụ của chúng tôi để xây dựng hạ tầng và giải pháp của riêng họ, sau đó mở rộng để tạo ra các dịch vụ cung cấp cho người khác. Nhìn thấy sự tiến triển tự nhiên từ khách hàng thành Partner này, chúng tôi nhận ra một cơ hội để tinh gọn hai trải nghiệm vốn tách biệt theo truyền thống thành một hành trình hợp nhất.</p>
+<p>Khi AWS phát triển, nhu cầu của cộng đồng Partner của chúng tôi cũng thay đổi. Các tổ chức ngày nay hoạt động trong nhiều vai trò: sử dụng các dịch vụ AWS cho hạ tầng của chính họ đồng thời xây dựng và cung cấp các giải pháp cho khách hàng của họ. Doanh nghiệp hiện đại cần các quy trình làm việc được tinh gọn, hỗ trợ sự phát triển từ khách hàng AWS thành Partner rồi thành người bán trên AWS Marketplace, với các tính năng bảo mật cấp doanh nghiệp phù hợp với cách họ thực sự làm việc với AWS ngày nay.</p>
+<h2 id="một-trải-nghiệm-console-hợp-nhất-mới">Một trải nghiệm console hợp nhất mới</h2>
+<p>Việc tích hợp AWS Partner Central vào Console đại diện cho một sự thay đổi mang tính nền tảng về khả năng tiếp cận quan hệ đối tác. Với các khách hàng AWS hiện có, như bạn, việc trở thành một AWS Partner giờ đây rõ ràng như việc truy cập bất kỳ dịch vụ AWS nào khác. Giao diện console quen thuộc cung cấp quyền truy cập trực tiếp đến các cơ hội hợp tác, quyền lợi chương trình và các khả năng của AWS Marketplace mà không cần đăng nhập riêng hay điều hướng giữa các hệ thống khác nhau.</p>
+<p>Bắt đầu với vai trò AWS Partner giờ đây chỉ mất vài cú nhấp chuột trong môi trường console hiện có của bạn. Bạn có thể khám phá các cơ hội hợp tác, hiểu các yêu cầu của chương trình và bắt đầu hành trình Partner của mình mà không cần rời khỏi giao diện AWS mà bạn đã biết và tin dùng.</p>
+<p>Tích hợp vào console tạo ra một lộ trình trực quan để các khách hàng hiện có chuyển sang trở thành AWS Marketplace Sellers. Giờ đây, bạn có thể truy cập các khả năng dành cho người bán trên AWS Marketplace song song với các dịch vụ AWS hiện có, quản lý cả hạ tầng lẫn hoạt động kinh doanh AWS Marketplace từ một giao diện duy nhất. Các yêu cầu private offer và đàm phán có thể được quản lý trực tiếp trong AWS Partner Central, và bạn có thể quản lý các listings trên AWS Marketplace song song với các hoạt động AWS khác của mình thông qua các quy trình làm việc được tinh gọn.</p>
+<h2 id="trở-thành-một-aws-partner">Trở thành một AWS Partner</h2>
+<p>Trải nghiệm console hợp nhất cung cấp quyền truy cập vào các quyền lợi hợp tác toàn diện được thiết kế để tăng tốc tăng trưởng doanh nghiệp của bạn.</p>
+<p>Hãy tham gia AWS Partner Network (APN) và hoàn tất các yêu cầu dành cho Partner và AWS Marketplace Seller một cách liền mạch trong cùng một giao diện. Đăng ký các Partner Paths phù hợp với các giải pháp khách hàng của bạn để xây dựng, tiếp thị, niêm yết và bán trên AWS Marketplace đồng thời phát triển cùng AWS. Khi bạn đã vững vàng, hãy dùng các chương trình Partner để tạo khác biệt cho giải pháp của bạn, niêm yết trên AWS Marketplace để cải thiện khả năng được khám phá trong go-to-market, và xây dựng chuyên môn AWS thông qua các chứng chỉ để thúc đẩy lợi nhuận bằng cách nắm bắt các dòng doanh thu mới. Mở rộng doanh nghiệp bằng cách bán hoặc bán lại phần mềm và dịch vụ chuyên nghiệp trên AWS Marketplace, giúp bạn tăng tốc các thương vụ, tăng doanh thu và mở rộng phạm vi tiếp cận khách hàng sang các khu vực địa lý, ngành và phân khúc mới.</p>
+<p>Trong suốt hành trình của bạn, bạn có thể tiếp tục sử dụng Amazon Q trong console, công cụ cung cấp hướng dẫn cá nhân hóa thông qua AWS Partner Assistant.</p>
+<h2 id="hãy-xem-partner-central-console-mới">Hãy xem Partner Central console mới</h2>
+<p>AWS Partner Central mới có thể truy cập từ console như bất kỳ dịch vụ AWS nào khác. Trong số nhiều khả năng mới, nó cung cấp bốn khu vực chính hỗ trợ vận hành Partner và tăng trưởng kinh doanh trong AWS Partner Network:</p>
+<h3 id="1-nó-giúp-bạn-bán-các-giải-pháp-của-mình">1. Nó giúp bạn bán các giải pháp của mình</h3>
+<p>AWS Partner Central - Solutions
+<img src="/images/blog9/b901.png" alt="B9img" title="B9img">
+Bạn có thể tạo và xuất bản các giải pháp đáp ứng các nhu cầu cụ thể của khách hàng thông qua AWS Marketplace. Solutions được tạo thành từ các products như phần mềm dạng dịch vụ (SaaS), Amazon Machine Images (AMI), containers, dịch vụ chuyên nghiệp, AI agents và tools, và nhiều hơn nữa. Khả năng quản lý giải pháp hướng dẫn bạn xây dựng các offerings bao gồm cả các products bạn sở hữu và các products bạn được ủy quyền để bán lại. Bạn có thể xây dựng các đề xuất giá trị (value propositions) và mô tả thuyết phục, truyền đạt rõ ràng lợi ích của giải pháp đến những người mua tiềm năng đang duyệt AWS Marketplace.</p>
+<p>Tôi chọn Create solution để bắt đầu niêm yết một giải pháp mới trên AWS Marketplace, như thể hiện trong hình sau.</p>
+<p>AWS Partner Central - Create solution
+<img src="/images/blog9/b902.png" alt="B9img" title="B9img"></p>
+<h3 id="2-nó-giúp-bạn-cập-nhật-và-quản-lý-hồ-sơ-partner-của-mình">2. Nó giúp bạn cập nhật và quản lý hồ sơ Partner của mình</h3>
+<p>AWS Partner Central - Manage profile
+<img src="/images/blog9/b903.png" alt="B9img" title="B9img">
+Hồ sơ Partner của bạn giới thiệu chuyên môn và năng lực của tổ chức bạn tới cộng đồng AWS. Bạn kiểm soát cách doanh nghiệp của mình xuất hiện trước các khách hàng và Partners tiềm năng bằng cách nêu bật các phân khúc ngành bạn phục vụ và mô tả các sản phẩm hoặc dịch vụ chính của bạn. Các thiết lập hiển thị hồ sơ cung cấp cho bạn tùy chọn chọn thông tin của bạn là công khai hay riêng tư.</p>
+<h3 id="3-nó-giúp-bạn-theo-dõi-các-cơ-hội">3. Nó giúp bạn theo dõi các cơ hội</h3>
+<p>AWS Partner Central - Track Opportunities
+<img src="/images/blog9/b904.png" alt="B9img" title="B9img">
+Bạn có thể quản lý pipeline các khách hàng AWS của mình, hỗ trợ các hoạt động cộng tác chung với AWS trong các lần tương tác với khách hàng. Bạn theo dõi các prospects này bằng các chỉ báo trạng thái rõ ràng: approved, rejected, draft và pending approval. Bảng điều khiển cơ hội hiển thị các giai đoạn, doanh thu định kỳ hàng tháng ước tính của AWS (AWS Monthly Recurring Revenue) và các chỉ số quan trọng khác giúp bạn hiểu pipeline của mình. Bạn có thể tạo thêm các cơ hội trực tiếp trong console và xuất dữ liệu cho báo cáo và phân tích của riêng bạn.</p>
+<h3 id="4-nó-cung-cấp-cho-bạn-khả-năng-khám-phá-và-kết-nối-với-các-partners-khác">4. Nó cung cấp cho bạn khả năng khám phá và kết nối với các Partners khác</h3>
+<p>Sau khi trở thành một AWS Partner, bạn có quyền truy cập vào mạng lưới AWS Partners, nơi bạn có thể tìm kiếm các Partners khác. Bạn có thể kết nối với họ để hợp tác trong các cơ hội bán hàng và mở rộng phạm vi tiếp cận khách hàng của bạn.</p>
+<p>AWS Partner Central - Discover and Search for partners
+<img src="/images/blog9/b905.png" alt="B9img" title="B9img">
+Bạn tìm kiếm trong danh sách Partners hiện có bằng các bộ lọc theo ngành, vị trí, loại chương trình Partner và chuyên môn. Bảng điều khiển tập trung hiển thị các kết nối đang hoạt động, các yêu cầu đang chờ và lịch sử kết nối, để bạn có thể quản lý các mối quan hệ kinh doanh và xác định các cơ hội hợp tác có thể mở rộng phạm vi của bạn. Giống như các dịch vụ AWS khác, các khả năng kết nối Partner này hiện cũng có sẵn dưới dạng APIs, cung cấp tự động hóa và tích hợp vào các quy trình làm việc hiện có của bạn.</p>
+<p>AWS Partner Central - Manage contact requests
+<img src="/images/blog9/b906.png" alt="B9img" title="B9img">
+Các khả năng này phối hợp cùng nhau trong AWS Partner Central console mới, có thể truy cập trực tiếp từ console, giúp bạn chuyển đổi từ khách hàng AWS thành Partner thành công với bảo mật cấp doanh nghiệp và quy trình làm việc được tinh gọn.</p>
+<h2 id="nền-tảng-kỹ-thuật-di-chuyển-hệ-thống-định-danh">Nền tảng kỹ thuật: Di chuyển hệ thống định danh</h2>
+<p>Trải nghiệm console hợp nhất này trở nên khả thi nhờ việc chúng tôi chuyển sang một hệ thống định danh hiện đại được xây dựng trên AWS Identity and Access Management (IAM). Chúng tôi đã chuyển từ hạ tầng định danh kế thừa sang IAM Identity Center, cung cấp các khả năng bảo mật cấp doanh nghiệp bao gồm khả năng single sign-on và xác thực đa yếu tố. Với bảo mật là ưu tiên số không (job zero), đợt di chuyển này mang đến cho các Partners mới và hiện có khả năng kết nối các identity providers của riêng họ với AWS Partner Central. Nó cung cấp tích hợp liền mạch với các hệ thống xác thực doanh nghiệp hiện có, đồng thời loại bỏ sự phức tạp của việc quản lý các thông tin xác thực tách biệt giữa các dịch vụ khác nhau.</p>
+<h2 id="thêm-một-điều-nữa">Thêm một điều nữa</h2>
+<p>APIs là cốt lõi trong những gì chúng tôi làm tại AWS, và AWS Partner Central cũng không ngoại lệ. Bạn có thể tự động hóa và tinh gọn các quy trình làm việc co-sell bằng cách kết nối các công cụ kinh doanh của bạn với AWS Partner Central. Các APIs do AWS Partner Central cung cấp giúp bạn tăng tốc các quyền lợi APN—từ Account Management (Account API) và Solution Management (Solution API) đến co-selling với Opportunity và Leads APIs, và Benefits APIs để kích hoạt quyền lợi nhanh hơn.</p>
+<p>Bạn có thể dùng các APIs này để tương tác với AWS và phát triển hoạt động kinh doanh Partner của bạn ngay từ các công cụ CRM của riêng bạn.</p>
+<h2 id="bắt-đầu-ngay-hôm-nay">Bắt đầu ngay hôm nay</h2>
+<p>Việc tích hợp giữa console và AWS Partner Central phản ánh cam kết của chúng tôi trong việc giảm độ phức tạp và cải thiện trải nghiệm Partner. Chúng tôi đưa AWS Partner Central vào console để tạo ra một con đường trực quan hơn cho các tổ chức phát triển cùng AWS, từ việc áp dụng với tư cách khách hàng ban đầu cho đến tham gia quan hệ đối tác toàn diện và thành công trên AWS Marketplace.</p>
+<p>Hành trình của bạn từ khách hàng AWS đến AWS Partner thành công và AWS Marketplace Seller bắt đầu chỉ với vài cú nhấp chuột trong console của bạn. Tôi khuyến khích bạn khám phá trải nghiệm hợp nhất mới ngay hôm nay và khám phá cách AWS Partner Central trong console có thể tăng tốc tăng trưởng và thành công của tổ chức bạn trong cộng đồng AWS.</p>
+<p>Sẵn sàng bắt đầu? Hãy truy cập AWS Partner Central trong console của bạn để tìm hiểu thêm về AWS Partner Network và khám phá partnership path phù hợp cho tổ chức của bạn.</p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/vi/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms ra mắt tính năng tạo bộ dữ liệu tổng hợp tăng cường quyền riêng tư để huấn luyện mô hình ML"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/vi/3-blogstranslated/3.10-blog10/" title="Công bố AWS Partner Central trong AWS Management Console" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765385197"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765385197"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765385197"></script>
+    <script src="/js/jquery.sticky.js?1765385197"></script>
+    <script src="/js/featherlight.min.js?1765385197"></script>
+    <script src="/js/highlight.pack.js?1765385197"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765385197"></script>
+    <script src="/js/learn.js?1765385197"></script>
+    <script src="/js/hugo-learn.js?1765385197"></script>
+
+    <link href="/mermaid/mermaid.css?1765385197" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765385197"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

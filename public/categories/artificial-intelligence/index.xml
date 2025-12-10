@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Artificial Intelligence on AWS MLOps Docs</title>
+    <link>http://localhost:1313/categories/artificial-intelligence/</link>
+    <description>Recent content in Artificial Intelligence on AWS MLOps Docs</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 08 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/artificial-intelligence/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research</title>
+      <link>http://localhost:1313/3-blogstranslated/3.4-blog4/</link>
+      <pubDate>Mon, 08 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/3-blogstranslated/3.4-blog4/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Bài viết gốc được đăng vào ngày 08 tháng 12 năm 2025&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;Hôm nay, chúng tôi hân hạnh thông báo về tích hợp mới giữa Amazon QuickSight Research và S&amp;amp;P Global. Tích hợp này kết hợp tin tức năng lượng toàn cầu, nghiên cứu và thông tin chi tiết của S&amp;amp;P Global với khả năng thị trường toàn cầu S&amp;amp;P Global để cung cấp cho khách hàng QuickSight Research một đại lý nghiên cứu sâu.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

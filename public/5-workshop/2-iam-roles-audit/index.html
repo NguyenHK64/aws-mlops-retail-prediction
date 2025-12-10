@@ -1,0 +1,3177 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.149.0">
+    <meta name="description" content="AWS MLOps Retail Prediction Platform Documentation">
+<meta name="author" content="Nguyễn Thanh Nhân &amp; Hà Khả Nguyên">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>IAM Roles &amp; Audit For MLops :: AWS MLOps Docs</title>
+
+    
+    <link href="/css/nucleus.css?1765385195" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1765385195" rel="stylesheet">
+    <link href="/css/hybrid.css?1765385195" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1765385195" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1765385195" rel="stylesheet">
+    <link href="/css/auto-complete.css?1765385195" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1765385195" rel="stylesheet">
+    <link href="/css/theme.css?1765385195" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1765385195" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1765385195" rel="stylesheet">
+    
+    <link href="/css/custom-image-border.css?1765385195" rel="stylesheet">
+
+    <script src="/js/jquery-3.3.1.min.js?1765385195"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    <style type="text/css">
+ 
+.content figure img, .content p img, img.bordered-image {
+  border: 2px solid black !important;
+  padding: 5px !important;
+  margin: 10px auto !important;
+  display: block !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+ 
+img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+figure {
+  text-align: center !important;
+  margin: 10px auto !important;
+}
+
+ 
+.content figure figcaption {
+  text-align: center;
+  font-style: italic;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+ 
+.content p img {
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+ 
+.content p {
+  text-align: center;
+}
+
+.content p:not(:has(img)) {
+  text-align: left;
+}
+</style>
+
+  </head>
+  <body class="" data-url="/5-workshop/2-iam-roles-audit/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1765385195"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1765385195"></script>
+<script type="text/javascript">
+    var baseurl = "http:\/\/localhost:1313\/";
+</script>
+<script type="text/javascript" src="/js/search.js?1765385195"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/" title="Worklog" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/">
+           <b> 1. </b> Worklog
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.1-week1/" title="Week 1 - Introduction to AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.1-week1/">
+           <b> 1.1. </b> Week 1 - Introduction to AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.2-week2/" title="Week 2 - Networking on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.2-week2/">
+           <b> 1.2. </b> Week 2 - Networking on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.3-week3/" title="Week 3 - Compute VM Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.3-week3/">
+           <b> 1.3. </b> Week 3 - Compute VM Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.4-week4/" title="Week 4 - Storage Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.4-week4/">
+           <b> 1.4. </b> Week 4 - Storage Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.5-week5/" title="Week 5 - Security Services on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.5-week5/">
+           <b> 1.5. </b> Week 5 - Security Services on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.6-week6/" title="Week 6 - Database Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.6-week6/">
+           <b> 1.6. </b> Week 6 - Database Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.7-week7/" title="Week 7 - DataLake Service on AWS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.7-week7/">
+           <b> 1.7. </b> Week 7 - DataLake Service on AWS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.8-week8/" title="Week 8 - Serverless Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.8-week8/">
+           <b> 1.8. </b> Week 8 - Serverless Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.9-week9/" title="Week 9 - Container Compute" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.9-week9/">
+           <b> 1.9. </b> Week 9 - Container Compute
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.10-week10/" title="Week 10 - DevOps &amp; IaC" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.10-week10/">
+           <b> 1.10. </b> Week 10 - DevOps &amp; IaC
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.11-week11/" title="Week 11 - Observability &amp; FinOps" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.11-week11/">
+           <b> 1.11. </b> Week 11 - Observability &amp; FinOps
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-worklog/1.12-week12/" title="Week 12 - Capstone: Personal Project" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-worklog/1.12-week12/">
+           <b> 1.12. </b> Week 12 - Capstone: Personal Project
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-proposal/" title="Proposal" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-proposal/">
+           <b> 2. </b> Proposal
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/" title="Translated blogs" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/">
+           <b> 3. </b> Translated blogs
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.1-blog1/" title="Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.1-blog1/">
+           <b> 3.1. </b> Công bố các Đối tác AWS của Năm 2025 khu vực châu Âu, Trung Đông và châu Phi
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.2-blog2/" title="Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.2-blog2/">
+           <b> 3.2. </b> Cách tùy chỉnh phản hồi đối với các cuộc tấn công DDoS tầng 7 bằng AWS WAF Anti-DDoS AMR
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.3-blog3/" title="AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.3-blog3/">
+           <b> 3.3. </b> AWS Marketplace: Chất xúc tác cho việc hiện đại hóa mua sắm liên bang
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.4-blog4/" title="Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.4-blog4/">
+           <b> 3.4. </b> Tích hợp dữ liệu S&amp;P Global mở rộng khả năng Amazon QuickSight Research
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.5-blog5/" title="Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.5-blog5/">
+           <b> 3.5. </b> Cách Văn phòng Tổng chưởng lý Quận Contra Costa hiện đại hóa quy trình xử lý trát đòi hầu tòa với AWS và CC Tech Digital
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.6-blog6/" title="Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.6-blog6/">
+           <b> 3.6. </b> Hợp lý hóa sự hợp tác giữa các Sở Giao thông Vận tải với Private Blockchain
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.7-blog7/" title="Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.7-blog7/">
+           <b> 3.7. </b> Introducing the AWS Infrastructure as Code MCP Server: AI-Powered CDK and CloudFormation Assistance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.8-blog8/" title="AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.8-blog8/">
+           <b> 3.8. </b> AWS Clean Rooms launches privacy-enhancing synthetic dataset generation for ML model training
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.9-blog9/" title="AWS Partner Central now available in AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.9-blog9/">
+           <b> 3.9. </b> AWS Partner Central now available in AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.10-blog10/" title="Announcing AWS Partner Central in the AWS Management Console" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.10-blog10/">
+           <b> 3.10. </b> Announcing AWS Partner Central in the AWS Management Console
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.11-blog11/" title="Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.11-blog11/">
+           <b> 3.11. </b> Announcing Amazon EKS Capabilities for workload orchestration and cloud resource management
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-blogstranslated/3.12-blog12/" title="Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-blogstranslated/3.12-blog12/">
+           <b> 3.12. </b> Simplify IAM policy creation with IAM Policy Autopilot, a new open source MCP server for builders
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-eventparticipated/" title="Events Participated" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-eventparticipated/">
+           <b> 4. </b> Events Participated
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/" title="Workshop" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/5-workshop/">
+          <b>5. </b>Workshop
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/1-introduction/" title="MLOps Architecture Design" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/1-introduction/">
+          <b>1. </b>MLOps Architecture Design
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/2-iam-roles-audit/" title="IAM Roles &amp; Audit For MLops" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/5-workshop/2-iam-roles-audit/">
+          <b>2. </b>IAM Roles &amp; Audit For MLops
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/3-s3-data-storage/">
+          <b>3. </b>Data Pipeline Optimization
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/4-sagemaker-training/" title="End-to-End Model Training Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/4-sagemaker-training/">
+          <b>4. </b>End-to-End Model Training Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/5-vpc/" title="Production Networking" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/5-vpc/">
+          <b>5. </b>Production Networking
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/6-ecr-registry/" title="Amazon ECR Container Registry (MLOps)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/6-ecr-registry/">
+          <b>6. </b>Amazon ECR Container Registry (MLOps)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/7-eks-cluster/" title="EKS Cluster Setup (Production)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/7-eks-cluster/">
+          <b>7. </b>EKS Cluster Setup (Production)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/8-deploy-kubernetes/" title="API Deployment on EKS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/8-deploy-kubernetes/">
+          <b>8. </b>API Deployment on EKS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/9-elastic-load-balancing/" title="Load Balancing" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/9-elastic-load-balancing/">
+          <b>9. </b>Load Balancing
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/10-cloudwatch/" title="CloudWatch Monitoring" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/10-cloudwatch/">
+          <b>10. </b>CloudWatch Monitoring
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/11-cicd-jenkins-travis/" title="CI/CD Pipeline" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/11-cicd-jenkins-travis/">
+          <b>11. </b>CI/CD Pipeline
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-workshop/12-cost--teardown/" title="Cost Management &amp; Teardown" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-workshop/12-cost--teardown/">
+          <b>12. </b>Cost Management &amp; Teardown
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-self-evaluation/" title="Self-Assessment" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-self-evaluation/">
+           <b> 6. </b> Self-Assessment
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/7-feedback/" title="Sharing and Feedback" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/7-feedback/">
+           <b> 7. </b> Sharing and Feedback
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="workshop-stats" style="padding: 8px; margin-top: 15px;">
+      <div style="background-color: var(--MENU-SECTIONS-BG-color); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #fd9827; font-size: 12px;">📊 Workshop Stats</b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Workshop Views" Alt="workshop counter" border="0" style="margin: 2px 0;" />
+        </div>
+        
+        
+        <div style="text-align: center; margin-bottom: 8px;">
+          <b style="color: #4881cd; font-size: 12px;"><a href="https://cloudjourney.awsstudygroup.com/" style="color: #4881cd; text-decoration: none;">🌥️ Cloud Journey</a></b> <br>
+          <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Cloud Journey Views" Alt="cloud journey counter" border="0" style="margin: 2px 0;" />
+        </div>
+
+        
+        <div style="text-align: center; border-top: 1px solid var(--MENU-SECTION-HR-color); padding-top: 12px; margin-top: 12px;">
+          
+          <div style="margin-bottom: 8px;">
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 3px;">📅 Last Updated</div>
+            <div style="color: #ffa500; font-style: italic; font-size: 13px;">28-09-2025</div>
+          </div>
+          
+          
+          <div>
+            <div style="color: #fd9827; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Team</div>
+            <div style="line-height: 1.2;">
+              <div style="margin-bottom: 2px;">
+                <a href="https://www.linkedin.com/in/nguyen-nhan-732a66247" style="color: #4881cd; text-decoration: none; font-size: 13px;">Nguyễn Thanh Nhân</a>
+              </div>
+              <div>
+                <span style="color: #4881cd; font-size: 13px;">Hà Khả Nguyên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="http://localhost:1313/5-workshop/2-iam-roles-audit/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="http://localhost:1313/vi/5-workshop/2-iam-roles-audit/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+ 
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                  
+                  
+                  
+                  <div id="top-github-link">
+                    <a class="github-link" title='Edit this page' href="https://github.com/uit-ntn/aws-mlops-retail-forecast/edit/main/content/5-Workshop/2-iam-roles-audit/_index.md" target="blank">
+                      <i class="fas fa-code-branch"></i>
+                      <span id="top-github-link-text">Edit this page</span>
+                    </a>
+                  </div>
+                  
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Internship Report</a> > <a href='/5-workshop/'>Workshop</a> > IAM Roles & Audit For MLops
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#-task-2-objectives">🎯 Task 2 Objectives</a></li>
+    <li><a href="#1-cloudtrail-setup---audit-foundation">1. CloudTrail Setup - Audit Foundation</a>
+      <ul>
+        <li><a href="#11-create-s3-bucket-for-cloudtrail">1.1. Create S3 Bucket for CloudTrail</a></li>
+        <li><a href="#12-configure-trail">1.2 Configure Trail</a></li>
+        <li><a href="#13-recommendation-synchronize-region-between-s3-and-sagemaker-project">1.3. Recommendation: Synchronize region between S3 and SageMaker Project</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-iam-roles-setup---service-permissions">2. IAM Roles Setup - Service permissions</a>
+      <ul>
+        <li><a href="#21-eks-cluster-service-role">2.1. EKS Cluster Service Role</a></li>
+        <li><a href="#22-eks-node-group-role">2.2. EKS Node Group Role</a></li>
+        <li><a href="#23-sagemaker-execution-role">2.3. SageMaker Execution Role</a></li>
+        <li><a href="#24-required-add-ec2-permissions">2.4. REQUIRED: Add EC2 Permissions</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-validation--security-checks">3. Validation &amp; Security checks</a>
+      <ul>
+        <li><a href="#31-verify-cloudtrail">3.1. Verify CloudTrail</a></li>
+        <li><a href="#32-iam-roles-summary">3.2. IAM Roles summary</a></li>
+        <li><a href="#33-security-checks">3.3. Security checks</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-cost-optimization--compliance">4. Cost optimization &amp; compliance</a>
+      <ul>
+        <li><a href="#41-cloudtrail-cost-management--comparison-table">4.1 CloudTrail cost management — comparison table</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-clean-up-resources-cli-guide">5. Clean Up Resources (CLI guide)</a>
+      <ul>
+        <li><a href="#51-delete-cloudtrail">5.1 Delete CloudTrail</a></li>
+        <li><a href="#52-delete-s3-cloudtrail-bucket-and-contents">5.2 Delete S3 CloudTrail bucket and contents</a></li>
+        <li><a href="#53-schedule-kms-key-deletion">5.3 Schedule KMS Key deletion</a></li>
+        <li><a href="#54-remove-iam-roles--policies-eks--sagemaker--cloudtrail">5.4 Remove IAM Roles &amp; Policies (EKS / SageMaker / CloudTrail)</a></li>
+        <li><a href="#55-remove-container-insights--cloudwatch-integration">5.5 Remove Container Insights / CloudWatch integration</a></li>
+        <li><a href="#56-delete-ecr-images-optional">5.6 Delete ECR images (optional)</a></li>
+        <li><a href="#57-stop--delete-sagemaker-training-jobs-endpoints-model-packages">5.7 Stop / Delete SageMaker training jobs, endpoints, model packages</a></li>
+        <li><a href="#58-verification">5.8 Verification</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              IAM Roles &amp; Audit For MLops
+            </h1>
+          
+
+        
+
+
+
+	<h2 id="-task-2-objectives">🎯 Task 2 Objectives</h2>
+<p>Set up <strong>access permissions (IAM)</strong> for all AWS services in the pipeline and <strong>enable CloudTrail</strong> to monitor and record all activities in the AWS account.</p>
+<p>→ <strong>Ensure security, access control, and evidence of team activities.</strong></p>
+<p>📥 <strong>Input</strong></p>
+<ul>
+<li>
+<p>AWS Account with admin rights</p>
+</li>
+<li>
+<p>Project naming convention: <code>mlops-retail-prediction-dev</code></p>
+</li>
+<li>
+<p>Target region: <code>ap-southeast-1</code></p>
+</li>
+<li>
+<p>Multi-region CloudTrail enabled</p>
+</li>
+<li>
+<p><strong>Input from Task 1:</strong> Task 1 (Introduction) — project conventions, naming, and high-level objectives</p>
+</li>
+<li>
+<p><strong>Input from Task 1:</strong> Task 1 (Introduction) — project conventions, naming, and high-level objectives</p>
+</li>
+</ul>
+<p>✅ <strong>Output</strong></p>
+<ul>
+<li>AWS services have appropriate <strong>Least Privilege</strong> permissions for their roles</li>
+<li>All operations are <strong>recorded by CloudTrail</strong></li>
+<li>Meets rubric criteria: <strong>security, access control, cloud project management</strong></li>
+</ul>
+<p>💰 <strong>Estimated Cost</strong>
+≈ <strong>0.05 USD/month</strong> (CloudTrail + S3 storage for logs)
+💰 <strong>Estimated Cost</strong>
+≈ <strong>0.05 USD/month</strong> (CloudTrail + S3 storage for logs)</p>
+<p>📌 <strong>Main Steps</strong></p>
+<ol>
+<li><strong>CloudTrail Setup</strong> - Set up multi-region audit logging</li>
+<li><strong>S3 CloudTrail Bucket</strong> - Centralized log storage</li>
+<li><strong>EKS Cluster Service Role</strong> - Role for control plane</li>
+<li><strong>EKS Node Group Role</strong> - Role for worker nodes</li>
+<li><strong>SageMaker Execution Role</strong> - Role for training &amp; deployment</li>
+<li><strong>IRSA Foundation</strong> - Prepare pod-level permissions</li>
+</ol>
+<p>✅ <strong>Deliverables</strong></p>
+<ul>
+<li>CloudTrail multi-region trail with logging to S3</li>
+<li>EKS Cluster Service Role (Console)</li>
+<li>EKS Node Group Role with ECR/S3/CloudWatch permissions</li>
+<li>SageMaker Execution Role with necessary S3 permissions</li>
+<li>Security foundation for IRSA setup</li>
+</ul>
+<p>📊 <strong>Acceptance Criteria</strong></p>
+<ul>
+<li>CloudTrail records all API calls and user activities</li>
+<li>EKS cluster can be created with appropriate service roles</li>
+<li>SageMaker training jobs have permissions to read/write S3</li>
+<li>Node groups can pull images from ECR</li>
+<li>All IAM roles comply with principle of least privilege</li>
+<li>Audit trail ready for compliance and monitoring</li>
+</ul>
+<h2 id="1-cloudtrail-setup---audit-foundation">1. CloudTrail Setup - Audit Foundation</h2>
+<h3 id="11-create-s3-bucket-for-cloudtrail">1.1. Create S3 Bucket for CloudTrail</h3>
+<p><strong>Go to S3 Console:</strong>
+AWS Console → S3 → &ldquo;Create bucket&rdquo;</p>
+<p><strong>Bucket Configuration:</strong></p>
+<pre tabindex="0"><code>Bucket name: mlops-cloudtrail-logs-us-east-1-842676018087
+Region: us-east-1 (must be same region as CloudTrail trail)
+Block all public access: ✅ Enabled
+Versioning: ✅ Enabled  
+Default encryption: ✅ AWS KMS
+KMS key: alias/mlops-retail-prediction-dev-cloudtrail-key
+</code></pre><p><strong>Lifecycle Policy Configuration:</strong></p>
+<p><strong>Step 1</strong>. S3 Console → select bucket <code>mlops-cloudtrail-logs-ap-southeast-1</code> → Management → Create lifecycle rule.</p>
+<p><img src="/images/2-iam-roles-audit/1.1-cloudtrail-s3-lifecycle-01.png" alt="S3 lifecycle"></p>
+<p><strong>Step 2</strong>. Name the rule (e.g. <code>CloudTrailLogLifecycle</code>), Apply to all objects or use Prefix <code>mlops-logs/</code>.</p>
+<p><strong>Configuration field details:</strong></p>
+<ol>
+<li>
+<p><strong>Object tags</strong>:</p>
+<ul>
+<li>❌ No need to add tags since we&rsquo;re using prefix filtering</li>
+</ul>
+</li>
+<li>
+<p><strong>Object size</strong>:</p>
+<ul>
+<li>❌ No need to specify minimum object size</li>
+<li>❌ No need to specify maximum object size</li>
+<li>CloudTrail logs are typically small and uniform in size</li>
+</ul>
+</li>
+<li>
+<p><strong>Lifecycle rule actions</strong>:</p>
+<ul>
+<li>✅ Transition current versions of objects between storage classes
+<ul>
+<li>Select to automatically move logs to cheaper storage classes</li>
+<li>Select to automatically move logs to cheaper storage classes</li>
+</ul>
+</li>
+<li>❌ Transition noncurrent versions of objects between storage classes
+<ul>
+<li>Not needed as CloudTrail logs don&rsquo;t have many versions</li>
+</ul>
+</li>
+<li>❌ Expire current versions of objects
+<ul>
+<li>Don&rsquo;t expire as we need to keep logs for audit</li>
+</ul>
+</li>
+<li>❌ Permanently delete noncurrent versions of objects
+<ul>
+<li>Don&rsquo;t delete as we need to keep log history</li>
+</ul>
+</li>
+<li>✅ Delete expired object delete markers or incomplete multipart uploads
+<ul>
+<li>Select to clean up failed markers and uploads</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/2-iam-roles-audit/1.2-cloudtrail-s3-lifecycle-01.png" alt="S3 lifecycle"></p>
+<p><strong>Step 3</strong>. Choose actions (Current versions):</p>
+<ul>
+<li>After 30 days → STANDARD_IA</li>
+<li>After 90 days → GLACIER / GLACIER_IR (optional)</li>
+<li>After 365 days → DEEP_ARCHIVE</li>
+</ul>
+<p><img src="/images/2-iam-roles-audit/1.3-cloudtrail-s3-lifecycle-overview.png" alt="S3 Lifecycle Overview" title="S3 Lifecycle for CloudTrail logs"></p>
+<p><strong>Step 4</strong>. Verify the rule is Active in the Management tab.</p>
+<p><img src="/images/2-iam-roles-audit/1.4-cloudtrail-s3-lifecycle-01.png" alt="S3 lifecycle"></p>
+<h3 id="12-configure-trail">1.2 Configure Trail</h3>
+
+<div class="notices warning" ><p><strong>⚠️ Region Note:</strong></p>
+<ul>
+<li>CloudTrail is a multi-region service but the trail must be created in a specific region (home region)</li>
+<li>S3 bucket and KMS key must be created in the same region as the CloudTrail trail</li>
+<li>In this case, we will create all resources in the <code>us-east-1</code> region</li>
+</ul>
+</div>
+
+<h3 id="13-recommendation-synchronize-region-between-s3-and-sagemaker-project">1.3. Recommendation: Synchronize region between S3 and SageMaker Project</h3>
+<p><strong>In short:</strong> If the main pipeline data (prefix <code>gold/</code> and <code>artifacts/</code>) is in <code>us-east-1</code>, <strong>create SageMaker Domain / Project in <code>us-east-1</code></strong> to avoid cross-region errors (S3 301), KMS key complexity, and other endpoint issues.</p>
+<p>If your organization requires SageMaker to be in <code>ap-southeast-1</code>, you need to copy or replicate data to a bucket in <code>ap-southeast-1</code> before creating the Project. Example sync commands (PowerShell / CloudShell):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>aws s3 mb s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>-apse1 --region ap-southeast-<span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>aws s3 sync s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>/gold/ s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>-apse1/gold/ --acl bucket-owner-full-control
+</span></span><span style="display:flex;"><span>aws s3 sync s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>/artifacts/ s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-retail-prediction-dev-<span style="color:#ae81ff">842676018087</span>-apse1/artifacts/ --acl bucket-owner-full-control
+</span></span></code></pre></div><p>Along with:</p>
+<ul>
+<li>Create KMS key in the destination region if using SSE-KMS.</li>
+<li>Update IAM policies to allow SageMaker role access to the new bucket.</li>
+</ul>
+<p>Suggestion: For labs and quick debugging, the least risky approach is to create Project/Domain where the bucket currently exists (in this lab: <code>us-east-1</code>).</p>
+<h4 id="121-create-kms-key-for-cloudtrail">1.2.1 Create KMS Key for CloudTrail</h4>
+<ol>
+<li><strong>Create KMS Key (in region <code>us-east-1</code>):</strong></li>
+</ol>
+<ul>
+<li>AWS Console → KMS → us-east-1 → Customer managed keys → Create key</li>
+</ul>
+<ol start="2">
+<li>
+<p><strong>Key Configuration:</strong></p>
+<pre tabindex="0"><code>Key type: ✅ Symmetric (encrypt and decrypt data)
+Key type: ✅ Symmetric (encrypt and decrypt data)
+Key usage: ✅ Encrypt and decrypt
+</code></pre></li>
+<li>
+<p><strong>Add labels:</strong></p>
+<pre tabindex="0"><code>Alias: alias/mlops-retail-prediction-dev-cloudtrail-key
+Description (optional): KMS key for CloudTrail logs encryption
+Tags (optional):
+  - Key: Project
+  - Value: MLOps-Retail-Prediction
+</code></pre></li>
+<li>
+<p><strong>Configure administrative permissions:</strong></p>
+<pre tabindex="0"><code>Key administrators: Select IAM users/roles allowed to manage key
+Key deletion: Whether to allow key deletion
+</code></pre></li>
+<li>
+<p><strong>Configure usage permissions:</strong></p>
+<pre tabindex="0"><code>Key users: 
+- Add service principal: cloudtrail.amazonaws.com
+</code></pre></li>
+<li>
+<p><strong>Edit key policy:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Id&#34;</span>: <span style="color:#e6db74">&#34;Key policy created by CloudTrail&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Enable IAM User Permissions&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;AWS&#34;</span>: [<span style="color:#e6db74">&#34;arn:aws:iam::842676018087:root&#34;</span>]
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;kms:*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Allow CloudTrail to encrypt logs&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Service&#34;</span>: <span style="color:#e6db74">&#34;cloudtrail.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;kms:GenerateDataKey*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Condition&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringLike&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;kms:EncryptionContext:aws:cloudtrail:arn&#34;</span>: [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;arn:aws:cloudtrail:*:842676018087:trail/*&#34;</span>
+</span></span><span style="display:flex;"><span>          ]
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringEquals&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;aws:SourceArn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:cloudtrail:us-east-1:842676018087:trail/mlops-retail-prediction-audit-trail&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Allow CloudTrail to describe key&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Service&#34;</span>: <span style="color:#e6db74">&#34;cloudtrail.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;kms:DescribeKey&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ol>
+
+<div class="notices warning" ><p><strong>Important points in KMS policy:</strong>
+Enable IAM User Permissions: Allow root account to manage key
+Allow CloudTrail to encrypt logs:</p>
+<ul>
+<li>Allow generateDataKey with EncryptionContext and SourceArn conditions</li>
+<li>EncryptionContext limits to CloudTrail trails in account</li>
+<li>SourceArn specifies exactly which trail is allowed to use
+Allow CloudTrail to describe key: Allow CloudTrail to view key information</li>
+</ul>
+</div>
+
+<ol start="3">
+<li><strong>Default Key Policy for CloudTrail:</strong>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Id&#34;</span>: <span style="color:#e6db74">&#34;Key policy created by CloudTrail&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Enable IAM User Permissions&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;AWS&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:iam::842676018087:root&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;kms:*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Allow CloudTrail to encrypt logs&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Service&#34;</span>: <span style="color:#e6db74">&#34;cloudtrail.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;kms:GenerateDataKey*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Condition&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringEquals&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;aws:SourceArn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:cloudtrail:us-east-1:842676018087:trail/mlops-retail-prediction-audit-trail&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringLike&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;kms:EncryptionContext:aws:cloudtrail:arn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:cloudtrail:*:842676018087:trail/*&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Allow CloudTrail to describe key&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Service&#34;</span>: <span style="color:#e6db74">&#34;cloudtrail.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;kms:DescribeKey&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Allow principals in the account to decrypt log files&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;AWS&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: [<span style="color:#e6db74">&#34;kms:Decrypt&#34;</span>, <span style="color:#e6db74">&#34;kms:ReEncryptFrom&#34;</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Condition&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringEquals&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;kms:CallerAccount&#34;</span>: <span style="color:#e6db74">&#34;842676018087&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringLike&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;kms:EncryptionContext:aws:cloudtrail:arn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:cloudtrail:*:842676018087:trail/*&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;Enable cross account log decryption&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;AWS&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: [<span style="color:#e6db74">&#34;kms:Decrypt&#34;</span>, <span style="color:#e6db74">&#34;kms:ReEncryptFrom&#34;</span>],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Condition&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringEquals&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;kms:CallerAccount&#34;</span>: <span style="color:#e6db74">&#34;842676018087&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringLike&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;kms:EncryptionContext:aws:cloudtrail:arn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:cloudtrail:*:842676018087:trail/*&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ol>
+
+<div class="notices info" ><p><strong>Key Policy includes:</strong></p>
+<ul>
+<li>Allow root account to manage key</li>
+<li>Allow CloudTrail to encrypt logs with condition that trail ARN matches</li>
+<li>Allow CloudTrail to view key information</li>
+<li>Allow principals in account to decrypt logs</li>
+<li>Support cross-account log decryption if needed</li>
+</ul>
+</div>
+
+
+<div class="notices warning" ><p>KMS key must be created in the same region as the S3 bucket and include a policy that allows CloudTrail usage.</p>
+</div>
+
+<h4 id="122-configure-s3-bucket-policy">1.2.2 Configure S3 Bucket Policy</h4>
+<ol>
+<li>
+<p><strong>Go to S3 bucket permissions:</strong></p>
+<pre tabindex="0"><code>S3 Console → mlops-cloudtrail-logs-ap-southeast-1 → Permissions → Bucket policy
+</code></pre></li>
+<li>
+<p><strong>Default policy for S3 bucket:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Statement&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;AWSCloudTrailAclCheck&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Service&#34;</span>: <span style="color:#e6db74">&#34;cloudtrail.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;s3:GetBucketAcl&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:s3:::mlops-cloudtrail-logs-ap-southeast-1-842676018087&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Condition&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringEquals&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;aws:SourceArn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:cloudtrail:us-east-1:842676018087:trail/mlops-retail-prediction-audit-trail&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;AWSCloudTrailWrite&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Principal&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;Service&#34;</span>: <span style="color:#e6db74">&#34;cloudtrail.amazonaws.com&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;s3:PutObject&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:s3:::mlops-cloudtrail-logs-ap-southeast-1-842676018087/mlops-logs/AWSLogs/842676018087/*&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;Condition&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;StringEquals&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;aws:SourceArn&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:cloudtrail:us-east-1:842676018087:trail/mlops-retail-prediction-audit-trail&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;s3:x-amz-acl&#34;</span>: <span style="color:#e6db74">&#34;bucket-owner-full-control&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ol>
+
+<div class="notices info" ><p><strong>S3 Bucket Policy includes:</strong></p>
+<ul>
+<li>AWSCloudTrailAclCheck: Allow CloudTrail to check bucket ACL</li>
+<li>AWSCloudTrailWrite: Allow CloudTrail to write logs to bucket</li>
+<li>Conditions:
+<ul>
+<li>aws:SourceArn: Ensure only specific trail can access</li>
+<li>s3:x-amz-acl: Ensure bucket owner has full control of objects</li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+<div class="notices info" ><p>This policy allows CloudTrail to check bucket ACL and write logs to bucket.</p>
+</div>
+
+<h4 id="123-create-the-cloudtrail">1.2.3 Create the CloudTrail</h4>
+<p><strong>Step 1: Create a new trail</strong></p>
+<pre tabindex="0"><code>AWS Console → us-east-1 → CloudTrail → Create trail
+</code></pre><p><strong>Step 2: Basic trail configuration (in us-east-1)</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Item</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Trail name</strong></td>
+          <td><code>mlops-retail-prediction-audit-trail</code></td>
+      </tr>
+      <tr>
+          <td><strong>Apply trail to all regions</strong></td>
+          <td>✅ Yes</td>
+      </tr>
+      <tr>
+          <td><strong>Management events</strong></td>
+          <td>✅ Read/Write</td>
+      </tr>
+      <tr>
+          <td><strong>Data events</strong></td>
+          <td>✅ S3 bucket data events</td>
+      </tr>
+      <tr>
+          <td><strong>Insights events</strong></td>
+          <td>✅ Enabled (detect anomalous behavior)</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Step 3: Storage configuration</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Item</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>S3 bucket</strong></td>
+          <td><code>mlops-cloudtrail-logs-ap-southeast-1</code></td>
+      </tr>
+      <tr>
+          <td><strong>Log file prefix</strong></td>
+          <td><code>mlops-logs/</code></td>
+      </tr>
+      <tr>
+          <td><strong>Log file SSE-KMS encryption</strong></td>
+          <td>✅ Enabled</td>
+      </tr>
+      <tr>
+          <td><strong>AWS KMS alias</strong></td>
+          <td><code>alias/mlops-retail-prediction-dev-cloudtrail-key</code> (select the created key)</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Step 4: CloudWatch Logs integration (optional)</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Item</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>CloudWatch Logs</strong></td>
+          <td>✅ Enabled</td>
+      </tr>
+      <tr>
+          <td><strong>Log group</strong></td>
+          <td><code>mlops-cloudtrail-log-group</code></td>
+      </tr>
+      <tr>
+          <td><strong>IAM Role</strong></td>
+          <td><code>CloudTrail_CloudWatchLogs_Role</code> (auto-created)</td>
+      </tr>
+  </tbody>
+</table>
+
+<div class="notices info" ><p>The <code>CloudTrail_CloudWatchLogs_Role</code> will be auto-created with necessary permissions: <code>logs:PutLogEvents</code>, <code>logs:CreateLogStream</code>, <code>logs:DescribeLogStreams</code>.</p>
+</div>
+
+<p><strong>Step 5: Review and create the trail</strong></p>
+
+<div class="notices tip" ><p>Correct order to avoid errors:</p>
+<ol>
+<li>✅ Create KMS key with proper policy</li>
+<li>✅ Configure S3 bucket policy</li>
+<li>✅ Create CloudTrail with the configured KMS and S3</li>
+<li>✅ Verify logs are being delivered</li>
+</ol>
+</div>
+
+<h2 id="2-iam-roles-setup---service-permissions">2. IAM Roles Setup - Service permissions</h2>
+<h3 id="21-eks-cluster-service-role">2.1. EKS Cluster Service Role</h3>
+<ul>
+<li>AWS Console → IAM → Roles → &ldquo;Create role&rdquo;</li>
+</ul>
+<ol>
+<li><strong>Trusted entity type:</strong>
+<pre tabindex="0"><code>/* Lines 445-447 omitted */
+</code></pre></li>
+<li><strong>Attach policies:</strong>
+<pre tabindex="0"><code>/* Lines 450-451 omitted */
+</code></pre></li>
+<li><strong>Role details:</strong>
+<pre tabindex="0"><code>/* Lines 454-456 omitted */
+</code></pre></li>
+</ol>
+<h3 id="22-eks-node-group-role">2.2. EKS Node Group Role</h3>
+<ul>
+<li>Similar steps</li>
+</ul>
+<ol>
+<li><strong>Trusted entity type:</strong>
+<pre tabindex="0"><code>/* Lines 463-465 omitted */
+</code></pre></li>
+<li><strong>Attach policies:</strong>
+<pre tabindex="0"><code>/* Lines 468-472 omitted */
+</code></pre></li>
+<li><strong>Role details:</strong>
+<pre tabindex="0"><code>/* Lines 475-478 omitted */
+</code></pre><img src="/images/2-iam-roles-audit/03-eks-nodegroup-role-policies.png" alt="EKS Node Group Role - Trust relationship and attached policies" title="EKS Node Group Role - Trust relationship and attached policies"></li>
+</ol>
+<h3 id="23-sagemaker-execution-role">2.3. SageMaker Execution Role</h3>
+<ol>
+<li>
+<p><strong>Trusted entity type:</strong></p>
+<pre tabindex="0"><code>/* Lines 484-486 omitted */
+</code></pre></li>
+<li>
+<p><strong>Attach policies:</strong></p>
+<pre tabindex="0"><code>/* Lines 489-492 omitted */
+</code></pre></li>
+<li>
+<p><strong>Add required inline EC2 policy (REQUIRED for Projects):</strong></p>
+<pre tabindex="0"><code>/* Lines 496-521 omitted */
+</code></pre><ol start="4">
+<li><strong>Policy name</strong>: <code>SageMakerEC2Access</code></li>
+</ol>
+</li>
+<li>
+<p><strong>Role details:</strong></p>
+<pre tabindex="0"><code>/* Lines 525-527 omitted */
+</code></pre></li>
+</ol>
+<h3 id="24-required-add-ec2-permissions">2.4. REQUIRED: Add EC2 Permissions</h3>
+<p>Because SageMaker Projects are mandatory, EC2 permissions must be added:</p>
+<ol>
+<li><strong>IAM Console</strong> → <strong>Roles</strong> → <code>mlops-retail-prediction-dev-sagemaker-execution</code></li>
+<li><strong>Permissions</strong> tab → <strong>Add permissions</strong> → <strong>Create inline policy</strong></li>
+<li><strong>JSON</strong> tab → paste policy:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">/*</span> <span style="color:#960050;background-color:#1e0010">Lines</span> <span style="color:#960050;background-color:#1e0010">540-553</span> <span style="color:#960050;background-color:#1e0010">omitted</span> <span style="color:#960050;background-color:#1e0010">*/</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">]</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="4">
+<li><strong>Review</strong> → <strong>Policy name</strong>: <code>SageMakerEC2Access</code></li>
+<li><strong>Create policy</strong></li>
+</ol>
+
+<div class="notices tip" ><p>✅ Verify: the role should have these 4 policies attached:</p>
+<ul>
+<li><code>AmazonSageMakerFullAccess</code> (AWS managed)</li>
+<li><code>AmazonS3FullAccess</code> (AWS managed)</li>
+<li><code>AmazonS3FullAccess</code> (AWS managed)</li>
+<li><code>CloudWatchLogsFullAccess</code> (AWS managed)</li>
+<li><code>SageMakerEC2Access</code> (the inline policy created above)</li>
+</ul>
+</div>
+
+
+<div class="notices warning" ><p>SageMaker Unified Studio (2024+) requirements:</p>
+<ul>
+<li>✅ <strong>Projects are mandatory</strong></li>
+<li>✅ <strong>EC2 permissions are REQUIRED</strong> (add inline policy)</li>
+<li>✅ Project profile must be configured first</li>
+</ul>
+<p>If EC2 permissions are missing:</p>
+<ul>
+<li>❌ Project creation will fail</li>
+<li>❌ &ldquo;Insufficient permissions to describe VPCs&rdquo; errors</li>
+<li>❌ Studio notebooks inaccessible</li>
+</ul>
+<p>✅ SOLUTION:</p>
+<ol>
+<li><strong>Add the inline EC2 policy</strong> above</li>
+<li>Create the Project with &ldquo;ML and generative AI model development&rdquo;</li>
+<li>Studio should work normally</li>
+</ol>
+</div>
+
+<h2 id="3-validation--security-checks">3. Validation &amp; Security checks</h2>
+<h3 id="31-verify-cloudtrail">3.1. Verify CloudTrail</h3>
+<p><strong>Check CloudTrail status:</strong>
+AWS Console → CloudTrail → Trails</p>
+<pre tabindex="0"><code>✅ mlops-retail-prediction-audit-trail: Active
+✅ Multi-region trail: Enabled
+✅ Management events: Read/Write
+✅ Data events: S3 configured
+✅ CloudWatch Logs: Integrated
+</code></pre><p><strong>Verify S3 logging:</strong>
+AWS Console → S3 → mlops-cloudtrail-logs-ap-southeast-1</p>
+<pre tabindex="0"><code>✅ Log files present: /mlops-logs/AWSLogs/[account-id]/CloudTrail/
+✅ Encryption: SSE-S3 enabled
+✅ Lifecycle policy: Applied
+✅ Access logging: Configured
+</code></pre><h3 id="32-iam-roles-summary">3.2. IAM Roles summary</h3>
+<p><strong>Go to IAM → Roles and verify:</strong></p>
+<pre tabindex="0"><code>✅ mlops-retail-prediction-dev-eks-cluster-role
+✅ mlops-retail-prediction-dev-eks-nodegroup-role
+✅ mlops-retail-prediction-dev-sagemaker-execution
+✅ CloudTrail_CloudWatchLogs_Role (auto-created)
+</code></pre><p><strong>Check Trust Relationships:</strong></p>
+<ul>
+<li>Open each role → Trust relationships tab</li>
+<li>Verify trusted entities such as <code>eks.amazonaws.com</code> (EKS cluster role)
+/* Lines 622-624 omitted */</li>
+<li><code>cloudtrail.amazonaws.com</code> (CloudTrail logging role)</li>
+</ul>
+<h3 id="33-security-checks">3.3. Security checks</h3>
+<p><strong>Verify CloudTrail logging:</strong></p>
+<ol>
+<li>Make a test API call (e.g., list S3 buckets)</li>
+<li>Check CloudTrail logs within 5–10 minutes</li>
+<li>Confirm the event appears in CloudWatch Logs</li>
+</ol>
+<p><strong>Verify IAM permissions:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Test SageMaker role can assume and access S3</span>
+</span></span><span style="display:flex;"><span>aws sts assume-role --role-arn arn:aws:iam::ACCOUNT:role/mlops-retail-prediction-dev-sagemaker-execution --role-session-name test
+</span></span></code></pre></div><p><strong>Test SageMaker role full access:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Test S3 access</span>
+</span></span><span style="display:flex;"><span>aws s3 ls s3://mlops-retail-prediction-dev-ACCOUNT/ --profile sagemaker-test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test SageMaker training job permissions</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-training-jobs --region us-east-1 --profile sagemaker-test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test EC2 permissions (if added)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Test EC2 permissions (if added)</span>
+</span></span><span style="display:flex;"><span>aws ec2 describe-vpcs --region us-east-1 --profile sagemaker-test
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Test EKS roles readiness for cluster creation</span>
+</span></span><span style="display:flex;"><span>aws eks describe-cluster --name test-cluster --region ap-southeast-1
+</span></span></code></pre></div><h2 id="4-cost-optimization--compliance">4. Cost optimization &amp; compliance</h2>
+<h3 id="41-cloudtrail-cost-management--comparison-table">4.1 CloudTrail cost management — comparison table</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Item</th>
+          <th style="text-align: right">Price</th>
+          <th>Notes / Assumptions</th>
+          <th style="text-align: right">Example estimate</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>S3 — Standard</td>
+          <td style="text-align: right">$0.023 / GB‑month</td>
+          <td>Hot logs (day 0–30)</td>
+          <td style="text-align: right">1 GB → $0.023</td>
+      </tr>
+      <tr>
+          <td>S3 — Standard‑IA</td>
+          <td style="text-align: right">$0.0125 / GB‑month</td>
+          <td>After 30 days (infrequent access)</td>
+          <td style="text-align: right">1 GB → $0.0125</td>
+      </tr>
+      <tr>
+          <td>S3 — Glacier</td>
+          <td style="text-align: right">$0.004 / GB‑month</td>
+          <td>Long-term retention (90–365 days)</td>
+          <td style="text-align: right">1 GB → $0.004</td>
+      </tr>
+      <tr>
+          <td>S3 — Deep Archive</td>
+          <td style="text-align: right">$0.00099 / GB‑month</td>
+          <td>Retention &gt;365 days</td>
+          <td style="text-align: right">1 GB → $0.00099</td>
+      </tr>
+      <tr>
+          <td>CloudTrail — Management events</td>
+          <td style="text-align: right">Free (first copy)</td>
+          <td>Management API calls</td>
+          <td style="text-align: right">—</td>
+      </tr>
+      <tr>
+          <td>CloudTrail — Data events</td>
+          <td style="text-align: right">$0.10 / 100,000 events</td>
+          <td>S3 object-level, Lambda, etc.</td>
+          <td style="text-align: right">100k events → $0.10</td>
+      </tr>
+      <tr>
+          <td>CloudTrail — Insights</td>
+          <td style="text-align: right">$0.35 / 100,000 events</td>
+          <td>Optional anomaly detection</td>
+          <td style="text-align: right">100k events → $0.35</td>
+      </tr>
+  </tbody>
+</table>
+<p>Sample monthly scenarios</p>
+<ul>
+<li>Minimal (small project): 0.5 GB storage (mostly Standard‑IA) + 10k data events<br>
+→ S3 ≈ 0.5 * $0.0125 = $0.0063 ; Data events ≈ (10k/100k)*$0.10 = $0.01<br>
+→ Total ≈ $0.016</li>
+<li>Typical (tens of GB, tens of thousands of events): 5 GB mixed classes + 50k data events<br>
+→ S3 (mix) ≈ $0.02–$0.04 ; Data events ≈ $0.05 ; Insights may add $0.00–$0.35<br>
+→ Total ~ $0.02–$0.05 (common for small projects)</li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>Lifecycle transitions to IA/Glacier/Deep Archive are key for long-term cost reduction.</li>
+<li>Data events and Insights scale with event count — optimize sampling and only log what’s necessary.</li>
+<li>Verify actual spend using Billing / Cost Explorer to adjust assumptions.</li>
+</ul>
+<h2 id="5-clean-up-resources-cli-guide">5. Clean Up Resources (CLI guide)</h2>
+<blockquote>
+<p>Warning: commands below will delete real resources. Confirm names (bucket, role, trail, key) before running.</p></blockquote>
+<h3 id="51-delete-cloudtrail">5.1 Delete CloudTrail</h3>
+<p>PowerShell (AWS CLI):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Delete the trail (if name matches)</span>
+</span></span><span style="display:flex;"><span>aws cloudtrail delete-trail --name mlops-retail-prediction-audit-trail
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Optionally disable CloudWatch Logs integration first</span>
+</span></span><span style="display:flex;"><span>aws cloudtrail update-trail --name mlops-retail-prediction-audit-trail --cloud-watch-logs-log-group-arn <span style="color:#e6db74">&#34;&#34;</span> --cloud-watch-logs-role-arn <span style="color:#e6db74">&#34;&#34;</span>
+</span></span></code></pre></div><h3 id="52-delete-s3-cloudtrail-bucket-and-contents">5.2 Delete S3 CloudTrail bucket and contents</h3>
+<p>Note: bucket may be in <code>us-east-1</code> per this guide. Verify with <code>aws s3 ls</code> / console before deleting.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Remove all objects recursively</span>
+</span></span><span style="display:flex;"><span>aws s3 rm s3<span style="color:#960050;background-color:#1e0010">:</span>//mlops-cloudtrail-logs-ap-southeast-<span style="color:#ae81ff">1</span> --recursive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete the bucket</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete the bucket</span>
+</span></span><span style="display:flex;"><span>aws s3api delete-bucket --bucket mlops-cloudtrail-logs-ap-southeast-<span style="color:#ae81ff">1</span> --region us-east-<span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><h3 id="53-schedule-kms-key-deletion">5.3 Schedule KMS Key deletion</h3>
+<p>KMS keys cannot be immediately deleted if in use. Schedule deletion (e.g., 7 days):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Find KeyId from alias</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Find KeyId from alias</span>
+</span></span><span style="display:flex;"><span>$keyId = aws kms list-aliases --query <span style="color:#e6db74">&#34;Aliases[?AliasName==&#39;alias/mlops-retail-prediction-dev-cloudtrail-key&#39;].TargetKeyId&#34;</span> --output text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Schedule key deletion (pending window: 7-30 days)</span>
+</span></span><span style="display:flex;"><span>aws kms schedule-key-deletion --key-id $keyId --pending-window-in-days <span style="color:#ae81ff">7</span>
+</span></span></code></pre></div><h3 id="54-remove-iam-roles--policies-eks--sagemaker--cloudtrail">5.4 Remove IAM Roles &amp; Policies (EKS / SageMaker / CloudTrail)</h3>
+<p>Safe procedure: 1) Detach managed policies 2) Delete inline policies 3) Delete role.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Example: delete SageMaker execution role</span>
+</span></span><span style="display:flex;"><span>$roleName = <span style="color:#e6db74">&#39;mlops-retail-prediction-dev-sagemaker-execution&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1) List and detach attached managed policies</span>
+</span></span><span style="display:flex;"><span>aws iam list-attached-role-policies --role-name $roleName --query <span style="color:#e6db74">&#39;AttachedPolicies[].PolicyArn&#39;</span> --output text | ForEach-Object { aws iam detach-role-policy --role-name $roleName --policy-arn $_ }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2) Delete inline policies</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2) Delete inline policies</span>
+</span></span><span style="display:flex;"><span>aws iam list-role-policies --role-name $roleName --query <span style="color:#e6db74">&#39;PolicyNames&#39;</span> --output text | ForEach-Object { aws iam delete-role-policy --role-name $roleName --policy-name $_ }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3) Delete the role</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3) Delete the role</span>
+</span></span><span style="display:flex;"><span>aws iam delete-role --role-name $roleName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Repeat for other roles (EKS cluster/nodegroup, CloudTrail_CloudWatchLogs_Role, CI roles, etc.)</span>
+</span></span></code></pre></div><h3 id="55-remove-container-insights--cloudwatch-integration">5.5 Remove Container Insights / CloudWatch integration</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Delete CloudWatch log group (if exists)</span>
+</span></span><span style="display:flex;"><span>aws logs delete-log-group --log-group-name <span style="color:#e6db74">&#34;/aws/containerinsights/mlops-retail-cluster/application&#34;</span> || Write-Host <span style="color:#e6db74">&#39;Log group not found&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete CloudTrail log group</span>
+</span></span><span style="display:flex;"><span>aws logs delete-log-group --log-group-name <span style="color:#e6db74">&#34;mlops-cloudtrail-log-group&#34;</span> || Write-Host <span style="color:#e6db74">&#39;Log group not found&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Disable Container Insights addon from EKS (if applied)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Disable Container Insights addon from EKS (if applied)</span>
+</span></span><span style="display:flex;"><span>aws eks delete-addon --cluster-name mlops-retail-cluster --addon-name amazon-cloudwatch-observability
+</span></span></code></pre></div><h3 id="56-delete-ecr-images-optional">5.6 Delete ECR images (optional)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Delete images by tag</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete images by tag</span>
+</span></span><span style="display:flex;"><span>aws ecr batch-delete-image --repository-name mlops/retail-api --image-ids imageTag=dev,imageTag=staging || Write-Host <span style="color:#e6db74">&#39;No matching images or already deleted&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete untagged images (caution)</span>
+</span></span><span style="display:flex;"><span>aws ecr describe-images --repository-name mlops/retail-api --filter tagStatus=UNTAGGED --query <span style="color:#e6db74">&#39;imageDetails[].imageDigest&#39;</span> --output text | ForEach-Object { aws ecr batch-delete-image --repository-name mlops/retail-api --image-ids imageDigest=$_ }
+</span></span></code></pre></div><h3 id="57-stop--delete-sagemaker-training-jobs-endpoints-model-packages">5.7 Stop / Delete SageMaker training jobs, endpoints, model packages</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Stop in-progress training jobs by name pattern</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-training-jobs --name<span style="color:#f92672">-contains</span> <span style="color:#e6db74">&#34;retail-&#34;</span> --status-equals InProgress --query <span style="color:#e6db74">&#39;TrainingJobSummaries[].TrainingJobName&#39;</span> --output text | ForEach-Object { aws sagemaker stop-training-job --training-job-name $_ }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete failed endpoints</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-endpoints --name<span style="color:#f92672">-contains</span> <span style="color:#e6db74">&#34;retail-&#34;</span> --query <span style="color:#e6db74">&#39;Endpoints[?EndpointStatus==`Failed`].EndpointName&#39;</span> --output text | ForEach-Object { aws sagemaker delete-endpoint --endpoint-name $_ }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Delete pending model packages in model group (careful: keep approved ones)</span>
+</span></span><span style="display:flex;"><span>aws sagemaker list-model-packages --model-package-group-name <span style="color:#e6db74">&#34;retail-forecast-models&#34;</span> --model-approval-status PendingManualApproval --query <span style="color:#e6db74">&#39;ModelPackageSummaryList[].ModelPackageArn&#39;</span> --output text | ForEach-Object { aws sagemaker delete-model-package --model-package-name $_ }
+</span></span></code></pre></div><h3 id="58-verification">5.8 Verification</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Check trail deletion</span>
+</span></span><span style="display:flex;"><span>aws cloudtrail describe-trails --query <span style="color:#e6db74">&#39;trailList[?Name==`mlops-retail-prediction-audit-trail`]&#39;</span> || Write-Host <span style="color:#e6db74">&#39;Trail removed or not found&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Check bucket</span>
+</span></span><span style="display:flex;"><span>/* Lines <span style="color:#ae81ff">785</span>-<span style="color:#ae81ff">844</span> omitted */
+</span></span></code></pre></div>
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/5-workshop/1-introduction/" title="MLOps Architecture Design"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/5-workshop/3-s3-data-storage/" title="Data Pipeline Optimization" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1765385195"></script>
+    <script src="/js/perfect-scrollbar.min.js?1765385195"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1765385195"></script>
+    <script src="/js/jquery.sticky.js?1765385195"></script>
+    <script src="/js/featherlight.min.js?1765385195"></script>
+    <script src="/js/highlight.pack.js?1765385195"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1765385195"></script>
+    <script src="/js/learn.js?1765385195"></script>
+    <script src="/js/hugo-learn.js?1765385195"></script>
+
+    <link href="/mermaid/mermaid.css?1765385195" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1765385195"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
